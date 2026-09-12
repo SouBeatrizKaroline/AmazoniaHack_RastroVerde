@@ -189,15 +189,14 @@ export const InspectionDetail: React.FC = () => {
               </Button>
             </Link>
 
-            <Link to="/reports">
-              <Button
-                size="sm"
-                className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-lg shadow-xs"
-              >
-                <FileText className="w-3.5 h-3.5 mr-1.5" />
-                <span>{t('workspace.generate_report')}</span>
-              </Button>
-            </Link>
+            <button
+              type="button"
+              onClick={() => setActiveTab('report')}
+              className="inline-flex items-center justify-center bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-lg shadow-xs transition-colors"
+            >
+              <FileText className="w-3.5 h-3.5 mr-1.5" />
+              <span>{t('workspace.generate_report')}</span>
+            </button>
           </div>
         </div>
 
@@ -470,20 +469,20 @@ export const InspectionDetail: React.FC = () => {
       {/* Tab 4: Verification shortcut */}
       {activeTab === 'verification' && (
         <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-base font-bold text-[#143028]">{t('verification.title')}</h2>
               <p className="text-xs text-[#5B6B63]">{t('verification.subtitle')}</p>
             </div>
             <Link to="/verification">
-              <Button size="sm" className="bg-[#1B5E3A] text-white text-xs">
+              <Button size="sm" className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs">
                 Abrir Painel Completo de Verificação
               </Button>
             </Link>
           </div>
           <p className="text-xs text-[#5B6B63]">
             Acesse a tela dedicada para analisar cruzamentos detalhados de dados, horários,
-            coordenadas e inconsistências identificadas automaticamente.
+            coordenadas e inconsistências identificadas automaticamente com postura de apoio.
           </p>
         </div>
       )}
@@ -491,34 +490,42 @@ export const InspectionDetail: React.FC = () => {
       {/* Tab 5: Gaps shortcut */}
       {activeTab === 'gaps' && (
         <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-base font-bold text-[#143028]">{t('gaps.title')}</h2>
               <p className="text-xs text-[#5B6B63]">{t('gaps.subtitle')}</p>
             </div>
             <Link to="/gaps">
-              <Button size="sm" className="bg-[#B45309] text-white text-xs">
+              <Button size="sm" className="bg-[#B45309] hover:bg-amber-800 text-white text-xs">
                 Abrir Checklist de Pendências
               </Button>
             </Link>
           </div>
+          <p className="text-xs text-[#5B6B63]">
+            Veja a lista de requisitos técnicos e documentais que precisam ser revisados antes da
+            elaboração final do laudo pericial.
+          </p>
         </div>
       )}
 
       {/* Tab 6: Report shortcut */}
       {activeTab === 'report' && (
         <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-base font-bold text-[#143028]">{t('report.title')}</h2>
               <p className="text-xs text-[#5B6B63]">{t('report.draft_notice')}</p>
             </div>
             <Link to="/reports">
-              <Button size="sm" className="bg-[#1B5E3A] text-white text-xs">
+              <Button size="sm" className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs">
                 Abrir Gerador de Relatório
               </Button>
             </Link>
           </div>
+          <p className="text-xs text-[#5B6B63]">
+            Relatório técnico preliminar com fundamentação em campo e rastreabilidade probatória
+            bidirecional até as evidências registradas.
+          </p>
         </div>
       )}
     </div>

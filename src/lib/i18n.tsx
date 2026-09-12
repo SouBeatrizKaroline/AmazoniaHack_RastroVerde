@@ -283,6 +283,10 @@ export const translations: Record<Language, Record<string, string>> = {
       'Verificação inteligente de consistência de horários e coordenadas com linguagem prudente.',
     'about.diff_3':
       'Checklist automático de lacunas que impede relatórios incompletos ou vulneráveis juridicamente.',
+    'demo.nav_badge': 'Modo Demonstração (RV-DEMO-001)',
+    'demo.read_only_tip':
+      'Você está visualizando a demonstração fictícia com dados de campo reais.',
+    'demo.login_prompt': 'Acesso Completo',
 
     // Auth
     'auth.login_title': 'Acesso à Fiscalização',
@@ -572,6 +576,9 @@ export const translations: Record<Language, Record<string, string>> = {
       'Smart time and coordinate consistency checks with strictly supportive language.',
     'about.diff_3':
       'Automated gaps checklist that prevents legally vulnerable or incomplete reports.',
+    'demo.nav_badge': 'Demo Mode (RV-DEMO-001)',
+    'demo.read_only_tip': 'You are viewing the fictional demonstration with realistic field data.',
+    'demo.login_prompt': 'Full Access',
 
     // Auth
     'auth.login_title': 'Officer Sign In',

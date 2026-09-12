@@ -40,7 +40,7 @@ export const App: React.FC = () => {
           <TourProvider>
             <Layout>
               <Routes>
-                {/* Public Routes */}
+                {/* Public Routes: Landing, Sobre, Autenticação */}
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/login" element={<Login />} />
@@ -50,20 +50,115 @@ export const App: React.FC = () => {
                 <Route path="/verify-email" element={<VerifyEmail />} />
                 <Route path="/confirm-email-change" element={<ConfirmEmailChange />} />
 
-                {/* Operational Routes - Public by design for demo and field inspection accessibility */}
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/inspections" element={<InspectionsList />} />
-                <Route path="/inspections/new" element={<InspectionForm />} />
-                <Route path="/inspections/:id" element={<InspectionDetail />} />
-                <Route path="/inspections/:id/edit" element={<InspectionForm />} />
-                <Route path="/evidence" element={<EvidenceCenter />} />
-                <Route path="/map" element={<EvidenceMap />} />
-                <Route path="/connections" element={<EvidenceConnections />} />
-                <Route path="/verification" element={<ConsistencyVerification />} />
-                <Route path="/gaps" element={<GapsChecklist />} />
-                <Route path="/reports" element={<ReportGenerator />} />
-                <Route path="/history" element={<HistoryLog />} />
-                <Route path="/assistant" element={<AssistantChat />} />
+                {/* Demo Routes - Portas abertas para demonstração e pitch sem exigir login */}
+                <Route path="/inspections/RV-DEMO-001" element={<InspectionDetail />} />
+                <Route path="/demo" element={<Navigate to="/inspections/RV-DEMO-001" replace />} />
+
+                {/* Rotas Operacionais Protegidas - Exigem usuário logado */}
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/inspections"
+                  element={
+                    <ProtectedRoute>
+                      <InspectionsList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/inspections/new"
+                  element={
+                    <ProtectedRoute>
+                      <InspectionForm />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/inspections/:id"
+                  element={
+                    <ProtectedRoute>
+                      <InspectionDetail />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/inspections/:id/edit"
+                  element={
+                    <ProtectedRoute>
+                      <InspectionForm />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/evidence"
+                  element={
+                    <ProtectedRoute>
+                      <EvidenceCenter />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/map"
+                  element={
+                    <ProtectedRoute>
+                      <EvidenceMap />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/connections"
+                  element={
+                    <ProtectedRoute>
+                      <EvidenceConnections />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/verification"
+                  element={
+                    <ProtectedRoute>
+                      <ConsistencyVerification />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/gaps"
+                  element={
+                    <ProtectedRoute>
+                      <GapsChecklist />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/reports"
+                  element={
+                    <ProtectedRoute>
+                      <ReportGenerator />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/history"
+                  element={
+                    <ProtectedRoute>
+                      <HistoryLog />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/assistant"
+                  element={
+                    <ProtectedRoute>
+                      <AssistantChat />
+                    </ProtectedRoute>
+                  }
+                />
                 {/* 404 */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

@@ -128,26 +128,29 @@ export const Index: React.FC = () => {
             {t('landing.subheadline')}
           </p>
 
-          {/* Action CTAs */}
+          {/* Action CTAs: 2 portas de entrada claras (Demo e Login) */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Link to="/inspections/new" className="w-full sm:w-auto">
+            <Link to="/inspections/RV-DEMO-001" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 className="w-full sm:w-auto bg-[#1B5E3A] hover:bg-[#14502F] text-white font-semibold shadow-md px-6 h-12 rounded-xl flex items-center justify-center gap-2"
               >
-                <span>{t('landing.start_inspection')}</span>
-                <ArrowRight className="w-4 h-4" />
+                <Compass className="w-4 h-4" />
+                <span>{t('landing.view_demo')}</span>
+                <span className="ml-1 text-xs font-normal text-emerald-100">(RV-DEMO-001)</span>
               </Button>
             </Link>
 
-            <Link to="/inspections/RV-DEMO-001" className="w-full sm:w-auto">
+            <Link to="/login" className="w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto border-[#E2E8E4] bg-white text-[#143028] hover:bg-[#F7F9F8] hover:border-[#1B5E3A] font-semibold h-12 px-6 rounded-xl shadow-xs"
+                className="w-full sm:w-auto border-[#E2E8E4] bg-white text-[#143028] hover:bg-[#F7F9F8] hover:border-[#1B5E3A] font-semibold h-12 px-6 rounded-xl shadow-xs flex items-center justify-center gap-2"
               >
-                <span>{t('landing.view_demo')}</span>
-                <span className="ml-1 text-xs font-normal text-[#5B6B63]">(RV-DEMO-001)</span>
+                <span>
+                  {t('nav.login')} / {t('nav.signup')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
           </div>
@@ -298,20 +301,21 @@ export const Index: React.FC = () => {
             <Link to="/inspections/RV-DEMO-001">
               <Button
                 size="lg"
-                className="bg-white text-[#1B5E3A] hover:bg-emerald-50 font-semibold shadow-md px-6 h-12 rounded-xl"
+                className="bg-white text-[#1B5E3A] hover:bg-emerald-50 font-semibold shadow-md px-6 h-12 rounded-xl flex items-center gap-2"
               >
+                <Compass className="w-4 h-4" />
                 <span>{t('landing.open_demo')}</span>
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
 
-            <Link to="/dashboard">
+            <Link to="/login">
               <Button
                 variant="outline"
                 size="lg"
                 className="border-white/30 text-white hover:bg-white/10 font-semibold h-12 px-6 rounded-xl"
               >
-                <span>{t('nav.overview')}</span>
+                <span>{t('nav.login')}</span>
               </Button>
             </Link>
           </div>
