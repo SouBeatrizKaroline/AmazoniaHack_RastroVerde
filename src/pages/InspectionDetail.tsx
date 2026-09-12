@@ -76,24 +76,56 @@ export const InspectionDetail: React.FC = () => {
   const loadData = async () => {
     if (!id) return
     try {
-      let record: InspectionRecord
+      let record: InspectionRecord | null = null
+
       if (id.startsWith('RV-')) {
-        record = await getInspectionByNumber(id)
+        try {
+          record = await getInspectionByNumber(id)
+        } catch (numErr) {
+          // If searching by number failed, attempt to find by matching list
+          const list = await getInspections(`id_number = "${id}"`)
+          if (list && list.length > 0) {
+            record = list[0]
+          }
+        }
       } else {
-        record = await getInspectionById(id)
+        try {
+          record = await getInspectionById(id)
+        } catch {
+          // Fallback: check if id matches id_number
+          try {
+            record = await getInspectionByNumber(id)
+          } catch {
+            const list = await getInspections()
+            const found = list.find((i) => i.id === id || i.id_number === id)
+            if (found) record = found
+          }
+        }
       }
+
+      // Special fallback specifically for demo case RV-DEMO-001
+      if (!record && id.includes('RV-DEMO-001')) {
+        const demoList = await getInspections('is_demo = true')
+        if (demoList && demoList.length > 0) {
+          record = demoList.find((i) => i.id_number === 'RV-DEMO-001') || demoList[0]
+        }
+      }
+
+      if (!record) {
+        throw new Error('Fiscalização não encontrada')
+      }
+
       setInspection(record)
 
       const [evds, acts] = await Promise.all([
-        getEvidenceByInspection(record.id),
-        getActivitiesByInspection(record.id),
+        getEvidenceByInspection(record.id).catch(() => []),
+        getActivitiesByInspection(record.id).catch(() => []),
       ])
       setEvidenceList(evds)
       setActivitiesList(acts)
     } catch (err) {
-      console.error(err)
+      console.error('InspectionDetail error loading data:', err)
       toast({ title: t('workspace.not_found'), variant: 'destructive' })
-      navigate('/inspections')
     } finally {
       setLoading(false)
     }
@@ -114,10 +146,42 @@ export const InspectionDetail: React.FC = () => {
     }
   }
 
-  if (loading || !inspection) {
+  if (loading) {
     return (
-      <div className="p-12 text-center text-xs font-semibold text-[#5B6B63]">
-        {t('workspace.loading')}
+      <div className="flex flex-col items-center justify-center p-16 sm:p-24 space-y-4">
+        <div className="w-10 h-10 border-3 border-[#1B5E3A] border-t-transparent rounded-full animate-spin" />
+        <div className="text-xs font-semibold text-[#5B6B63] tracking-wide animate-pulse">
+          {t('workspace.loading')}
+        </div>
+      </div>
+    )
+  }
+
+  if (!inspection) {
+    return (
+      <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl border border-[#E2E8E4] bg-white text-center space-y-4 shadow-sm">
+        <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center mx-auto">
+          <AlertTriangle className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-[#143028]">
+          {t('workspace.not_found') || 'Fiscalização não encontrada'}
+        </h2>
+        <p className="text-xs text-[#5B6B63] max-w-md mx-auto leading-relaxed">
+          O registro solicitado ({id}) não pôde ser carregado. Você pode retornar à página inicial
+          ou à demonstração interativa.
+        </p>
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
+          <Link to="/">
+            <Button variant="outline" size="sm" className="text-xs">
+              ← Início
+            </Button>
+          </Link>
+          <Link to="/inspections/RV-DEMO-001">
+            <Button size="sm" className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs">
+              Abrir Demo RV-DEMO-001
+            </Button>
+          </Link>
+        </div>
       </div>
     )
   }

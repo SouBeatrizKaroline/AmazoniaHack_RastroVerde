@@ -122,9 +122,11 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Se o passo for o 8 (EVD-014), emitir evento com leve retardo para abrir o modal
     if (targetStep.id === 'step-traceability-anchor') {
-      setTimeout(() => {
+      const emitTourOpen = () => {
         window.dispatchEvent(new CustomEvent('tour-open-evidence', { detail: { code: 'EVD-014' } }))
-      }, 350)
+      }
+      setTimeout(emitTourOpen, 350)
+      setTimeout(emitTourOpen, 800)
     }
   }
 

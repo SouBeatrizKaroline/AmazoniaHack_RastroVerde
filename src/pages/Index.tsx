@@ -102,7 +102,7 @@ export const Index: React.FC = () => {
     },
     {
       title: t('landing.demo_step2'),
-      badge: 'EVD-001 a EVD-014',
+      badge: 'EVD-008 a EVD-026',
       icon: Camera,
     },
     {
@@ -404,14 +404,16 @@ export const Index: React.FC = () => {
               <div className="grid grid-cols-3 gap-2 py-1">
                 <div className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-center">
                   <span className="text-[10px] text-[#5B6B63] block font-medium">Evidências</span>
-                  <span className="text-base font-extrabold text-[#1B5E3A]">11</span>
+                  <span className="text-base font-extrabold text-[#1B5E3A]">14</span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-center">
                   <span className="text-[10px] text-[#5B6B63] block font-medium">Completude</span>
                   <span className="text-base font-extrabold text-[#0F766E]">78%</span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-center">
-                  <span className="text-[10px] text-[#5B6B63] block font-medium">Pendências</span>
+                  <span className="text-[10px] text-[#5B6B63] block font-medium">
+                    Falhas Propositais
+                  </span>
                   <span className="text-base font-extrabold text-[#B45309]">3</span>
                 </div>
               </div>

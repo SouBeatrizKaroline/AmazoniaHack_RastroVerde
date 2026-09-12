@@ -96,12 +96,24 @@ export const EvidenceCenter: React.FC = () => {
     const handleTourOpenEvidence = (evt: Event) => {
       const customEvt = evt as CustomEvent<{ code: string }>
       const code = customEvt.detail?.code
-      if (code && evidenceList.length > 0) {
-        const found = evidenceList.find(
-          (e) => e.code.toLowerCase() === code.toLowerCase() || e.id === code,
-        )
-        if (found) {
-          setDetailModalEvidence(found)
+      if (code) {
+        // Try finding in current evidenceList, or load if list is still empty
+        if (evidenceList.length > 0) {
+          const found = evidenceList.find(
+            (e) => e.code.toLowerCase() === code.toLowerCase() || e.id === code,
+          )
+          if (found) {
+            setDetailModalEvidence(found)
+          }
+        } else {
+          getAllEvidence().then((all) => {
+            const found = all.find(
+              (e) => e.code.toLowerCase() === code.toLowerCase() || e.id === code,
+            )
+            if (found) {
+              setDetailModalEvidence(found)
+            }
+          })
         }
       }
     }
