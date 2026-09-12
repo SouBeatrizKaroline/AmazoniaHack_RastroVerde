@@ -13,6 +13,7 @@ import {
 import {
   getInspectionByNumber,
   getActivitiesByInspection,
+  getAllActivities,
   type ActivityRecord,
 } from '@/services/dataService'
 import { useRealtime } from '@/hooks/use-realtime'
@@ -27,8 +28,13 @@ export const HistoryLog: React.FC = () => {
 
   const loadData = async () => {
     try {
-      const insp = await getInspectionByNumber('RV-DEMO-001')
-      const list = await getActivitiesByInspection(insp.id)
+      let list: ActivityRecord[] = []
+      try {
+        const insp = await getInspectionByNumber('RV-DEMO-001')
+        list = await getActivitiesByInspection(insp.id)
+      } catch {
+        list = await getAllActivities()
+      }
       setActivities(list)
     } catch (err) {
       console.error(err)

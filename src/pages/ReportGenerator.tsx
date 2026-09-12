@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import {
+  getInspectionById,
   getInspectionByNumber,
   getEvidenceByInspection,
   getActivitiesByInspection,
@@ -35,38 +36,91 @@ export const ReportGenerator: React.FC = () => {
   const [evidenceList, setEvidenceList] = useState<EvidenceRecord[]>([])
   const [activitiesList, setActivitiesList] = useState<ActivityRecord[]>([])
   const [isEditing, setIsEditing] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   // 13 Editable Sections Content
   const [sections, setSections] = useState({
-    sec1: 'Auto de Fiscalização RV-2026-001 — Vistoria de Constatação Técnica Ambiental. Processo de Referência: SIS-AMB-2026/0912.',
-    sec2: 'Realizada em 12/09/2026 às 08:30 no Setor Norte da Área de Proteção Ambiental (APA), Município de Rio Claro/PA.',
-    sec3: 'Equipe Tática Ambiental Composta por: Agente 01 — Beatriz Silva (Fiscal Titular), Léo Matias Araújo e Sonia Janara S. Barros.',
-    sec4: 'Operação desencadeada em decorrência de alerta de supressão de cobertura vegetal nativa gerado por satélite de monitoramento contínuo.',
-    sec5: 'Constatada intervenção mecânica com supressão de vegetação primária em área estimada preliminarmente em 4 hectares, presença de marcas recentes de trator de lâmina e estocagem não autorizada de madeira protegida.',
-    sec6: 'Registradas 9 evidências georreferenciadas, abrangendo registros fotográficos de clareiras, marcas de maquinário, troncos empilhados, anotações de campo e depoimento de testemunha local.',
-    sec7: 'Deslocamento iniciado às 08:42; marco de entrada fixado às 09:05; fotografias às 14:32; encerramento preliminar de campo às 15:40.',
-    sec8: 'Poligonal delimitada entre as coordenadas Latitude -8.0000 e -8.0040, Longitude -34.0000 e -34.0050, datum SIRGAS 2000.',
-    sec9: 'Notificação formal DOC-003 emitida e entregue com assinalamento de prazo legal para apresentação do Cadastro Ambiental Rural (CAR) e título de propriedade.',
-    sec10:
-      'PONTOS PARA REVISÃO: Recomenda-se confirmar a coordenada descrita na anotação de campo relativa ao acampamento temporário (divergência detectada entre anotação textual e receptor GNSS) e suprir a ausência de identificação do fiscal no registro EVD-008.',
-    sec11:
-      'INFORMAÇÕES PENDENTES: Apresentação da comprovação dominial/CAR pelo ocupante e cálculo da poligonal vetorial definitiva da área desmatada.',
-    sec12:
-      'Local com topografia acidentada e solo de textura argilosa que facilitou a preservação dos rastros de esteira dos maquinários.',
-    sec13:
-      'Com base nas constatações técnicas e nas evidências rastreadas, sugere-se a continuidade do procedimento de apuração com intimação do suposto responsável e encaminhamento do dossiê ao órgão gestor da unidade de conservação.',
+    sec1: '',
+    sec2: '',
+    sec3: '',
+    sec4: '',
+    sec5: '',
+    sec6: '',
+    sec7: '',
+    sec8: '',
+    sec9: '',
+    sec10: '',
+    sec11: '',
+    sec12: '',
+    sec13: '',
   })
 
-  useEffect(() => {
-    getInspectionByNumber('RV-DEMO-001').then(async (insp) => {
+  const loadData = async () => {
+    try {
+      let insp: InspectionRecord
+      try {
+        insp = await getInspectionByNumber('RV-DEMO-001')
+      } catch {
+        const all = await getInspectionById('9ykaitbzexx3fy5')
+        insp = all
+      }
       setInspection(insp)
+
       const [evds, acts] = await Promise.all([
         getEvidenceByInspection(insp.id),
         getActivitiesByInspection(insp.id),
       ])
       setEvidenceList(evds)
       setActivitiesList(acts)
-    })
+
+      // Calculate dynamic sections based on real database records
+      const photoCount = evds.filter((e) => e.type === 'Fotografia').length
+      const docCount = evds.filter((e) => e.type === 'Documento').length
+      const noteCount = evds.filter((e) => e.type === 'Anotação').length
+      const inReviewEvds = evds.filter((e) => e.status === 'Em revisão')
+      const missingOfficerEvds = evds.filter((e) => !e.officer || e.officer.trim() === '')
+
+      setSections({
+        sec1: `Auto de Fiscalização ${insp.id_number} — Vistoria de Constatação Técnica Ambiental. Processo de Referência: SIS-AMB-2026/0912.`,
+        sec2: `Realizada em ${insp.date || '12/09/2026'} às ${insp.time || '08:30'} na localidade ${insp.location}, Município de ${insp.municipality || 'Rio Claro'} - ${insp.state || 'PA'}.`,
+        sec3: `Equipe Tática Ambiental Composta por: ${insp.agent || 'Agente Responsável'}${insp.team ? ` (${insp.team})` : ''}.`,
+        sec4: `Operação desencadeada em decorrência de ocorrência de ${insp.occurrence_type}: ${insp.description || 'supressão vegetal constatada em campo'}.`,
+        sec5: `Constatação técnica: ${insp.description || 'Intervenção identificada na área inspecionada.'} Evidências rastreadas diretamente aos registros coletados em campo.`,
+        sec6: `Registradas ${evds.length} evidências georreferenciadas na base de dados (${photoCount} fotos, ${docCount} documentos, ${noteCount} anotações/depoimentos).`,
+        sec7:
+          acts.length > 0
+            ? `Cronologia de campo: ${acts.map((a) => `${a.timestamp} (${a.description})`).join('; ')}.`
+            : `Deslocamento iniciado às 08:42; marco de entrada fixado às 09:05; registros de campo realizados até 15:40.`,
+        sec8: `Ponto central georreferenciado: Latitude ${insp.latitude || -8.0015}, Longitude ${insp.longitude || -34.0042}, Datum SIRGAS 2000.`,
+        sec9:
+          docCount > 0
+            ? `Documentos registrados no sistema: ${evds
+                .filter((e) => e.type === 'Documento')
+                .map((e) => `${e.code} - ${e.description}`)
+                .join('; ')}.`
+            : `Notificação formal emitida com assinalamento de prazo legal para apresentação do Cadastro Ambiental Rural (CAR) e título de propriedade.`,
+        sec10:
+          inReviewEvds.length > 0
+            ? `PONTOS PARA REVISÃO: ${inReviewEvds.map((e) => `Evidência ${e.code} em revisão (${e.description})`).join('; ')}.`
+            : 'PONTOS PARA REVISÃO: Todos os registros encontram-se em conformidade preliminar.',
+        sec11:
+          missingOfficerEvds.length > 0
+            ? `INFORMAÇÕES PENDENTES: Identificação do agente fiscal pendente nas evidências: ${missingOfficerEvds.map((e) => e.code).join(', ')}.`
+            : `INFORMAÇÕES PENDENTES: Apresentação da comprovação dominial/CAR pelo ocupante e cálculo da poligonal vetorial definitiva.`,
+        sec12: insp.notes
+          ? `Observações técnicas adicionais: ${insp.notes}`
+          : 'Local com topografia acidentada e solo de textura argilosa que facilitou a preservação dos rastros no solo.',
+        sec13: `Com base nas constatações técnicas e nas ${evds.length} evidências rastreadas, sugere-se a continuidade do procedimento administrativo de fiscalização ambiental conforme normas vigentes.`,
+      })
+    } catch (err) {
+      console.error('Failed to load report data:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadData()
   }, [])
 
   const handlePrint = () => {
@@ -287,33 +341,26 @@ export const ReportGenerator: React.FC = () => {
               <p className="leading-relaxed text-[#143028]">{sections.sec6}</p>
             )}
 
-            {/* Additional Traceability Source Block for EVD-015 and EVD-016 */}
+            {/* Dynamic Traceability Sources from real evidence */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 print:hidden">
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#F7F9F8] border border-[#E2E8E4] text-[11px]">
-                <div className="font-mono text-[#1B5E3A] font-semibold">
-                  📷 EVD-015 (Marcas de trator)
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleNavigateToSource('EVD-015')}
-                  className="font-bold text-[#0F766E] hover:underline"
+              {evidenceList.slice(0, 4).map((evd) => (
+                <div
+                  key={evd.id}
+                  className="flex items-center justify-between p-2.5 rounded-lg bg-[#F7F9F8] border border-[#E2E8E4] text-[11px]"
                 >
-                  Ver origem →
-                </button>
-              </div>
-
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#F7F9F8] border border-[#E2E8E4] text-[11px]">
-                <div className="font-mono text-[#1B5E3A] font-semibold">
-                  📷 EVD-016 (Madeira protegida)
+                  <div className="font-mono text-[#1B5E3A] font-semibold truncate max-w-[200px]">
+                    {evd.type === 'Fotografia' ? '📷' : evd.type === 'Documento' ? '📄' : '📍'}{' '}
+                    {evd.code} ({evd.description})
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleNavigateToSource(evd.code)}
+                    className="font-bold text-[#0F766E] hover:underline shrink-0 ml-2"
+                  >
+                    Ver origem →
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleNavigateToSource('EVD-016')}
-                  className="font-bold text-[#0F766E] hover:underline"
-                >
-                  Ver origem →
-                </button>
-              </div>
+              ))}
             </div>
           </div>
 

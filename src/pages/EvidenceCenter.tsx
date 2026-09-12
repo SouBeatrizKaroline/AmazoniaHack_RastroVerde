@@ -21,6 +21,7 @@ import { EvidenceCard } from '@/components/EvidenceCard'
 import { EvidenceModal } from '@/components/EvidenceModal'
 import {
   getAllEvidence,
+  getInspections,
   createEvidence,
   updateEvidence,
   deleteEvidence,
@@ -37,6 +38,7 @@ export const EvidenceCenter: React.FC = () => {
   const sourceEvidenceParam = searchParams.get('source')
 
   const [evidenceList, setEvidenceList] = useState<EvidenceRecord[]>([])
+  const [defaultInspectionId, setDefaultInspectionId] = useState<string>('9ykaitbzexx3fy5')
   const [search, setSearch] = useState('')
   const [selectedType, setSelectedType] = useState<string>('ALL')
   const [modalOpen, setModalOpen] = useState(false)
@@ -49,7 +51,10 @@ export const EvidenceCenter: React.FC = () => {
 
   const loadData = async () => {
     try {
-      const list = await getAllEvidence()
+      const [allInsp, list] = await Promise.all([getInspections(), getAllEvidence()])
+      if (allInsp.length > 0) {
+        setDefaultInspectionId(allInsp[0].id)
+      }
       setEvidenceList(list)
 
       // If source param is provided, open detail automatically
@@ -94,12 +99,22 @@ export const EvidenceCenter: React.FC = () => {
   })
 
   const handleSave = async (data: Partial<EvidenceRecord>) => {
-    if (editingEvidence) {
-      await updateEvidence(editingEvidence.id, data)
-      toast({ title: t('evidence.update_success') })
-    } else {
-      await createEvidence(data)
-      toast({ title: t('evidence.create_success') })
+    try {
+      if (editingEvidence) {
+        await updateEvidence(editingEvidence.id, data)
+        toast({ title: t('evidence.update_success') })
+      } else {
+        const payload = {
+          ...data,
+          inspection: data.inspection || defaultInspectionId,
+          code: data.code || `EVD-${Math.floor(100 + Math.random() * 900)}`,
+        }
+        await createEvidence(payload)
+        toast({ title: t('evidence.create_success') })
+      }
+    } catch (err) {
+      console.error(err)
+      toast({ title: 'Erro ao salvar evidência', variant: 'destructive' })
     }
     loadData()
   }
@@ -210,7 +225,7 @@ export const EvidenceCenter: React.FC = () => {
       <EvidenceModal
         open={modalOpen}
         onOpenChange={setModalOpen}
-        inspectionId={evidenceList[0]?.inspection || ''}
+        inspectionId={defaultInspectionId}
         evidenceToEdit={editingEvidence}
         onSave={handleSave}
       />

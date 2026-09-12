@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { StatusBadge } from '@/components/StatusBadge'
-import { getInspections, type InspectionRecord } from '@/services/dataService'
+import { getInspections, getAllEvidence, type InspectionRecord } from '@/services/dataService'
 import { useRealtime } from '@/hooks/use-realtime'
 
 export const InspectionsList: React.FC = () => {
@@ -32,10 +32,17 @@ export const InspectionsList: React.FC = () => {
     loadData()
   })
 
+  const [evidenceCounts, setEvidenceCounts] = useState<Record<string, number>>({})
+
   const loadData = async () => {
     try {
-      const list = await getInspections()
+      const [list, allEvd] = await Promise.all([getInspections(), getAllEvidence()])
       setInspections(list)
+      const counts: Record<string, number> = {}
+      allEvd.forEach((e) => {
+        counts[e.inspection] = (counts[e.inspection] || 0) + 1
+      })
+      setEvidenceCounts(counts)
     } catch (err) {
       console.error(err)
     } finally {
@@ -160,8 +167,11 @@ export const InspectionsList: React.FC = () => {
                       <span>{insp.date || '12/09/2026'}</span>
                     </span>
                   </div>
-                  <div className="text-[11px] font-semibold text-[#0F766E]">
-                    {insp.occurrence_type}
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-semibold text-[#0F766E]">{insp.occurrence_type}</span>
+                    <span className="font-medium text-[#143028]">
+                      {evidenceCounts[insp.id] ?? (isDemo ? 14 : 0)} evidências
+                    </span>
                   </div>
                 </div>
               </div>

@@ -17,7 +17,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'badge.demo': 'Dados demonstrativos',
     'badge.fictional_demo': 'Caso demonstrativo fictício',
     'footer.text': 'RastroVerde — Tecnologia para apoiar a fiscalização ambiental.',
-    'footer.rights': 'Ambiente seguro de demonstração GovTech / GreenTech.',
+    'footer.rights': '',
 
     // Navigation
     'nav.overview': 'Visão Geral',
@@ -267,7 +267,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'badge.demo': 'Demo data',
     'badge.fictional_demo': 'Fictional demo case',
     'footer.text': 'RastroVerde — Technology supporting environmental enforcement.',
-    'footer.rights': 'Secure GovTech / GreenTech demonstration environment.',
+    'footer.rights': '',
 
     // Navigation
     'nav.overview': 'Overview',

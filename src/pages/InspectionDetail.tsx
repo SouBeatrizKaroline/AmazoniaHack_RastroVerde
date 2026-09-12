@@ -29,6 +29,8 @@ import {
   getEvidenceByInspection,
   getActivitiesByInspection,
   updateInspection,
+  createEvidence,
+  updateEvidence,
   type InspectionRecord,
   type EvidenceRecord,
   type ActivityRecord,
@@ -388,7 +390,23 @@ export const InspectionDetail: React.FC = () => {
             onOpenChange={setModalOpen}
             inspectionId={inspection.id}
             evidenceToEdit={editingEvidence}
-            onSave={async () => {
+            onSave={async (data) => {
+              try {
+                if (editingEvidence) {
+                  await updateEvidence(editingEvidence.id, data)
+                  toast({ title: t('evidence.update_success') || 'Evidência atualizada' })
+                } else {
+                  await createEvidence({
+                    ...data,
+                    inspection: inspection.id,
+                    code: data.code || `EVD-${Math.floor(100 + Math.random() * 900)}`,
+                  })
+                  toast({ title: t('evidence.create_success') || 'Evidência criada com sucesso' })
+                }
+              } catch (err) {
+                console.error(err)
+                toast({ title: 'Erro ao salvar evidência', variant: 'destructive' })
+              }
               loadData()
             }}
           />

@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useI18n } from '@/lib/i18n'
-import { Bot, Send, Sparkles, Info, RotateCcw, User, Shield, HelpCircle } from 'lucide-react'
+import { Bot, Send, Sparkles, RotateCcw, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import pb from '@/lib/pocketbase/client'
+import { getAllEvidence, getInspections } from '@/services/dataService'
 
 interface Message {
   id: string
@@ -79,7 +80,7 @@ export const AssistantChat: React.FC = () => {
     setLoading(true)
 
     try {
-      // Prioritize Skip Cloud Native Agent endpoint
+      // Prioritize Native Agent endpoint
       const pbUrl = import.meta.env.VITE_POCKETBASE_URL || ''
       const token = pb.authStore.token
 
@@ -113,15 +114,57 @@ export const AssistantChat: React.FC = () => {
         // Fallback to local deterministic answers
       }
 
-      // If backend didn't return text, use domain knowledge
+      // If backend didn't return text, query real database state dynamically!
       if (!assistantText) {
-        if (mockKnowledge[text]) {
-          assistantText = mockKnowledge[text]
-        } else {
-          // General cautious supportive answer
+        try {
+          const [allEvd, allInsp] = await Promise.all([getAllEvidence(), getInspections()])
+          const demoInsp = allInsp.find((i) => i.id_number === 'RV-DEMO-001') || allInsp[0]
+          const q = text.toLowerCase()
+
+          if (q.includes('faltando') || q.includes('lacuna') || q.includes('pendên')) {
+            const missingOfficer = allEvd.filter((e) => !e.officer || e.officer.trim() === '')
+            const inReview = allEvd.filter((e) => e.status === 'Em revisão')
+            assistantText =
+              `Na fiscalização ${demoInsp?.id_number || 'RV-DEMO-001'} foram identificadas as seguintes pendências reais no banco de dados:\n\n` +
+              `1. ${missingOfficer.length} evidência(s) sem agente fiscal identificado (${missingOfficer.map((e) => e.code).join(', ') || 'Nenhuma'});\n` +
+              `2. ${inReview.length} evidência(s) em estado de revisão técnica (${inReview.map((e) => e.code).join(', ') || 'Nenhuma'});\n` +
+              `3. Poligonal vetorial e shapefile definitivo da área estimada.\n\n` +
+              `Recomenda-se suprir essas lacunas antes da emissão definitiva do relatório de infração.`
+          } else if (q.includes('conflito') || q.includes('divergên')) {
+            const inReview = allEvd.find((e) => e.status === 'Em revisão')
+            assistantText = inReview
+              ? `Foi detectada pendência técnica na evidência ${inReview.code} ("${inReview.description}"). Recomenda-se confirmar a localização exata e as notas de campo antes de consolidar o documento.`
+              : 'Nenhum conflito crítico identificado entre os registros validados no momento.'
+          } else if (q.includes('resuma') || q.includes('resumo')) {
+            assistantText =
+              `A fiscalização ${demoInsp?.id_number || 'RV-DEMO-001'} foi deflagrada em ${demoInsp?.date || '12/09/2026'} na localidade ${demoInsp?.location || 'Setor Norte'}, motivada por ocorrência de ${demoInsp?.occurrence_type || 'supressão vegetal'}.\n\n` +
+              `A base de dados conta atualmente com ${allEvd.length} evidências registradas (${allEvd.filter((e) => e.type === 'Fotografia').length} fotos, ${allEvd.filter((e) => e.type === 'Documento').length} documentos) e status operacional "${demoInsp?.status || 'Em análise'}".`
+          } else if (q.includes('horário') || q.includes('cronolog')) {
+            const sorted = [...allEvd].sort((a, b) => (a.time || '').localeCompare(b.time || ''))
+            assistantText =
+              `Cronologia das evidências cadastradas na operação:\n\n` +
+              sorted
+                .slice(0, 8)
+                .map((e) => `• ${e.time || '00:00'} — ${e.code} (${e.type}: ${e.description})`)
+                .join('\n')
+          } else if (q.includes('localização') || q.includes('coordenada')) {
+            const withCoords = allEvd.filter((e) => e.latitude && e.longitude)
+            assistantText =
+              `Atualmente ${withCoords.length} de ${allEvd.length} evidências possuem coordenadas georreferenciadas completas no sistema (SIRGAS 2000).\n\n` +
+              `Exemplos registrados: ${withCoords
+                .slice(0, 3)
+                .map((e) => `${e.code} (Lat ${e.latitude}, Lon ${e.longitude})`)
+                .join('; ')}.`
+          } else if (mockKnowledge[text]) {
+            assistantText = mockKnowledge[text]
+          } else {
+            assistantText =
+              `Com base nas ${allEvd.length} evidências cadastradas para a fiscalização ${demoInsp?.id_number || 'RV-DEMO-001'}, recomenda-se verificar a consistência dos dados geográficos e das fotografias citadas. ` +
+              `Lembramos que as decisões de mérito permanecem sob a competência exclusiva da autoridade fiscalizatória.`
+          }
+        } catch (_) {
           assistantText =
             `Com base nos registros cadastrados para a fiscalização RV-DEMO-001, recomenda-se verificar a consistência dos dados geográficos e das evidências fotográficas citadas. ` +
-            `O sistema sugere atentar para o documento pendente DOC-003 e a identificação do agente na EVD-008. ` +
             `Lembramos que as decisões de mérito permanecem sob a competência exclusiva da autoridade fiscalizatória.`
         }
       }

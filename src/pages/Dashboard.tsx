@@ -24,7 +24,7 @@ export const Dashboard: React.FC = () => {
   const navigate = useNavigate()
 
   const [inspections, setInspections] = useState<InspectionRecord[]>([])
-  const [evidenceCount, setEvidenceCount] = useState<number>(87) // Demo stat initial fallback
+  const [evidenceList, setEvidenceList] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   // Subscribe in real-time to updates
@@ -37,12 +37,9 @@ export const Dashboard: React.FC = () => {
 
   const loadData = async () => {
     try {
-      const inspList = await getInspections()
+      const [inspList, evdList] = await Promise.all([getInspections(), getAllEvidence()])
       setInspections(inspList)
-      const evdList = await getAllEvidence()
-      if (evdList.length > 0) {
-        setEvidenceCount(evdList.length)
-      }
+      setEvidenceList(evdList)
     } catch (err) {
       console.error('Failed to load dashboard data:', err)
     } finally {
@@ -54,11 +51,16 @@ export const Dashboard: React.FC = () => {
     loadData()
   }, [])
 
-  // Stats
-  const totalInspections = inspections.length > 0 ? inspections.length : 12
-  const inProgressCount =
-    inspections.filter((i) => i.status === 'Em análise' || i.status === 'Em coleta').length || 4
-  const gapsCount = 6 // Fictional baseline demo number
+  // Live Stats calculated from real database records
+  const totalInspections = inspections.length
+  const inProgressCount = inspections.filter(
+    (i) => i.status === 'Em análise' || i.status === 'Em coleta',
+  ).length
+  const evidenceCount = evidenceList.length
+  // Gaps count calculated from inspections with pending status or evidence in review
+  const pendingInspections = inspections.filter((i) => i.status === 'Com pendências').length
+  const reviewEvidence = evidenceList.filter((e) => e.status === 'Em revisão').length
+  const gapsCount = pendingInspections + reviewEvidence
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
@@ -214,9 +216,10 @@ export const Dashboard: React.FC = () => {
         {/* Inspections Table / Cards */}
         <div className="space-y-3">
           {inspections.map((insp) => {
-            const isDemoCase = insp.id_number === 'RV-DEMO-001' || insp.is_demo
-            const evidenceCountForInsp = isDemoCase ? 14 : 6
-            const gapsCountForInsp = isDemoCase ? 3 : 1
+            const isDemoCase = insp.id_number === 'RV-DEMO-001' || !!insp.is_demo
+            const evidenceForInsp = evidenceList.filter((e) => e.inspection === insp.id)
+            const countForInsp = evidenceForInsp.length
+            const gapsForInsp = evidenceForInsp.filter((e) => e.status === 'Em revisão').length
 
             return (
               <div
@@ -249,12 +252,8 @@ export const Dashboard: React.FC = () => {
                       <Calendar className="w-3 h-3 text-[#5B6B63]" />
                       <span>{insp.date || '12/09/2026'}</span>
                     </span>
-                    <span className="font-medium text-[#143028]">
-                      {evidenceCountForInsp} evidências
-                    </span>
-                    <span className="font-medium text-[#B45309]">
-                      {gapsCountForInsp} pendências
-                    </span>
+                    <span className="font-medium text-[#143028]">{countForInsp} evidências</span>
+                    <span className="font-medium text-[#B45309]">{gapsForInsp} em revisão</span>
                   </div>
                 </div>
 

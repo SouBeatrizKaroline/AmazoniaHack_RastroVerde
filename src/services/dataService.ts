@@ -124,6 +124,12 @@ export async function getActivitiesByInspection(inspectionId: string) {
   })
 }
 
+export async function getAllActivities() {
+  return await pb.collection('activities').getFullList<ActivityRecord>({
+    sort: '-created',
+  })
+}
+
 export async function createActivity(data: {
   inspection: string
   timestamp: string

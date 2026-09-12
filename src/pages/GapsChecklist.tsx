@@ -1,100 +1,177 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useI18n } from '@/lib/i18n'
-import {
-  CheckSquare,
-  CheckCircle2,
-  AlertTriangle,
-  XCircle,
-  Plus,
-  ArrowRight,
-  ShieldCheck,
-  FileText,
-  Camera,
-  MapPin,
-  Clock,
-  User,
-} from 'lucide-react'
+import { CheckCircle2, AlertTriangle, XCircle, Plus, ShieldCheck, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
+import { getAllEvidence, getInspections } from '@/services/dataService'
+
+interface GapItem {
+  id: string
+  title: string
+  category: 'completed' | 'pending' | 'missing'
+  status: string
+  description: string
+  action: string | null
+  route?: string
+}
 
 export const GapsChecklist: React.FC = () => {
   const { t } = useI18n()
   const navigate = useNavigate()
   const { toast } = useToast()
 
-  const [items, setItems] = useState([
-    {
-      id: 'gap-1',
-      title: 'Localização registrada',
-      category: 'completed',
-      status: '✅',
-      description: 'Marco georreferenciado e poligonal preliminar inseridos.',
-      action: null,
-    },
-    {
-      id: 'gap-2',
-      title: 'Evidências fotográficas',
-      category: 'completed',
-      status: '✅',
-      description: 'Fotografias com carimbo de data/hora e coordenadas em conformidade.',
-      action: null,
-    },
-    {
-      id: 'gap-3',
-      title: 'Data e horário de vistoria',
-      category: 'completed',
-      status: '✅',
-      description: 'Cronograma da operação perfeitamente documentado.',
-      action: null,
-    },
-    {
-      id: 'gap-4',
-      title: 'Identificação do agente fiscal',
-      category: 'completed',
-      status: '✅',
-      description: 'Equipe e responsável técnico formalmente qualificados.',
-      action: null,
-    },
-    {
-      id: 'gap-5',
-      title: 'Responsável pela área não identificado',
-      category: 'pending',
-      status: '⚠️',
-      description:
-        'Ausência de identificação do proprietário ou posseiro atual da gleba fiscalizada.',
-      action: 'Adicionar Depoimento / Qualificação',
-      route: '/evidence',
-    },
-    {
-      id: 'gap-6',
-      title: 'Documento de propriedade não anexado',
-      category: 'pending',
-      status: '⚠️',
-      description:
-        'Notificação DOC-003 emitida com prazo sem juntada da certidão de matrícula ou CAR.',
-      action: 'Anexar Documento',
-      route: '/evidence',
-    },
-    {
-      id: 'gap-7',
-      title: 'Área estimada ainda não informada',
-      category: 'pending',
-      status: '⚠️',
-      description: 'Poligonal da clareira necessita de cálculo vetorial de hectares atingidos.',
-      action: 'Inserir Área Estimada',
-      route: '/inspections/RV-DEMO-001/edit',
-    },
-    {
-      id: 'gap-8',
-      title: 'Ausência de registro complementar solicitado',
-      category: 'missing',
-      status: '❌',
-      description: 'Laudo de apreensão ou depósito dos maquinários avistados não formalizado.',
-      action: 'Adicionar Registro Complementar',
-      route: '/evidence',
-    },
-  ])
+  const [items, setItems] = useState<GapItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadGapsFromData()
+  }, [])
+
+  const loadGapsFromData = async () => {
+    try {
+      const [inspections, evidenceList] = await Promise.all([getInspections(), getAllEvidence()])
+
+      const demoInsp = inspections.find((i) => i.id_number === 'RV-DEMO-001') || inspections[0]
+      const computed: GapItem[] = []
+
+      // 1. Location requirement
+      if (demoInsp && demoInsp.latitude && demoInsp.longitude) {
+        computed.push({
+          id: 'gap-loc',
+          title: 'Localização registrada',
+          category: 'completed',
+          status: '✅',
+          description: `Marco georreferenciado (${demoInsp.latitude}, ${demoInsp.longitude}) inserido no SIRGAS 2000.`,
+          action: null,
+        })
+      } else {
+        computed.push({
+          id: 'gap-loc-missing',
+          title: 'Localização geográfica incompleta',
+          category: 'missing',
+          status: '❌',
+          description: 'Fiscalização sem coordenadas georreferenciadas completas.',
+          action: 'Preencher Coordenadas',
+          route: demoInsp ? `/inspections/${demoInsp.id_number}/edit` : '/inspections',
+        })
+      }
+
+      // 2. Photographic evidence
+      const photos = evidenceList.filter((e) => e.type === 'Fotografia')
+      if (photos.length > 0) {
+        computed.push({
+          id: 'gap-photo',
+          title: 'Evidências fotográficas catalogadas',
+          category: 'completed',
+          status: '✅',
+          description: `${photos.length} fotografias com carimbo e metadados persistidos no banco.`,
+          action: null,
+        })
+      } else {
+        computed.push({
+          id: 'gap-photo-missing',
+          title: 'Nenhuma evidência fotográfica registrada',
+          category: 'missing',
+          status: '❌',
+          description: 'A operação necessita de registros visuais para instruir o auto.',
+          action: 'Adicionar Foto',
+          route: '/evidence',
+        })
+      }
+
+      // 3. Inspection date / time
+      if (demoInsp && demoInsp.date) {
+        computed.push({
+          id: 'gap-date',
+          title: 'Data e horário de vistoria',
+          category: 'completed',
+          status: '✅',
+          description: `Realizada em ${demoInsp.date} às ${demoInsp.time || '08:30'}.`,
+          action: null,
+        })
+      }
+
+      // 4. Responsible officer
+      const missingOfficer = evidenceList.filter((e) => !e.officer || e.officer.trim() === '')
+      if (missingOfficer.length === 0) {
+        computed.push({
+          id: 'gap-officer-ok',
+          title: 'Identificação dos agentes fiscais',
+          category: 'completed',
+          status: '✅',
+          description: 'Todos os registros contam com agente técnico identificado.',
+          action: null,
+        })
+      } else {
+        computed.push({
+          id: 'gap-officer-pending',
+          title: `Agente fiscal pendente em ${missingOfficer.length} evidência(s)`,
+          category: 'pending',
+          status: '⚠️',
+          description: `Evidências sem agente qualificado: ${missingOfficer.map((e) => e.code).join(', ')}.`,
+          action: 'Identificar Agente',
+          route: '/evidence',
+        })
+      }
+
+      // 5. In-review evidence
+      const inReviewEvds = evidenceList.filter((e) => e.status === 'Em revisão')
+      if (inReviewEvds.length > 0) {
+        computed.push({
+          id: 'gap-in-review',
+          title: `${inReviewEvds.length} evidência(s) em revisão técnica`,
+          category: 'pending',
+          status: '⚠️',
+          description: `Registros que aguardam conferência: ${inReviewEvds.map((e) => e.code).join(', ')}.`,
+          action: 'Revisar no Centro de Evidências',
+          route: '/evidence',
+        })
+      }
+
+      // 6. Documents (e.g. CAR / Matrícula)
+      const docs = evidenceList.filter((e) => e.type === 'Documento')
+      if (docs.length === 0) {
+        computed.push({
+          id: 'gap-doc-missing',
+          title: 'Documento de propriedade / CAR não anexado',
+          category: 'pending',
+          status: '⚠️',
+          description:
+            'Notificação formal emitida mas certidão dominial ou recibo do CAR ainda pendente.',
+          action: 'Anexar Documento',
+          route: '/evidence',
+        })
+      } else {
+        computed.push({
+          id: 'gap-doc-ok',
+          title: `Documentos anexados (${docs.length})`,
+          category: 'completed',
+          status: '✅',
+          description: `Juntados aos autos: ${docs.map((d) => `${d.code}`).join(', ')}.`,
+          action: null,
+        })
+      }
+
+      // 7. Area polygon / estimation
+      computed.push({
+        id: 'gap-area-calc',
+        title: 'Poligonal vetorial e cálculo de área definitivo',
+        category: 'missing',
+        status: '❌',
+        description:
+          'Delimitação por satélite preliminar pendente de arquivo shapefile definitivo.',
+        action: 'Editar Fiscalização',
+        route: demoInsp ? `/inspections/${demoInsp.id_number}/edit` : '/inspections',
+      })
+
+      setItems(computed)
+    } catch (err) {
+      console.error('Failed to load dynamic gaps:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const completedCount = items.filter((i) => i.category === 'completed').length
   const totalCount = items.length
@@ -192,7 +269,9 @@ export const GapsChecklist: React.FC = () => {
         <div className="rounded-2xl border border-amber-200 bg-white p-5 shadow-xs space-y-3">
           <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-[#D97706]">
             <AlertTriangle className="w-4 h-4" />
-            <span>{t('gaps.pending_review')} (3)</span>
+            <span>
+              {t('gaps.pending_review')} ({items.filter((i) => i.category === 'pending').length})
+            </span>
           </div>
 
           <div className="space-y-2">
@@ -211,14 +290,16 @@ export const GapsChecklist: React.FC = () => {
                     <p className="text-[11px] text-amber-950/80">{item.description}</p>
                   </div>
 
-                  <Button
-                    size="sm"
-                    onClick={() => handleResolveAction(item.route)}
-                    className="self-end sm:self-center bg-[#B45309] hover:bg-amber-800 text-white text-xs font-semibold h-8 px-3 rounded-lg shadow-xs"
-                  >
-                    <Plus className="w-3.5 h-3.5 mr-1" />
-                    <span>{item.action || t('gaps.action_add')}</span>
-                  </Button>
+                  {item.action && (
+                    <Button
+                      size="sm"
+                      onClick={() => handleResolveAction(item.route || null)}
+                      className="self-end sm:self-center bg-[#B45309] hover:bg-amber-800 text-white text-xs font-semibold h-8 px-3 rounded-lg shadow-xs"
+                    >
+                      <Plus className="w-3.5 h-3.5 mr-1" />
+                      <span>{item.action || t('gaps.action_add')}</span>
+                    </Button>
+                  )}
                 </div>
               ))}
           </div>
@@ -228,7 +309,9 @@ export const GapsChecklist: React.FC = () => {
         <div className="rounded-2xl border border-red-200 bg-white p-5 shadow-xs space-y-3">
           <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-[#B3261E]">
             <XCircle className="w-4 h-4" />
-            <span>{t('gaps.missing_item')} (1)</span>
+            <span>
+              {t('gaps.missing_item')} ({items.filter((i) => i.category === 'missing').length})
+            </span>
           </div>
 
           <div className="space-y-2">

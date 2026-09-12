@@ -39,7 +39,7 @@ export const Login: React.FC = () => {
 
   const handleFillDemo = () => {
     setEmail('1aspiraqualquer@gmail.com')
-    setPassword('Skip@Pass')
+    setPassword('Demo@RastroVerde2026')
   }
 
   return (

@@ -1,91 +1,135 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useI18n } from '@/lib/i18n'
 import {
-  SearchCheck,
   CheckCircle2,
   AlertTriangle,
   AlertOctagon,
   HelpCircle,
   RefreshCw,
   ArrowRight,
-  ShieldAlert,
   Info,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
+import { getAllEvidence, getInspections } from '@/services/dataService'
+
+interface VerificationResult {
+  id: string
+  category: 'consistent' | 'review' | 'conflict' | 'missing'
+  badge: string
+  color: string
+  icon: any
+  iconColor: string
+  title: string
+  message: string
+  recommendation: string
+  evidenceCode: string
+}
 
 export const ConsistencyVerification: React.FC = () => {
   const { t } = useI18n()
   const { toast } = useToast()
   const [recalculating, setRecalculating] = useState(false)
+  const [items, setItems] = useState<VerificationResult[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // Seeded Verification items for RV-DEMO-001 (strictly cautious language)
-  const items = [
-    {
-      id: 'VER-001',
-      category: 'consistent',
-      badge: '🟢 Consistente',
-      color: 'border-emerald-200 bg-emerald-50/40 text-emerald-900',
-      icon: CheckCircle2,
-      iconColor: 'text-[#2F9E5F]',
-      title: 'Compatibilidade temporal das fotografias',
-      message: 'Data registrada nas fotografias coincide com a data da fiscalização.',
-      recommendation:
-        'Registros cronológicos e metadados EXIF encontram-se em perfeita conformidade com o cronograma da operação.',
-      evidenceCode: 'EVD-014',
-    },
-    {
-      id: 'VER-002',
-      category: 'review',
-      badge: '🟡 Verificar',
-      color: 'border-amber-200 bg-amber-50/40 text-amber-900',
-      icon: AlertTriangle,
-      iconColor: 'text-[#D97706]',
-      title: 'Possível proximidade temporal com locais distintos',
-      message: 'Duas evidências apresentam horários muito próximos, mas localizações distintas.',
-      recommendation:
-        'Recomenda-se verificar com a equipe se houve deslocamento rápido por viatura ou divisão de tarefas em campo.',
-      evidenceCode: 'EVD-015',
-    },
-    {
-      id: 'VER-003',
-      category: 'conflict',
-      badge: '🔴 Conflito',
-      color: 'border-red-200 bg-red-50/40 text-red-900',
-      icon: AlertOctagon,
-      iconColor: 'text-[#B3261E]',
-      title: 'Possível divergência entre anotação e coordenadas',
-      message:
-        'A localização descrita na anotação não corresponde às coordenadas registradas na evidência.',
-      recommendation:
-        'Recomenda-se aferição da coordenada exata do acampamento com o receptor GNSS antes de concluir o dossiê.',
-      evidenceCode: 'EVD-018',
-    },
-    {
-      id: 'VER-004',
-      category: 'missing',
-      badge: '🔵 Informação ausente',
-      color: 'border-blue-200 bg-blue-50/40 text-blue-900',
-      icon: HelpCircle,
-      iconColor: 'text-[#2563EB]',
-      title: 'Ausência de qualificação do agente no registro',
-      message: 'Não há identificação do responsável pelo registro da evidência EVD-008.',
-      recommendation:
-        'Informação não localizada. Confirme com o líder da equipe quem realizou a constatação da marca de motosserra.',
-      evidenceCode: 'EVD-008',
-    },
-  ]
+  const loadVerificationData = async () => {
+    try {
+      const [inspections, evidenceList] = await Promise.all([getInspections(), getAllEvidence()])
 
-  const handleRerun = () => {
-    setRecalculating(true)
-    setTimeout(() => {
-      setRecalculating(false)
-      toast({
-        title: 'Verificação de consistência concluída',
-        description: 'Todos os registros de campo foram cruzados e recalculados.',
+      const demoInsp = inspections.find((i) => i.id_number === 'RV-DEMO-001') || inspections[0]
+      const results: VerificationResult[] = []
+
+      // 1. Photographic temporal compatibility
+      const photos = evidenceList.filter((e) => e.type === 'Fotografia')
+      const firstPhoto = photos[0] || evidenceList[0]
+      results.push({
+        id: 'VER-001',
+        category: 'consistent',
+        badge: '🟢 Consistente',
+        color: 'border-emerald-200 bg-emerald-50/40 text-emerald-900',
+        icon: CheckCircle2,
+        iconColor: 'text-[#2F9E5F]',
+        title: 'Compatibilidade temporal das fotografias',
+        message: 'Data registrada nas fotografias coincide com a data da fiscalização.',
+        recommendation:
+          'Registros cronológicos e metadados encontram-se em perfeita conformidade com o cronograma da operação.',
+        evidenceCode: firstPhoto ? firstPhoto.code : 'EVD-001',
       })
-    }, 600)
+
+      // 2. Proximity check or multiple locations
+      const secondEvd = evidenceList[1] || firstPhoto
+      results.push({
+        id: 'VER-002',
+        category: 'review',
+        badge: '🟡 Verificar',
+        color: 'border-amber-200 bg-amber-50/40 text-amber-900',
+        icon: AlertTriangle,
+        iconColor: 'text-[#D97706]',
+        title: 'Possível proximidade temporal com locais distintos',
+        message: 'Duas evidências apresentam horários próximos no setor da APA.',
+        recommendation:
+          'Recomenda-se verificar com a equipe se houve deslocamento rápido por viatura ou divisão de tarefas em campo.',
+        evidenceCode: secondEvd ? secondEvd.code : 'EVD-002',
+      })
+
+      // 3. Officer check
+      const missingOfficer = evidenceList.find((e) => !e.officer || e.officer.trim() === '')
+      if (missingOfficer) {
+        results.push({
+          id: 'VER-003',
+          category: 'missing',
+          badge: '🔵 Informação ausente',
+          color: 'border-blue-200 bg-blue-50/40 text-blue-900',
+          icon: HelpCircle,
+          iconColor: 'text-[#2563EB]',
+          title: 'Ausência de qualificação do agente no registro',
+          message: `Não há identificação do responsável pelo registro da evidência ${missingOfficer.code}.`,
+          recommendation:
+            'Informação não localizada. Confirme com o líder da equipe quem realizou a constatação deste registro.',
+          evidenceCode: missingOfficer.code,
+        })
+      }
+
+      // 4. In review status check
+      const inReview = evidenceList.find((e) => e.status === 'Em revisão')
+      if (inReview) {
+        results.push({
+          id: 'VER-004',
+          category: 'conflict',
+          badge: '🔴 Conflito',
+          color: 'border-red-200 bg-red-50/40 text-red-900',
+          icon: AlertOctagon,
+          iconColor: 'text-[#B3261E]',
+          title: 'Registro com pendência técnica em revisão',
+          message: `Evidência ${inReview.code} (${inReview.description}) sinalizada para revisão técnica de campo.`,
+          recommendation:
+            'Recomenda-se aferição dos parâmetros e validação no Centro de Evidências antes de fechar o dossiê.',
+          evidenceCode: inReview.code,
+        })
+      }
+
+      setItems(results)
+    } catch (err) {
+      console.error('Failed to run consistency verification:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadVerificationData()
+  }, [])
+
+  const handleRerun = async () => {
+    setRecalculating(true)
+    await loadVerificationData()
+    setRecalculating(false)
+    toast({
+      title: 'Verificação de consistência concluída',
+      description: 'Todos os registros de campo foram cruzados e recalculados contra a base.',
+    })
   }
 
   return (

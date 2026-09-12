@@ -129,56 +129,58 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Container */}
       <div className="mx-auto flex w-full max-w-7xl flex-1 px-4 sm:px-6 lg:px-8 py-6 gap-6">
         {/* Desktop Sidebar (>=1024px) */}
-        {isAuthenticated && (
-          <aside className="hidden lg:block w-60 shrink-0">
-            <div className="sticky top-24 rounded-2xl border border-[#E2E8E4] bg-white p-3 shadow-xs">
-              <div className="px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[#5B6B63]">
-                {t('nav.overview')} &amp; Trilha
-              </div>
-              <nav className="space-y-1">
-                {navItems.map((item) => {
-                  const Icon = item.icon
-                  const isActive =
-                    item.to === '/dashboard'
-                      ? location.pathname === '/dashboard'
-                      : location.pathname.startsWith(item.to)
-                  return (
-                    <NavLink
-                      key={item.to}
-                      to={item.to}
-                      className={({ isActive: matchActive }) =>
-                        `flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all ${
-                          matchActive
-                            ? 'bg-[#E7F2EC] text-[#1B5E3A] font-semibold shadow-xs'
-                            : 'text-[#5B6B63] hover:bg-[#F7F9F8] hover:text-[#143028]'
-                        }`
-                      }
-                    >
-                      <Icon className="w-4 h-4 shrink-0" />
-                      <span>{item.label}</span>
-                    </NavLink>
-                  )
-                })}
-              </nav>
+        {location.pathname !== '/' &&
+          location.pathname !== '/login' &&
+          location.pathname !== '/signup' && (
+            <aside className="hidden lg:block w-60 shrink-0">
+              <div className="sticky top-24 rounded-2xl border border-[#E2E8E4] bg-white p-3 shadow-xs">
+                <div className="px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[#5B6B63]">
+                  {t('nav.overview')} &amp; Trilha
+                </div>
+                <nav className="space-y-1">
+                  {navItems.map((item) => {
+                    const Icon = item.icon
+                    const isActive =
+                      item.to === '/dashboard'
+                        ? location.pathname === '/dashboard'
+                        : location.pathname.startsWith(item.to)
+                    return (
+                      <NavLink
+                        key={item.to}
+                        to={item.to}
+                        className={({ isActive: matchActive }) =>
+                          `flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all ${
+                            matchActive
+                              ? 'bg-[#E7F2EC] text-[#1B5E3A] font-semibold shadow-xs'
+                              : 'text-[#5B6B63] hover:bg-[#F7F9F8] hover:text-[#143028]'
+                          }`
+                        }
+                      >
+                        <Icon className="w-4 h-4 shrink-0" />
+                        <span>{item.label}</span>
+                      </NavLink>
+                    )
+                  })}
+                </nav>
 
-              {/* Quick Case Shortcut */}
-              <div className="mt-4 pt-4 border-t border-[#E2E8E4] px-3">
-                <Link
-                  to="/inspections/RV-DEMO-001"
-                  className="block rounded-lg bg-[#F7F9F8] border border-[#E2E8E4] p-2.5 hover:border-[#1B5E3A] transition-colors group"
-                >
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1B5E3A]">
-                    <Compass className="w-3.5 h-3.5" />
-                    <span>RV-DEMO-001</span>
-                  </div>
-                  <div className="text-[11px] text-[#5B6B63] mt-0.5 line-clamp-1">
-                    APA Setor Norte (Demo)
-                  </div>
-                </Link>
+                {/* Quick Case Shortcut */}
+                <div className="mt-4 pt-4 border-t border-[#E2E8E4] px-3">
+                  <Link
+                    to="/inspections/RV-DEMO-001"
+                    className="block rounded-lg bg-[#F7F9F8] border border-[#E2E8E4] p-2.5 hover:border-[#1B5E3A] transition-colors group"
+                  >
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1B5E3A]">
+                      <Compass className="w-3.5 h-3.5" />
+                      <span>RV-DEMO-001</span>
+                    </div>
+                    <div className="text-[11px] text-[#5B6B63] mt-0.5 line-clamp-1">
+                      APA Setor Norte (Demo)
+                    </div>
+                  </Link>
+                </div>
               </div>
-            </div>
-          </aside>
-        )}
+            </aside>
+          )}
 
         {/* Content Area */}
         <main className="flex-1 min-w-0 pb-20 lg:pb-6">{children}</main>
@@ -228,7 +230,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
             <div className="pt-4 border-t border-[#E2E8E4] flex flex-col gap-2">
               <div className="text-xs text-[#5B6B63]">{t('badge.demo')}</div>
-              {isAuthenticated && (
+              {isAuthenticated ? (
                 <Button
                   variant="outline"
                   size="sm"
@@ -241,6 +243,17 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <LogOut className="w-3.5 h-3.5 mr-2" />
                   {t('nav.logout')}
                 </Button>
+              ) : (
+                <Link to="/login" onClick={() => setMobileDrawerOpen(false)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-[#1B5E3A] border-[#1B5E3A]/30 text-xs"
+                  >
+                    <LogIn className="w-3.5 h-3.5 mr-2" />
+                    {t('nav.login')}
+                  </Button>
+                </Link>
               )}
             </div>
           </div>
@@ -248,98 +261,92 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
 
       {/* Mobile Bottom Navigation (<=640px) */}
-      {isAuthenticated && (
-        <nav
-          className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-[#E2E8E4] px-2 py-1.5 flex items-center justify-around shadow-lg"
-          aria-label="Navegação móvel"
-        >
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) =>
-              `flex flex-col items-center justify-center min-w-[56px] py-1 text-[11px] font-medium transition-colors ${
-                isActive ? 'text-[#1B5E3A] font-semibold' : 'text-[#5B6B63]'
-              }`
-            }
+      {location.pathname !== '/' &&
+        location.pathname !== '/login' &&
+        location.pathname !== '/signup' && (
+          <nav
+            className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-[#E2E8E4] px-2 py-1.5 flex items-center justify-around shadow-lg"
+            aria-label="Navegação móvel"
           >
-            <LayoutDashboard className="w-5 h-5" />
-            <span className="mt-0.5">{t('nav.home')}</span>
-          </NavLink>
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                `flex flex-col items-center justify-center min-w-[56px] py-1 text-[11px] font-medium transition-colors ${
+                  isActive ? 'text-[#1B5E3A] font-semibold' : 'text-[#5B6B63]'
+                }`
+              }
+            >
+              <LayoutDashboard className="w-5 h-5" />
+              <span className="mt-0.5">{t('nav.home')}</span>
+            </NavLink>
 
-          <NavLink
-            to="/inspections"
-            className={({ isActive }) =>
-              `flex flex-col items-center justify-center min-w-[56px] py-1 text-[11px] font-medium transition-colors ${
-                isActive ? 'text-[#1B5E3A] font-semibold' : 'text-[#5B6B63]'
-              }`
-            }
-          >
-            <FileCheck2 className="w-5 h-5" />
-            <span className="mt-0.5">{t('nav.inspections')}</span>
-          </NavLink>
+            <NavLink
+              to="/inspections"
+              className={({ isActive }) =>
+                `flex flex-col items-center justify-center min-w-[56px] py-1 text-[11px] font-medium transition-colors ${
+                  isActive ? 'text-[#1B5E3A] font-semibold' : 'text-[#5B6B63]'
+                }`
+              }
+            >
+              <FileCheck2 className="w-5 h-5" />
+              <span className="mt-0.5">{t('nav.inspections')}</span>
+            </NavLink>
 
-          {/* Centered Prominent Quick Add Button */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                type="button"
-                className="-mt-5 flex items-center justify-center w-12 h-12 rounded-full bg-[#1B5E3A] text-white shadow-md hover:bg-[#14502F] active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-[#1B5E3A] focus:ring-offset-2"
-                aria-label={t('nav.quick_new')}
-              >
-                <Plus className="w-6 h-6 stroke-[2.5]" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="center" side="top" className="w-48 mb-2">
-              <DropdownMenuItem onClick={() => navigate('/inspections/new')}>
-                <FilePlus2 className="w-4 h-4 mr-2 text-[#1B5E3A]" />
-                <span>{t('nav.quick_new_insp')}</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/evidence')}>
-                <ImageIcon className="w-4 h-4 mr-2 text-[#0F766E]" />
-                <span>{t('nav.quick_new_evd')}</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            {/* Centered Prominent Quick Add Button */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="-mt-5 flex items-center justify-center w-12 h-12 rounded-full bg-[#1B5E3A] text-white shadow-md hover:bg-[#14502F] active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-[#1B5E3A] focus:ring-offset-2"
+                  aria-label={t('nav.quick_new')}
+                >
+                  <Plus className="w-6 h-6 stroke-[2.5]" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" side="top" className="w-48 mb-2">
+                <DropdownMenuItem onClick={() => navigate('/inspections/new')}>
+                  <FilePlus2 className="w-4 h-4 mr-2 text-[#1B5E3A]" />
+                  <span>{t('nav.quick_new_insp')}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/evidence')}>
+                  <ImageIcon className="w-4 h-4 mr-2 text-[#0F766E]" />
+                  <span>{t('nav.quick_new_evd')}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-          <NavLink
-            to="/evidence"
-            className={({ isActive }) =>
-              `flex flex-col items-center justify-center min-w-[56px] py-1 text-[11px] font-medium transition-colors ${
-                isActive ? 'text-[#1B5E3A] font-semibold' : 'text-[#5B6B63]'
-              }`
-            }
-          >
-            <ImageIcon className="w-5 h-5" />
-            <span className="mt-0.5">{t('nav.evidence')}</span>
-          </NavLink>
+            <NavLink
+              to="/evidence"
+              className={({ isActive }) =>
+                `flex flex-col items-center justify-center min-w-[56px] py-1 text-[11px] font-medium transition-colors ${
+                  isActive ? 'text-[#1B5E3A] font-semibold' : 'text-[#5B6B63]'
+                }`
+              }
+            >
+              <ImageIcon className="w-5 h-5" />
+              <span className="mt-0.5">{t('nav.evidence')}</span>
+            </NavLink>
 
-          <NavLink
-            to="/map"
-            className={({ isActive }) =>
-              `flex flex-col items-center justify-center min-w-[56px] py-1 text-[11px] font-medium transition-colors ${
-                isActive ? 'text-[#1B5E3A] font-semibold' : 'text-[#5B6B63]'
-              }`
-            }
-          >
-            <MapIcon className="w-5 h-5" />
-            <span className="mt-0.5">{t('nav.map')}</span>
-          </NavLink>
-        </nav>
-      )}
+            <NavLink
+              to="/map"
+              className={({ isActive }) =>
+                `flex flex-col items-center justify-center min-w-[56px] py-1 text-[11px] font-medium transition-colors ${
+                  isActive ? 'text-[#1B5E3A] font-semibold' : 'text-[#5B6B63]'
+                }`
+              }
+            >
+              <MapIcon className="w-5 h-5" />
+              <span className="mt-0.5">{t('nav.map')}</span>
+            </NavLink>
+          </nav>
+        )}
 
       {/* Footer */}
       <footer className="w-full border-t border-[#E2E8E4] bg-white py-6 mt-auto">
         <div className="mx-auto flex max-w-7xl flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 text-center sm:text-left">
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+          <div className="flex items-center justify-center sm:justify-start gap-2.5 w-full">
             <RastroVerdeLogo size="sm" showText={false} />
             <p className="text-xs font-medium text-[#143028]">{t('footer.text')}</p>
-          </div>
-
-          <div className="flex items-center gap-4 text-xs text-[#5B6B63]">
-            <span>{t('badge.demo')}</span>
-            <span className="text-[#E2E8E4]">•</span>
-            <Link to="/about" className="hover:text-[#1B5E3A] transition-colors">
-              {t('nav.about')}
-            </Link>
           </div>
         </div>
       </footer>

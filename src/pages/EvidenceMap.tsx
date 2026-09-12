@@ -19,12 +19,20 @@ export const EvidenceMap: React.FC = () => {
   ])
 
   useEffect(() => {
-    getAllEvidence().then((res) => {
-      setEvidenceList(res)
-      // Select first evidence by default for visual demonstration
-      if (res.length > 0) setSelectedEvidence(res[0])
-    })
+    loadMapData()
   }, [])
+
+  const loadMapData = async () => {
+    try {
+      const res = await getAllEvidence()
+      setEvidenceList(res)
+      if (res.length > 0) {
+        setSelectedEvidence(res[0])
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   const toggleType = (type: string) => {
     setActiveTypes((prev) =>
