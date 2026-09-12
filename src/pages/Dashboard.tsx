@@ -37,13 +37,41 @@ export const Dashboard: React.FC = () => {
     loadData()
   })
 
+  const [loadError, setLoadError] = useState<string | null>(null)
+
   const loadData = async () => {
-    try {
-      const [inspList, evdList] = await Promise.all([getInspections(), getAllEvidence()])
+    setLoading(true)
+    setLoadError(null)
+
+    const timeoutPromise = new Promise<'TIMEOUT'>((resolve) => {
+      setTimeout(() => resolve('TIMEOUT'), 8000)
+    })
+
+    const fetchPromise = (async () => {
+      const [inspList, evdList] = await Promise.all([
+        getInspections().catch((e) => {
+          console.warn('Dashboard getInspections error:', e)
+          return [] as InspectionRecord[]
+        }),
+        getAllEvidence().catch((e) => {
+          console.warn('Dashboard getAllEvidence error:', e)
+          return [] as any[]
+        }),
+      ])
       setInspections(inspList)
       setEvidenceList(evdList)
-    } catch (err) {
+      return true
+    })()
+
+    try {
+      const race = await Promise.race([fetchPromise, timeoutPromise])
+      if (race === 'TIMEOUT') {
+        console.warn('Dashboard: loadData timed out after 8s')
+        setLoadError('Tempo limite excedido ao carregar dados do painel.')
+      }
+    } catch (err: any) {
       console.error('Failed to load dashboard data:', err)
+      setLoadError(err?.message || 'Falha ao carregar painel.')
     } finally {
       setLoading(false)
     }

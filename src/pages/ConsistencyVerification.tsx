@@ -33,10 +33,27 @@ export const ConsistencyVerification: React.FC = () => {
   const [recalculating, setRecalculating] = useState(false)
   const [items, setItems] = useState<VerificationResult[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   const loadVerificationData = async () => {
-    try {
-      const [inspections, evidenceList] = await Promise.all([getInspections(), getAllEvidence()])
+    setLoading(true)
+    setLoadError(null)
+
+    const timeoutPromise = new Promise<'TIMEOUT'>((resolve) => {
+      setTimeout(() => resolve('TIMEOUT'), 8000)
+    })
+
+    const fetchPromise = (async () => {
+      const [inspections, evidenceList] = await Promise.all([
+        getInspections().catch((e) => {
+          console.warn('Verification getInspections error:', e)
+          return [] as any[]
+        }),
+        getAllEvidence().catch((e) => {
+          console.warn('Verification getAllEvidence error:', e)
+          return [] as any[]
+        }),
+      ])
 
       const demoInsp = inspections.find((i) => i.id_number === 'RV-DEMO-001') || inspections[0]
       const results: VerificationResult[] = []
@@ -111,8 +128,18 @@ export const ConsistencyVerification: React.FC = () => {
       }
 
       setItems(results)
-    } catch (err) {
+      return true
+    })()
+
+    try {
+      const race = await Promise.race([fetchPromise, timeoutPromise])
+      if (race === 'TIMEOUT') {
+        console.warn('ConsistencyVerification timed out after 8s')
+        setLoadError('Tempo limite excedido ao rodar verificação de consistência.')
+      }
+    } catch (err: any) {
       console.error('Failed to run consistency verification:', err)
+      setLoadError(err?.message || 'Falha na verificação de consistência.')
     } finally {
       setLoading(false)
     }
@@ -185,86 +212,109 @@ export const ConsistencyVerification: React.FC = () => {
         </span>
       </div>
 
+      {/* Loading & Error States */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center p-16 space-y-3">
+          <div className="w-8 h-8 border-3 border-[#1B5E3A] border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs text-[#5B6B63] font-semibold">{t('workspace.loading')}</span>
+        </div>
+      )}
+
+      {!loading && loadError && (
+        <div className="p-8 text-center rounded-3xl border border-amber-200 bg-amber-50/50 space-y-3">
+          <p className="text-xs text-amber-900 font-medium">{loadError}</p>
+          <Button
+            size="sm"
+            onClick={() => loadVerificationData()}
+            className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs"
+          >
+            Tentar novamente
+          </Button>
+        </div>
+      )}
+
       {/* Result Cards Grid com design elegante, sem cores gritantes */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {items.map((item) => {
-          const Icon = item.icon
+      {!loading && !loadError && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {items.map((item) => {
+            const Icon = item.icon
 
-          // Estilo de borda e fundo sutis conforme cada categoria
-          const borderStyle =
-            item.category === 'consistent'
-              ? 'border-emerald-200/90 hover:border-emerald-400'
-              : item.category === 'review'
-                ? 'border-amber-200/90 hover:border-amber-400'
-                : item.category === 'conflict'
-                  ? 'border-rose-200/90 hover:border-rose-400'
-                  : 'border-sky-200/90 hover:border-sky-400'
+            // Estilo de borda e fundo sutis conforme cada categoria
+            const borderStyle =
+              item.category === 'consistent'
+                ? 'border-emerald-200/90 hover:border-emerald-400'
+                : item.category === 'review'
+                  ? 'border-amber-200/90 hover:border-amber-400'
+                  : item.category === 'conflict'
+                    ? 'border-rose-200/90 hover:border-rose-400'
+                    : 'border-sky-200/90 hover:border-sky-400'
 
-          const badgeBg =
-            item.category === 'consistent'
-              ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
-              : item.category === 'review'
-                ? 'bg-amber-50 text-amber-900 border-amber-200'
-                : item.category === 'conflict'
-                  ? 'bg-rose-50 text-rose-900 border-rose-200'
-                  : 'bg-sky-50 text-sky-900 border-sky-200'
+            const badgeBg =
+              item.category === 'consistent'
+                ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                : item.category === 'review'
+                  ? 'bg-amber-50 text-amber-900 border-amber-200'
+                  : item.category === 'conflict'
+                    ? 'bg-rose-50 text-rose-900 border-rose-200'
+                    : 'bg-sky-50 text-sky-900 border-sky-200'
 
-          return (
-            <div
-              key={item.id}
-              className={`rounded-3xl border p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 bg-white transition-all duration-200 hover:shadow-md ${borderStyle}`}
-            >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border ${badgeBg}`}
+            return (
+              <div
+                key={item.id}
+                className={`rounded-3xl border p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 bg-white transition-all duration-200 hover:shadow-md ${borderStyle}`}
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border ${badgeBg}`}
+                    >
+                      {item.badge}
+                    </span>
+                    <span className="font-mono text-[11px] font-semibold text-[#5B6B63] bg-[#F7F9F8] px-2 py-0.5 rounded-md border border-[#E2E8E4]">
+                      {item.id}
+                    </span>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-xl bg-[#F9FCFA] border border-[#E2E8E4] shrink-0 mt-0.5">
+                      <Icon className={`w-4 h-4 ${item.iconColor}`} />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-sm sm:text-base text-[#143028] leading-tight">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs font-medium text-[#5B6B63] mt-1 leading-relaxed">
+                        "{item.message}"
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-[#F9FCFA] border border-[#E2E8E4] text-xs text-[#5B6B63] space-y-1">
+                    <span className="font-bold text-[#143028] block">
+                      {t('verification.rec_title')}
+                    </span>
+                    <p className="leading-relaxed">{item.recommendation}</p>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-[#E2E8E4] flex items-center justify-between">
+                  <span className="text-xs font-mono font-semibold text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-0.5 rounded-md border border-[#1B5E3A]/15">
+                    {t('verification.ref_prefix')} {item.evidenceCode}
+                  </span>
+
+                  <Link
+                    to={`/evidence?source=${item.evidenceCode}`}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#1B5E3A] hover:underline group"
                   >
-                    {item.badge}
-                  </span>
-                  <span className="font-mono text-[11px] font-semibold text-[#5B6B63] bg-[#F7F9F8] px-2 py-0.5 rounded-md border border-[#E2E8E4]">
-                    {item.id}
-                  </span>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-xl bg-[#F9FCFA] border border-[#E2E8E4] shrink-0 mt-0.5">
-                    <Icon className={`w-4 h-4 ${item.iconColor}`} />
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="font-bold text-sm sm:text-base text-[#143028] leading-tight">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs font-medium text-[#5B6B63] mt-1 leading-relaxed">
-                      "{item.message}"
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-[#F9FCFA] border border-[#E2E8E4] text-xs text-[#5B6B63] space-y-1">
-                  <span className="font-bold text-[#143028] block">
-                    {t('verification.rec_title')}
-                  </span>
-                  <p className="leading-relaxed">{item.recommendation}</p>
+                    <span>{t('verification.go_to_evidence')}</span>
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </Link>
                 </div>
               </div>
-
-              <div className="pt-3 border-t border-[#E2E8E4] flex items-center justify-between">
-                <span className="text-xs font-mono font-semibold text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-0.5 rounded-md border border-[#1B5E3A]/15">
-                  {t('verification.ref_prefix')} {item.evidenceCode}
-                </span>
-
-                <Link
-                  to={`/evidence?source=${item.evidenceCode}`}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-[#1B5E3A] hover:underline group"
-                >
-                  <span>{t('verification.go_to_evidence')}</span>
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              </div>
-            </div>
-          )
-        })}
-      </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

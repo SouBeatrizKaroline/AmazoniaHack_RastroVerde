@@ -51,9 +51,28 @@ export const EvidenceCenter: React.FC = () => {
     loadData()
   })
 
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
+
   const loadData = async () => {
-    try {
-      const [allInsp, list] = await Promise.all([getInspections(), getAllEvidence()])
+    setLoading(true)
+    setLoadError(null)
+
+    const timeoutPromise = new Promise<'TIMEOUT'>((resolve) => {
+      setTimeout(() => resolve('TIMEOUT'), 8000)
+    })
+
+    const fetchPromise = (async () => {
+      const [allInsp, list] = await Promise.all([
+        getInspections().catch((e) => {
+          console.warn('EvidenceCenter getInspections error:', e)
+          return [] as any[]
+        }),
+        getAllEvidence().catch((e) => {
+          console.warn('EvidenceCenter getAllEvidence error:', e)
+          return [] as EvidenceRecord[]
+        }),
+      ])
       const demoInsp = allInsp.find((i) => i.id_number === 'RV-DEMO-001') || allInsp[0]
       if (demoInsp) {
         setDefaultInspectionId(demoInsp.id)
@@ -71,8 +90,20 @@ export const EvidenceCenter: React.FC = () => {
           setDetailModalEvidence(target)
         }
       }
-    } catch (err) {
-      console.error(err)
+      return true
+    })()
+
+    try {
+      const race = await Promise.race([fetchPromise, timeoutPromise])
+      if (race === 'TIMEOUT') {
+        console.warn('EvidenceCenter timed out after 8s')
+        setLoadError('Tempo limite excedido ao carregar evidências.')
+      }
+    } catch (err: any) {
+      console.error('EvidenceCenter loadData error:', err)
+      setLoadError(err?.message || 'Falha ao carregar evidências.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -283,7 +314,27 @@ export const EvidenceCenter: React.FC = () => {
           />
         ))}
 
-        {filtered.length === 0 && (
+        {loading && (
+          <div className="col-span-full flex flex-col items-center justify-center p-12 space-y-3">
+            <div className="w-8 h-8 border-3 border-[#1B5E3A] border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs text-[#5B6B63] font-semibold">{t('workspace.loading')}</span>
+          </div>
+        )}
+
+        {!loading && loadError && (
+          <div className="col-span-full p-8 text-center rounded-2xl border border-amber-200 bg-amber-50/50 space-y-3">
+            <p className="text-xs text-amber-900 font-medium">{loadError}</p>
+            <Button
+              size="sm"
+              onClick={() => loadData()}
+              className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs"
+            >
+              Tentar novamente
+            </Button>
+          </div>
+        )}
+
+        {!loading && !loadError && filtered.length === 0 && (
           <div className="col-span-full p-12 text-center rounded-2xl border border-dashed border-[#E2E8E4] bg-white">
             <p className="text-sm font-medium text-[#5B6B63]">{t('evidence.empty')}</p>
           </div>

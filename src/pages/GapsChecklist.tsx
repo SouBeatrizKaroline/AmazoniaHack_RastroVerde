@@ -23,14 +23,31 @@ export const GapsChecklist: React.FC = () => {
 
   const [items, setItems] = useState<GapItem[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   useEffect(() => {
     loadGapsFromData()
   }, [])
 
   const loadGapsFromData = async () => {
-    try {
-      const [inspections, evidenceList] = await Promise.all([getInspections(), getAllEvidence()])
+    setLoading(true)
+    setLoadError(null)
+
+    const timeoutPromise = new Promise<'TIMEOUT'>((resolve) => {
+      setTimeout(() => resolve('TIMEOUT'), 8000)
+    })
+
+    const fetchPromise = (async () => {
+      const [inspections, evidenceList] = await Promise.all([
+        getInspections().catch((e) => {
+          console.warn('GapsChecklist getInspections error:', e)
+          return [] as any[]
+        }),
+        getAllEvidence().catch((e) => {
+          console.warn('GapsChecklist getAllEvidence error:', e)
+          return [] as any[]
+        }),
+      ])
 
       const demoInsp = inspections.find((i) => i.id_number === 'RV-DEMO-001') || inspections[0]
       const computed: GapItem[] = []
@@ -166,8 +183,18 @@ export const GapsChecklist: React.FC = () => {
       })
 
       setItems(computed)
-    } catch (err) {
+      return true
+    })()
+
+    try {
+      const race = await Promise.race([fetchPromise, timeoutPromise])
+      if (race === 'TIMEOUT') {
+        console.warn('GapsChecklist timed out after 8s')
+        setLoadError('Tempo limite excedido ao checar pendências e lacunas.')
+      }
+    } catch (err: any) {
       console.error('Failed to load dynamic gaps:', err)
+      setLoadError(err?.message || 'Falha ao processar lacunas.')
     } finally {
       setLoading(false)
     }
@@ -238,119 +265,144 @@ export const GapsChecklist: React.FC = () => {
         </p>
       </div>
 
-      {/* Checklist Sections com cards arredondados e bordas sutis */}
-      <div className="space-y-4">
-        {/* Completed items */}
-        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-5 sm:p-6 shadow-xs space-y-3">
-          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-emerald-800">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>
-              {t('gaps.completed')} ({completedCount})
-            </span>
-          </div>
-
-          <div className="space-y-2.5">
-            {items
-              .filter((i) => i.category === 'completed')
-              .map((item) => (
-                <div
-                  key={item.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 rounded-2xl bg-emerald-50/40 border border-emerald-200/70 text-xs transition-colors hover:bg-emerald-50/60"
-                >
-                  <div className="space-y-0.5">
-                    <div className="font-bold text-[#143028] flex items-center gap-2 text-sm">
-                      <span>{item.status}</span>
-                      <span>{item.title}</span>
-                    </div>
-                    <p className="text-xs text-[#5B6B63] leading-relaxed">{item.description}</p>
-                  </div>
-
-                  <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider bg-white px-2.5 py-1 rounded-full border border-emerald-200 shadow-2xs self-start sm:self-center shrink-0">
-                    {t('workspace.item_validated')}
-                  </span>
-                </div>
-              ))}
-          </div>
+      {/* Loading & Error States */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center p-16 space-y-3">
+          <div className="w-8 h-8 border-3 border-[#1B5E3A] border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs text-[#5B6B63] font-semibold">{t('workspace.loading')}</span>
         </div>
+      )}
 
-        {/* Pending review items */}
-        <div className="rounded-3xl border border-amber-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-3">
-          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-amber-900">
-            <AlertTriangle className="w-4 h-4 text-amber-600" />
-            <span>
-              {t('gaps.pending_review')} ({items.filter((i) => i.category === 'pending').length})
-            </span>
+      {!loading && loadError && (
+        <div className="p-8 text-center rounded-3xl border border-amber-200 bg-amber-50/50 space-y-3">
+          <p className="text-xs text-amber-900 font-medium">{loadError}</p>
+          <Button
+            size="sm"
+            onClick={() => loadGapsFromData()}
+            className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs"
+          >
+            Tentar novamente
+          </Button>
+        </div>
+      )}
+
+      {/* Checklist Sections com cards arredondados e bordas sutis */}
+      {!loading && !loadError && (
+        <div className="space-y-4">
+          {/* Completed items */}
+          <div className="rounded-3xl border border-[#E2E8E4] bg-white p-5 sm:p-6 shadow-xs space-y-3">
+            <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-emerald-800">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>
+                {t('gaps.completed')} ({completedCount})
+              </span>
+            </div>
+
+            <div className="space-y-2.5">
+              {items
+                .filter((i) => i.category === 'completed')
+                .map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 rounded-2xl bg-emerald-50/40 border border-emerald-200/70 text-xs transition-colors hover:bg-emerald-50/60"
+                  >
+                    <div className="space-y-0.5">
+                      <div className="font-bold text-[#143028] flex items-center gap-2 text-sm">
+                        <span>{item.status}</span>
+                        <span>{item.title}</span>
+                      </div>
+                      <p className="text-xs text-[#5B6B63] leading-relaxed">{item.description}</p>
+                    </div>
+
+                    <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider bg-white px-2.5 py-1 rounded-full border border-emerald-200 shadow-2xs self-start sm:self-center shrink-0">
+                      {t('workspace.item_validated')}
+                    </span>
+                  </div>
+                ))}
+            </div>
           </div>
 
-          <div className="space-y-2.5">
-            {items
-              .filter((i) => i.category === 'pending')
-              .map((item) => (
-                <div
-                  key={item.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-amber-50/40 border border-amber-200/80 text-xs transition-colors hover:bg-amber-50/60"
-                >
-                  <div className="space-y-0.5">
-                    <div className="font-bold text-[#143028] flex items-center gap-2 text-sm">
-                      <span>{item.status}</span>
-                      <span>{item.title}</span>
-                    </div>
-                    <p className="text-xs text-amber-950/80 leading-relaxed">{item.description}</p>
-                  </div>
+          {/* Pending review items */}
+          <div className="rounded-3xl border border-amber-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-3">
+            <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-amber-900">
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
+              <span>
+                {t('gaps.pending_review')} ({items.filter((i) => i.category === 'pending').length})
+              </span>
+            </div>
 
-                  {item.action && (
+            <div className="space-y-2.5">
+              {items
+                .filter((i) => i.category === 'pending')
+                .map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-amber-50/40 border border-amber-200/80 text-xs transition-colors hover:bg-amber-50/60"
+                  >
+                    <div className="space-y-0.5">
+                      <div className="font-bold text-[#143028] flex items-center gap-2 text-sm">
+                        <span>{item.status}</span>
+                        <span>{item.title}</span>
+                      </div>
+                      <p className="text-xs text-amber-950/80 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    {item.action && (
+                      <Button
+                        size="sm"
+                        onClick={() => handleResolveAction(item.route || null)}
+                        className="self-end sm:self-center bg-[#B45309] hover:bg-amber-800 text-white text-xs font-bold h-9 px-3.5 rounded-xl shadow-2xs shrink-0"
+                      >
+                        <Plus className="w-3.5 h-3.5 mr-1" />
+                        <span>{item.action || t('gaps.action_add')}</span>
+                      </Button>
+                    )}
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* Missing item */}
+          <div className="rounded-3xl border border-rose-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-3">
+            <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-rose-900">
+              <XCircle className="w-4 h-4 text-rose-600" />
+              <span>
+                {t('gaps.missing_item')} ({items.filter((i) => i.category === 'missing').length})
+              </span>
+            </div>
+
+            <div className="space-y-2.5">
+              {items
+                .filter((i) => i.category === 'missing')
+                .map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-rose-50/40 border border-rose-200/80 text-xs transition-colors hover:bg-rose-50/60"
+                  >
+                    <div className="space-y-0.5">
+                      <div className="font-bold text-rose-950 flex items-center gap-2 text-sm">
+                        <span>{item.status}</span>
+                        <span>{item.title}</span>
+                      </div>
+                      <p className="text-xs text-rose-950/80 leading-relaxed">{item.description}</p>
+                    </div>
+
                     <Button
                       size="sm"
-                      onClick={() => handleResolveAction(item.route || null)}
-                      className="self-end sm:self-center bg-[#B45309] hover:bg-amber-800 text-white text-xs font-bold h-9 px-3.5 rounded-xl shadow-2xs shrink-0"
+                      onClick={() => handleResolveAction(item.route)}
+                      className="self-end sm:self-center bg-[#B3261E] hover:bg-red-800 text-white text-xs font-bold h-9 px-3.5 rounded-xl shadow-2xs shrink-0"
                     >
                       <Plus className="w-3.5 h-3.5 mr-1" />
                       <span>{item.action || t('gaps.action_add')}</span>
                     </Button>
-                  )}
-                </div>
-              ))}
-          </div>
-        </div>
-
-        {/* Missing item */}
-        <div className="rounded-3xl border border-rose-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-3">
-          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-rose-900">
-            <XCircle className="w-4 h-4 text-rose-600" />
-            <span>
-              {t('gaps.missing_item')} ({items.filter((i) => i.category === 'missing').length})
-            </span>
-          </div>
-
-          <div className="space-y-2.5">
-            {items
-              .filter((i) => i.category === 'missing')
-              .map((item) => (
-                <div
-                  key={item.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-rose-50/40 border border-rose-200/80 text-xs transition-colors hover:bg-rose-50/60"
-                >
-                  <div className="space-y-0.5">
-                    <div className="font-bold text-rose-950 flex items-center gap-2 text-sm">
-                      <span>{item.status}</span>
-                      <span>{item.title}</span>
-                    </div>
-                    <p className="text-xs text-rose-950/80 leading-relaxed">{item.description}</p>
                   </div>
-
-                  <Button
-                    size="sm"
-                    onClick={() => handleResolveAction(item.route)}
-                    className="self-end sm:self-center bg-[#B3261E] hover:bg-red-800 text-white text-xs font-bold h-9 px-3.5 rounded-xl shadow-2xs shrink-0"
-                  >
-                    <Plus className="w-3.5 h-3.5 mr-1" />
-                    <span>{item.action || t('gaps.action_add')}</span>
-                  </Button>
-                </div>
-              ))}
+                ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

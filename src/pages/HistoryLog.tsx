@@ -21,23 +21,48 @@ import { useRealtime } from '@/hooks/use-realtime'
 export const HistoryLog: React.FC = () => {
   const { t } = useI18n()
   const [activities, setActivities] = useState<ActivityRecord[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   useRealtime('activities', () => {
     loadData()
   })
 
   const loadData = async () => {
-    try {
+    setLoading(true)
+    setLoadError(null)
+
+    const timeoutPromise = new Promise<'TIMEOUT'>((resolve) => {
+      setTimeout(() => resolve('TIMEOUT'), 8000)
+    })
+
+    const fetchPromise = (async () => {
       let list: ActivityRecord[] = []
       try {
-        const insp = await getInspectionByNumber('RV-DEMO-001')
-        list = await getActivitiesByInspection(insp.id)
-      } catch {
-        list = await getAllActivities()
+        const insp = await getInspectionByNumber('RV-DEMO-001').catch(() => null)
+        if (insp) {
+          list = await getActivitiesByInspection(insp.id).catch(() => [])
+        } else {
+          list = await getAllActivities().catch(() => [])
+        }
+      } catch (e) {
+        list = await getAllActivities().catch(() => [])
       }
       setActivities(list)
-    } catch (err) {
-      console.error(err)
+      return true
+    })()
+
+    try {
+      const race = await Promise.race([fetchPromise, timeoutPromise])
+      if (race === 'TIMEOUT') {
+        console.warn('HistoryLog timed out after 8s')
+        setLoadError('Tempo limite excedido ao carregar trilha de eventos.')
+      }
+    } catch (err: any) {
+      console.error('HistoryLog loadData error:', err)
+      setLoadError(err?.message || 'Falha ao carregar eventos.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -66,26 +91,48 @@ export const HistoryLog: React.FC = () => {
           <span className="text-xs text-[#0F766E] font-semibold">Caso: RV-DEMO-001</span>
         </div>
 
-        <div className="relative pl-6 border-l-2 border-[#1B5E3A]/30 space-y-5">
-          {activities.map((act) => (
-            <div key={act.id} className="relative group">
-              {/* Dot */}
-              <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-white border-2 border-[#1B5E3A] group-hover:bg-[#1B5E3A] transition-colors" />
+        {loading && (
+          <div className="flex flex-col items-center justify-center p-12 space-y-3">
+            <div className="w-8 h-8 border-3 border-[#1B5E3A] border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs text-[#5B6B63] font-semibold">{t('workspace.loading')}</span>
+          </div>
+        )}
 
-              <div className="p-3.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] hover:border-[#1B5E3A] transition-all space-y-1">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-mono font-bold text-[#1B5E3A]">{act.timestamp}</span>
-                  <span className="flex items-center gap-1 text-[11px] text-[#5B6B63]">
-                    <User className="w-3 h-3" />
-                    <span>{act.actor}</span>
-                  </span>
+        {!loading && loadError && (
+          <div className="p-6 text-center rounded-2xl border border-amber-200 bg-amber-50/50 space-y-2">
+            <p className="text-xs text-amber-900 font-medium">{loadError}</p>
+            <button
+              type="button"
+              onClick={() => loadData()}
+              className="text-xs font-bold text-[#1B5E3A] underline"
+            >
+              Tentar novamente
+            </button>
+          </div>
+        )}
+
+        {!loading && !loadError && (
+          <div className="relative pl-6 border-l-2 border-[#1B5E3A]/30 space-y-5">
+            {activities.map((act) => (
+              <div key={act.id} className="relative group">
+                {/* Dot */}
+                <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-white border-2 border-[#1B5E3A] group-hover:bg-[#1B5E3A] transition-colors" />
+
+                <div className="p-3.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] hover:border-[#1B5E3A] transition-all space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-mono font-bold text-[#1B5E3A]">{act.timestamp}</span>
+                    <span className="flex items-center gap-1 text-[11px] text-[#5B6B63]">
+                      <User className="w-3 h-3" />
+                      <span>{act.actor}</span>
+                    </span>
+                  </div>
+
+                  <p className="text-xs font-medium text-[#143028]">{act.description}</p>
                 </div>
-
-                <p className="text-xs font-medium text-[#143028]">{act.description}</p>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

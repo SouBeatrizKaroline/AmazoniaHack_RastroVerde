@@ -73,41 +73,88 @@ export const InspectionDetail: React.FC = () => {
     loadData()
   })
 
+  const [loadError, setLoadError] = useState<string | null>(null)
+
   const loadData = async () => {
-    if (!id) return
-    try {
+    if (!id) {
+      setLoading(false)
+      return
+    }
+
+    setLoading(true)
+    setLoadError(null)
+
+    // Safety timeout: ensure loading cannot hang infinitely (e.g. 8s maximum)
+    const timeoutPromise = new Promise<'TIMEOUT'>((resolve) => {
+      setTimeout(() => resolve('TIMEOUT'), 8000)
+    })
+
+    const fetchPromise = (async () => {
       let record: InspectionRecord | null = null
 
-      if (id.startsWith('RV-')) {
+      // Direct check: is it RV-DEMO-001 or id starts with RV-
+      if (id === 'RV-DEMO-001' || id.includes('RV-DEMO-001')) {
+        try {
+          record = await getInspectionByNumber('RV-DEMO-001')
+        } catch (e1) {
+          console.warn('getInspectionByNumber failed for demo, trying getInspectionById:', e1)
+          try {
+            record = await getInspectionById('9ykaitbzexx3fy5')
+          } catch (e2) {
+            console.warn('getInspectionById failed for demo, searching list:', e2)
+            try {
+              const demoList = await getInspections('id_number = "RV-DEMO-001"')
+              if (demoList && demoList.length > 0) {
+                record = demoList[0]
+              }
+            } catch (e3) {
+              console.warn('List by id_number failed, trying is_demo filter:', e3)
+              try {
+                const list = await getInspections('is_demo = true')
+                record = list.find((i) => i.id_number === 'RV-DEMO-001') || list[0] || null
+              } catch (_) {
+                // Ignore and proceed
+              }
+            }
+          }
+        }
+      } else if (id.startsWith('RV-')) {
         try {
           record = await getInspectionByNumber(id)
-        } catch (numErr) {
-          // If searching by number failed, attempt to find by matching list
-          const list = await getInspections(`id_number = "${id}"`)
-          if (list && list.length > 0) {
-            record = list[0]
+        } catch {
+          try {
+            const list = await getInspections(`id_number = "${id}"`)
+            if (list && list.length > 0) record = list[0]
+          } catch {
+            // fallback
           }
         }
       } else {
         try {
           record = await getInspectionById(id)
         } catch {
-          // Fallback: check if id matches id_number
           try {
             record = await getInspectionByNumber(id)
           } catch {
-            const list = await getInspections()
-            const found = list.find((i) => i.id === id || i.id_number === id)
-            if (found) record = found
+            try {
+              const list = await getInspections()
+              const found = list.find((i) => i.id === id || i.id_number === id)
+              if (found) record = found
+            } catch {
+              /* intentionally ignored */
+            }
           }
         }
       }
 
-      // Special fallback specifically for demo case RV-DEMO-001
+      // Final fallback if still not found
       if (!record && id.includes('RV-DEMO-001')) {
-        const demoList = await getInspections('is_demo = true')
-        if (demoList && demoList.length > 0) {
-          record = demoList.find((i) => i.id_number === 'RV-DEMO-001') || demoList[0]
+        try {
+          const all = await getInspections()
+          record =
+            all.find((i) => i.id_number === 'RV-DEMO-001' || i.id === '9ykaitbzexx3fy5') || null
+        } catch {
+          /* intentionally ignored */
         }
       }
 
@@ -117,15 +164,32 @@ export const InspectionDetail: React.FC = () => {
 
       setInspection(record)
 
+      // Parallel fetch for evidences and activities with individual error safety
       const [evds, acts] = await Promise.all([
-        getEvidenceByInspection(record.id).catch(() => []),
-        getActivitiesByInspection(record.id).catch(() => []),
+        getEvidenceByInspection(record.id).catch((err) => {
+          console.warn('Failed to load evidence for inspection:', err)
+          return [] as EvidenceRecord[]
+        }),
+        getActivitiesByInspection(record.id).catch((err) => {
+          console.warn('Failed to load activities for inspection:', err)
+          return [] as ActivityRecord[]
+        }),
       ])
+
       setEvidenceList(evds)
       setActivitiesList(acts)
-    } catch (err) {
+      return record
+    })()
+
+    try {
+      const raceResult = await Promise.race([fetchPromise, timeoutPromise])
+      if (raceResult === 'TIMEOUT') {
+        console.warn('InspectionDetail: loadData timed out after 8s')
+        setLoadError('Tempo limite excedido ao carregar os dados.')
+      }
+    } catch (err: any) {
       console.error('InspectionDetail error loading data:', err)
-      toast({ title: t('workspace.not_found'), variant: 'destructive' })
+      setLoadError(err?.message || 'Falha ao carregar a fiscalização.')
     } finally {
       setLoading(false)
     }
@@ -148,11 +212,14 @@ export const InspectionDetail: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center p-16 sm:p-24 space-y-4">
+      <div className="flex flex-col items-center justify-center p-16 sm:p-24 space-y-4 min-h-[400px]">
         <div className="w-10 h-10 border-3 border-[#1B5E3A] border-t-transparent rounded-full animate-spin" />
         <div className="text-xs font-semibold text-[#5B6B63] tracking-wide animate-pulse">
           {t('workspace.loading')}
         </div>
+        <p className="text-[11px] text-[#5B6B63]/70 font-mono">
+          Identificador: {id || 'RV-DEMO-001'}
+        </p>
       </div>
     )
   }
@@ -167,17 +234,29 @@ export const InspectionDetail: React.FC = () => {
           {t('workspace.not_found') || 'Fiscalização não encontrada'}
         </h2>
         <p className="text-xs text-[#5B6B63] max-w-md mx-auto leading-relaxed">
-          O registro solicitado ({id}) não pôde ser carregado. Você pode retornar à página inicial
-          ou à demonstração interativa.
+          {loadError
+            ? `Ocorreu uma instabilidade: ${loadError}`
+            : `O registro solicitado (${id}) não pôde ser carregado. Você pode tentar novamente, retornar ao início ou recarregar a demonstração interativa.`}
         </p>
         <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
+          <Button
+            type="button"
+            onClick={() => loadData()}
+            className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold"
+          >
+            Tentar novamente
+          </Button>
           <Link to="/">
             <Button variant="outline" size="sm" className="text-xs">
               ← Início
             </Button>
           </Link>
           <Link to="/inspections/RV-DEMO-001">
-            <Button size="sm" className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs border-[#0F766E] text-[#0F766E] hover:bg-teal-50"
+            >
               Abrir Demo RV-DEMO-001
             </Button>
           </Link>

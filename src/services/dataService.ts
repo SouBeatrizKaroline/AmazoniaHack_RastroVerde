@@ -62,9 +62,20 @@ export async function getInspectionById(id: string) {
 }
 
 export async function getInspectionByNumber(idNumber: string) {
-  return await pb
-    .collection('inspections')
-    .getFirstListItem<InspectionRecord>(`id_number = "${idNumber}"`)
+  try {
+    return await pb
+      .collection('inspections')
+      .getFirstListItem<InspectionRecord>(`id_number = "${idNumber}"`)
+  } catch (err) {
+    // PocketBase getFirstListItem throws 404 when not found; try fallback list search
+    const list = await pb.collection('inspections').getFullList<InspectionRecord>({
+      filter: `id_number = "${idNumber}"`,
+    })
+    if (list && list.length > 0) {
+      return list[0]
+    }
+    throw err
+  }
 }
 
 export async function createInspection(data: Partial<InspectionRecord>) {

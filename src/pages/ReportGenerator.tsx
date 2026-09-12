@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import {
+  getInspections,
   getInspectionById,
   getInspectionByNumber,
   getEvidenceByInspection,
@@ -37,6 +38,7 @@ export const ReportGenerator: React.FC = () => {
   const [activitiesList, setActivitiesList] = useState<ActivityRecord[]>([])
   const [isEditing, setIsEditing] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   // 13 Editable Sections Content
   const [sections, setSections] = useState({
@@ -56,19 +58,42 @@ export const ReportGenerator: React.FC = () => {
   })
 
   const loadData = async () => {
-    try {
+    setLoading(true)
+    setLoadError(null)
+
+    const timeoutPromise = new Promise<'TIMEOUT'>((resolve) => {
+      setTimeout(() => resolve('TIMEOUT'), 8000)
+    })
+
+    const fetchPromise = (async () => {
       let insp: InspectionRecord
       try {
         insp = await getInspectionByNumber('RV-DEMO-001')
       } catch {
-        const all = await getInspectionById('9ykaitbzexx3fy5')
-        insp = all
+        try {
+          insp = await getInspectionById('9ykaitbzexx3fy5')
+        } catch {
+          const list = await getInspections()
+          insp =
+            list.find((i) => i.id_number === 'RV-DEMO-001' || i.id === '9ykaitbzexx3fy5') || list[0]
+        }
       }
+
+      if (!insp) {
+        throw new Error('Fiscalização não encontrada para o relatório.')
+      }
+
       setInspection(insp)
 
       const [evds, acts] = await Promise.all([
-        getEvidenceByInspection(insp.id),
-        getActivitiesByInspection(insp.id),
+        getEvidenceByInspection(insp.id).catch((e) => {
+          console.warn('Report getEvidenceByInspection error:', e)
+          return [] as EvidenceRecord[]
+        }),
+        getActivitiesByInspection(insp.id).catch((e) => {
+          console.warn('Report getActivitiesByInspection error:', e)
+          return [] as ActivityRecord[]
+        }),
       ])
       setEvidenceList(evds)
       setActivitiesList(acts)
@@ -112,8 +137,18 @@ export const ReportGenerator: React.FC = () => {
           : 'Local com topografia acidentada e solo de textura argilosa que facilitou a preservação dos rastros no solo.',
         sec13: `Com base nas constatações técnicas e nas ${evds.length} evidências rastreadas, sugere-se a continuidade do procedimento administrativo de fiscalização ambiental conforme normas vigentes.`,
       })
-    } catch (err) {
+      return true
+    })()
+
+    try {
+      const race = await Promise.race([fetchPromise, timeoutPromise])
+      if (race === 'TIMEOUT') {
+        console.warn('ReportGenerator timed out after 8s')
+        setLoadError('Tempo limite excedido ao compilar dados do relatório.')
+      }
+    } catch (err: any) {
       console.error('Failed to load report data:', err)
+      setLoadError(err?.message || 'Falha ao compilar relatório.')
     } finally {
       setLoading(false)
     }
@@ -149,6 +184,42 @@ export const ReportGenerator: React.FC = () => {
 
   const handleNavigateToSource = (code: string) => {
     navigate(`/evidence?source=${code}`)
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-16 sm:p-24 space-y-4 min-h-[400px]">
+        <div className="w-10 h-10 border-3 border-[#1B5E3A] border-t-transparent rounded-full animate-spin" />
+        <div className="text-xs font-semibold text-[#5B6B63] tracking-wide animate-pulse">
+          {t('workspace.loading')}
+        </div>
+      </div>
+    )
+  }
+
+  if (loadError || !inspection) {
+    return (
+      <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl border border-[#E2E8E4] bg-white text-center space-y-4 shadow-sm">
+        <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center mx-auto">
+          <AlertTriangle className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-[#143028]">
+          {loadError || 'Falha ao compilar o relatório técnico'}
+        </h2>
+        <p className="text-xs text-[#5B6B63] leading-relaxed">
+          Não foi possível carregar as informações necessárias para compilar o relatório técnico.
+        </p>
+        <div className="pt-2 flex justify-center gap-2">
+          <Button
+            size="sm"
+            onClick={() => loadData()}
+            className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs"
+          >
+            Tentar novamente
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   return (
