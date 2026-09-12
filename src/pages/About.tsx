@@ -28,6 +28,21 @@ export const About: React.FC = () => {
         </div>
       </div>
 
+      {/* AmazoniaHack & Open Source Badge Section */}
+      <div className="rounded-3xl border border-[#1B5E3A]/20 bg-[#E7F2EC]/40 p-6 sm:p-8 shadow-xs space-y-3">
+        <div className="flex items-center gap-2 font-bold text-base text-[#1B5E3A]">
+          <Compass className="w-5 h-5" />
+          <span>{t('about.amazoniahack_title')}</span>
+        </div>
+        <p className="text-xs sm:text-sm text-[#143028] leading-relaxed">
+          {t('about.amazoniahack_desc')}
+        </p>
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/30 bg-white px-3 py-1 text-xs font-semibold text-[#1B5E3A]">
+          <span className="w-2 h-2 rounded-full bg-[#1B5E3A]" />
+          <span>{t('landing.amazoniahack_badge')}</span>
+        </div>
+      </div>
+
       {/* Differentials */}
       <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
         <div className="flex items-center gap-2 font-bold text-base text-[#143028]">

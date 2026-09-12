@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useI18n } from '@/lib/i18n'
 import {
   FileCheck2,
@@ -7,6 +7,7 @@ import {
   Camera,
   AlertCircle,
   Plus,
+  PlusCircle,
   ArrowRight,
   MapPin,
   Calendar,
@@ -21,11 +22,11 @@ import { useRealtime } from '@/hooks/use-realtime'
 import { useTour } from '@/components/TourProvider'
 
 export const Dashboard: React.FC = () => {
-  const { t, language } = useI18n()
-  const navigate = useNavigate()
+  const { t } = useI18n()
   const { startTour } = useTour()
 
-  const [inspections, setInspections] = useState<InspectionRecord[]>([])  const [evidenceList, setEvidenceList] = useState<any[]>([])
+  const [inspections, setInspections] = useState<InspectionRecord[]>([])
+  const [evidenceList, setEvidenceList] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   // Subscribe in real-time to updates
@@ -77,7 +78,6 @@ export const Dashboard: React.FC = () => {
             {t('badge.demo')} • Painel integrado de controle operacional
           </p>
         </div>
-
         <div className="flex items-center gap-2">
           <Button
             type="button"
@@ -93,7 +93,8 @@ export const Dashboard: React.FC = () => {
               <span>{t('dashboard.new_inspection')}</span>
             </Button>
           </Link>
-        </div>      </div>
+        </div>{' '}
+      </div>
 
       {/* 4 Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

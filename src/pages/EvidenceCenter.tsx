@@ -299,7 +299,7 @@ export const EvidenceCenter: React.FC = () => {
                     </div>
                   )}
                   <div className="mt-2 text-[11px] text-[#5B6B63] font-mono">
-                    Arquivo persistido no servidor Skip Cloud / PocketBase
+                    Arquivo persistido no servidor com integridade probatória
                   </div>
                 </div>
               ) : (
