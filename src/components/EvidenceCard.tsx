@@ -72,34 +72,34 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
   return (
     <>
       <div
-        className={`flex flex-col justify-between rounded-2xl border bg-white p-5 shadow-xs transition-all hover:shadow-md ${
+        className={`flex flex-col justify-between rounded-3xl border bg-white p-5 sm:p-5.5 shadow-xs transition-all duration-200 hover:shadow-md ${
           isHighlighted
-            ? 'border-[#1B5E3A] ring-2 ring-[#1B5E3A]/20 bg-[#E7F2EC]/20'
-            : 'border-[#E2E8E4] hover:border-[#1B5E3A]'
+            ? 'border-[#1B5E3A] ring-2 ring-[#1B5E3A]/25 bg-gradient-to-b from-[#E7F2EC]/30 to-white'
+            : 'border-[#E2E8E4] hover:border-[#1B5E3A]/60'
         }`}
       >
-        <div className="space-y-3">
+        <div className="space-y-3.5">
           {/* Header row: code, type badge, status */}
           <div className="flex items-center justify-between gap-2">
-            <span className="font-mono text-xs font-bold text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-1 rounded-md">
+            <span className="font-mono text-xs font-bold text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-1 rounded-lg border border-[#1B5E3A]/15">
               {evidence.code}
             </span>
 
             <div className="flex items-center gap-1.5">
               <span
-                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold border ${currentType.bg} ${currentType.color}`}
+                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${currentType.bg} ${currentType.color}`}
               >
                 <Icon className="w-3 h-3" />
                 <span>{evidence.type}</span>
               </span>
 
               <span
-                className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
                   evidence.status === 'Verificada'
-                    ? 'bg-emerald-100 text-emerald-800'
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
                     : evidence.status === 'Em revisão'
-                      ? 'bg-amber-100 text-amber-800'
-                      : 'bg-gray-100 text-gray-700'
+                      ? 'bg-amber-50 text-amber-900 border-amber-200'
+                      : 'bg-slate-100 text-slate-800 border-slate-200'
                 }`}
               >
                 {evidence.status}
@@ -108,38 +108,50 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
           </div>
 
           {/* Description */}
-          <p className="text-sm font-medium text-[#143028] leading-snug">{evidence.description}</p>
+          <p className="text-sm font-semibold text-[#143028] leading-snug">
+            {evidence.description}
+          </p>
 
           {/* File Thumbnail / Media Display */}
           {evidence.file ? (
-            <div className="relative h-32 rounded-xl overflow-hidden border border-[#E2E8E4] bg-black/5 flex items-center justify-center">
+            <div className="relative h-34 rounded-2xl overflow-hidden border border-[#E2E8E4] bg-[#F7F9F8] flex items-center justify-center">
               {evidence.file.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i) ? (
                 <img
                   src={
                     getEvidenceFileUrl(evidence, '400x300') || getEvidenceFileUrl(evidence) || ''
                   }
                   alt={evidence.code}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                 />
               ) : evidence.file.match(/\.(mp4|webm|mov)$/i) ? (
                 <div className="flex flex-col items-center p-3 text-center">
-                  <Video className="w-8 h-8 text-[#0F766E] mb-1" />
+                  <div className="w-9 h-9 rounded-xl bg-teal-50 text-[#0F766E] border border-teal-200 flex items-center justify-center mb-1.5 shadow-2xs">
+                    <Video className="w-4 h-4" />
+                  </div>
                   <span className="text-xs font-semibold text-[#143028] max-w-[200px] truncate">
                     {evidence.file}
                   </span>
-                  <span className="text-[10px] text-[#5B6B63] font-mono mt-0.5">Vídeo anexado</span>
+                  <span className="text-[10px] text-[#5B6B63] font-mono mt-0.5">
+                    {t('workspace.attached_video')}
+                  </span>
                 </div>
               ) : evidence.file.match(/\.(mp3|wav|ogg|m4a)$/i) ? (
                 <div className="flex flex-col items-center p-3 text-center">
-                  <Mic className="w-8 h-8 text-purple-700 mb-1" />
+                  <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 flex items-center justify-center mb-1.5 shadow-2xs">
+                    <Mic className="w-4 h-4" />
+                  </div>
                   <span className="text-xs font-semibold text-[#143028] max-w-[200px] truncate">
                     {evidence.file}
                   </span>
-                  <span className="text-[10px] text-[#5B6B63] font-mono mt-0.5">Áudio gravado</span>
+                  <span className="text-[10px] text-[#5B6B63] font-mono mt-0.5">
+                    {t('workspace.attached_audio')}
+                  </span>
                 </div>
               ) : (
                 <div className="flex flex-col items-center p-3 text-center">
-                  <FileText className="w-8 h-8 text-[#1B5E3A] mb-1" />
+                  <div className="w-9 h-9 rounded-xl bg-emerald-50 text-[#1B5E3A] border border-emerald-200 flex items-center justify-center mb-1.5 shadow-2xs">
+                    <FileText className="w-4 h-4" />
+                  </div>
                   <span className="text-xs font-semibold text-[#143028] max-w-[200px] truncate">
                     {evidence.file}
                   </span>
@@ -150,7 +162,7 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
                     className="inline-flex items-center gap-1 text-[11px] text-[#1B5E3A] font-bold mt-1 hover:underline"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <span>Abrir documento</span>
+                    <span>{t('workspace.open_document')}</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
@@ -158,32 +170,10 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
             </div>
           ) : (
             evidence.type === 'Fotografia' && (
-              <div className="relative h-28 rounded-xl overflow-hidden border border-[#E2E8E4] bg-gradient-to-tr from-[#1B5E3A]/20 via-[#0F766E]/15 to-[#B45309]/15 flex items-center justify-center group/img">
-                <div className="absolute inset-0 opacity-20">
-                  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <pattern
-                        id={`grid-${evidence.code}`}
-                        width="20"
-                        height="20"
-                        patternUnits="userSpaceOnUse"
-                      >
-                        <rect
-                          width="20"
-                          height="20"
-                          fill="none"
-                          stroke="#1B5E3A"
-                          strokeWidth="0.5"
-                        />
-                      </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill={`url(#grid-${evidence.code})`} />
-                  </svg>
-                </div>
-
-                <div className="relative z-10 flex flex-col items-center text-xs font-semibold text-[#1B5E3A] bg-white/90 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-[#E2E8E4] shadow-xs">
-                  <Camera className="w-4 h-4 mb-0.5" />
-                  <span>Registro Fotográfico de Campo</span>
+              <div className="relative h-28 rounded-2xl overflow-hidden border border-[#E2E8E4] bg-gradient-to-tr from-[#1B5E3A]/15 via-[#0F766E]/10 to-amber-500/10 flex items-center justify-center group/img">
+                <div className="relative z-10 flex flex-col items-center text-xs font-semibold text-[#1B5E3A] bg-white/95 backdrop-blur-xs px-3.5 py-2 rounded-xl border border-[#E2E8E4] shadow-2xs">
+                  <Camera className="w-4 h-4 mb-0.5 text-[#1B5E3A]" />
+                  <span>{t('workspace.evidence_field_photo')}</span>
                   <span className="text-[10px] text-[#5B6B63] font-mono">{evidence.code}</span>
                 </div>
               </div>
@@ -191,10 +181,10 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
           )}
 
           {/* Metadata pill box */}
-          <div className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-[11px] space-y-1 text-[#5B6B63]">
+          <div className="p-3 rounded-2xl bg-[#F9FCFA] border border-[#E2E8E4] text-[11px] space-y-1.5 text-[#5B6B63]">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1 font-mono">
-                <Clock className="w-3 h-3" />
+                <Clock className="w-3 h-3 text-[#5B6B63]" />
                 <span>
                   {evidence.date} • {evidence.time}
                 </span>
@@ -213,17 +203,17 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
               <User className="w-3 h-3 text-[#5B6B63]" />
               <span className="truncate">
                 {evidence.officer ? (
-                  <span>{evidence.officer}</span>
+                  <span className="font-medium">{evidence.officer}</span>
                 ) : (
                   <span className="text-[#B3261E] font-semibold italic">
-                    ⚠ Responsável não identificado (Lacuna)
+                    {t('workspace.unidentified_officer_warning')}
                   </span>
                 )}
               </span>
             </div>
 
             {evidence.notes && (
-              <div className="text-[10px] text-[#5B6B63] line-clamp-1 italic pt-0.5 border-t border-[#E2E8E4]/60">
+              <div className="text-[11px] text-[#5B6B63] line-clamp-1 italic pt-1 border-t border-[#E2E8E4]/60">
                 "{evidence.notes}"
               </div>
             )}
@@ -231,11 +221,11 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
 
           {/* Tags */}
           {tagsList.length > 0 && (
-            <div className="flex flex-wrap gap-1 pt-1">
+            <div className="flex flex-wrap gap-1.5 pt-0.5">
               {tagsList.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center text-[10px] font-medium text-[#1B5E3A] bg-[#E7F2EC] px-2 py-0.5 rounded-md"
+                  className="inline-flex items-center text-[10px] font-medium text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-0.5 rounded-full border border-[#1B5E3A]/15"
                 >
                   #{tag.replace(/^#/, '')}
                 </span>
@@ -244,16 +234,16 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
           )}
         </div>
 
-        {/* Action Buttons */}
-        <div className="pt-4 mt-4 border-t border-[#E2E8E4] flex items-center justify-between gap-2">
+        {/* Action Buttons com hover states suaves */}
+        <div className="pt-3.5 mt-3.5 border-t border-[#E2E8E4] flex items-center justify-between gap-2">
           {onSelect && (
             <Button
               variant="outline"
               size="sm"
               onClick={() => onSelect(evidence)}
-              className="h-8 px-2.5 text-xs text-[#143028] border-[#E2E8E4] hover:bg-[#F7F9F8]"
+              className="h-8.5 px-3 text-xs font-semibold text-[#143028] border-[#E2E8E4] bg-white hover:bg-[#F7F9F8] rounded-xl shadow-2xs hover:shadow-xs transition-all"
             >
-              <Eye className="w-3.5 h-3.5 mr-1 text-[#1B5E3A]" />
+              <Eye className="w-3.5 h-3.5 mr-1.5 text-[#1B5E3A]" />
               <span>{t('evidence.view_detail')}</span>
             </Button>
           )}
@@ -264,7 +254,8 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => onEdit(evidence)}
-                className="h-8 px-2 text-xs text-[#5B6B63] hover:text-[#143028]"
+                className="h-8.5 w-8.5 p-0 text-xs text-[#5B6B63] hover:text-[#143028] hover:bg-[#F7F9F8] rounded-xl transition-colors"
+                aria-label={t('evidence.edit')}
               >
                 <Edit2 className="w-3.5 h-3.5" />
               </Button>
@@ -275,7 +266,8 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => setDeleteConfirmOpen(true)}
-                className="h-8 px-2 text-xs text-[#5B6B63] hover:text-[#B3261E] hover:bg-red-50"
+                className="h-8.5 w-8.5 p-0 text-xs text-[#5B6B63] hover:text-[#B3261E] hover:bg-rose-50 rounded-xl transition-colors"
+                aria-label={t('evidence.remove')}
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </Button>

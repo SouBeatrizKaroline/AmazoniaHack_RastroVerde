@@ -127,103 +127,138 @@ export const ConsistencyVerification: React.FC = () => {
     await loadVerificationData()
     setRecalculating(false)
     toast({
-      title: 'Verificação de consistência concluída',
-      description: 'Todos os registros de campo foram cruzados e recalculados contra a base.',
+      title: t('verification.toast_done_title'),
+      description: t('verification.toast_done_desc'),
     })
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#143028]">
-            {t('verification.title')}
-          </h1>
-          <p className="text-xs text-[#5B6B63] mt-1">{t('verification.subtitle')}</p>
-        </div>
+    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
+      {/* Header com gradiente sutil alinhado ao padrão da landing */}
+      <div className="rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-white via-[#F9FCFA] to-[#EFF5F1] p-6 sm:p-7 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#143028] tracking-tight">
+              {t('verification.title')}
+            </h1>
+            <p className="text-xs sm:text-sm text-[#5B6B63] mt-1">{t('verification.subtitle')}</p>
+          </div>
 
-        <Button
-          onClick={handleRerun}
-          disabled={recalculating}
-          className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-lg shadow-xs flex items-center gap-1.5"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${recalculating ? 'animate-spin' : ''}`} />
-          <span>{t('verification.rerun')}</span>
-        </Button>
+          <Button
+            onClick={handleRerun}
+            disabled={recalculating}
+            className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-10 px-4.5 rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 self-start sm:self-auto"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${recalculating ? 'animate-spin' : ''}`} />
+            <span>{t('verification.rerun')}</span>
+          </Button>
+        </div>
       </div>
 
-      {/* Cautious Language Banner */}
-      <div className="p-4 rounded-2xl border border-blue-200 bg-blue-50 text-xs text-blue-900 flex items-start gap-3 shadow-xs">
-        <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+      {/* Cautious Language Banner com estilo refinado e sutil */}
+      <div className="p-4 sm:p-5 rounded-2xl border border-sky-200/90 bg-gradient-to-r from-sky-50/70 via-sky-50/40 to-white text-xs text-sky-950 flex items-start gap-3 shadow-2xs">
+        <Info className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <span className="font-bold">Postura Técnica e Cautelosa da Plataforma</span>
-          <p className="text-blue-800 leading-relaxed">
-            {t('verification.cautious_notice')} Termos como "Possível inconsistência", "Recomenda-se
-            verificar" e "Informação não localizada" garantem a segurança jurídica do procedimento.
+          <span className="font-bold text-sky-950 block">{t('verification.posture_title')}</span>
+          <p className="text-sky-900 leading-relaxed">
+            {t('verification.cautious_notice')} {t('verification.cautious_detail')}
           </p>
         </div>
       </div>
 
       {/* Category Pills Strip */}
-      <div className="flex flex-wrap items-center gap-2 p-3 rounded-2xl border border-[#E2E8E4] bg-white text-xs">
-        <span className="font-bold text-[#5B6B63] mr-2">Categorias de Análise:</span>
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">
+      <div className="flex flex-wrap items-center gap-2 p-3 sm:p-4 rounded-2xl border border-[#E2E8E4] bg-white text-xs shadow-2xs">
+        <span className="font-bold text-[#5B6B63] mr-1">
+          {t('workspace.category_filter_title')}
+        </span>
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 text-emerald-900 font-semibold border border-emerald-200/80">
           🟢 {t('verification.consistent')}
         </span>
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 font-semibold border border-amber-200">
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-50 text-amber-900 font-semibold border border-amber-200/80">
           🟡 {t('verification.review')}
         </span>
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-red-50 text-red-800 font-semibold border border-red-200">
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-50 text-rose-900 font-semibold border border-rose-200/80">
           🔴 {t('verification.conflict')}
         </span>
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-blue-50 text-blue-800 font-semibold border border-blue-200">
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-sky-50 text-sky-900 font-semibold border border-sky-200/80">
           🔵 {t('verification.missing')}
         </span>
       </div>
 
-      {/* Result Cards Grid */}
+      {/* Result Cards Grid com design elegante, sem cores gritantes */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {items.map((item) => {
           const Icon = item.icon
+
+          // Estilo de borda e fundo sutis conforme cada categoria
+          const borderStyle =
+            item.category === 'consistent'
+              ? 'border-emerald-200/90 hover:border-emerald-400'
+              : item.category === 'review'
+                ? 'border-amber-200/90 hover:border-amber-400'
+                : item.category === 'conflict'
+                  ? 'border-rose-200/90 hover:border-rose-400'
+                  : 'border-sky-200/90 hover:border-sky-400'
+
+          const badgeBg =
+            item.category === 'consistent'
+              ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+              : item.category === 'review'
+                ? 'bg-amber-50 text-amber-900 border-amber-200'
+                : item.category === 'conflict'
+                  ? 'bg-rose-50 text-rose-900 border-rose-200'
+                  : 'bg-sky-50 text-sky-900 border-sky-200'
+
           return (
             <div
               key={item.id}
-              className={`rounded-2xl border p-5 shadow-xs flex flex-col justify-between space-y-4 ${item.color} bg-white transition-all hover:shadow-md`}
+              className={`rounded-3xl border p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 bg-white transition-all duration-200 hover:shadow-md ${borderStyle}`}
             >
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs">{item.badge}</span>
-                  <span className="font-mono text-[11px] font-semibold text-[#5B6B63]">
+                  <span
+                    className={`inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border ${badgeBg}`}
+                  >
+                    {item.badge}
+                  </span>
+                  <span className="font-mono text-[11px] font-semibold text-[#5B6B63] bg-[#F7F9F8] px-2 py-0.5 rounded-md border border-[#E2E8E4]">
                     {item.id}
                   </span>
                 </div>
 
-                <div className="flex items-start gap-2.5">
-                  <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${item.iconColor}`} />
-                  <div>
-                    <h3 className="font-bold text-sm text-[#143028]">{item.title}</h3>
-                    <p className="text-xs font-medium text-[#143028] mt-1">"{item.message}"</p>
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-xl bg-[#F9FCFA] border border-[#E2E8E4] shrink-0 mt-0.5">
+                    <Icon className={`w-4 h-4 ${item.iconColor}`} />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-sm sm:text-base text-[#143028] leading-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs font-medium text-[#5B6B63] mt-1 leading-relaxed">
+                      "{item.message}"
+                    </p>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-[11px] text-[#5B6B63] space-y-1">
-                  <span className="font-semibold text-[#143028]">Recomendação técnica:</span>
-                  <p>{item.recommendation}</p>
+                <div className="p-3.5 rounded-2xl bg-[#F9FCFA] border border-[#E2E8E4] text-xs text-[#5B6B63] space-y-1">
+                  <span className="font-bold text-[#143028] block">
+                    {t('verification.rec_title')}
+                  </span>
+                  <p className="leading-relaxed">{item.recommendation}</p>
                 </div>
               </div>
 
               <div className="pt-3 border-t border-[#E2E8E4] flex items-center justify-between">
-                <span className="text-xs font-mono font-semibold text-[#1B5E3A] bg-[#E7F2EC] px-2 py-0.5 rounded">
-                  Ref: {item.evidenceCode}
+                <span className="text-xs font-mono font-semibold text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-0.5 rounded-md border border-[#1B5E3A]/15">
+                  {t('verification.ref_prefix')} {item.evidenceCode}
                 </span>
 
                 <Link
                   to={`/evidence?source=${item.evidenceCode}`}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-[#1B5E3A] hover:underline"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-[#1B5E3A] hover:underline group"
                 >
                   <span>{t('verification.go_to_evidence')}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </div>
             </div>

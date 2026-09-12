@@ -92,7 +92,7 @@ export const InspectionDetail: React.FC = () => {
       setActivitiesList(acts)
     } catch (err) {
       console.error(err)
-      toast({ title: 'Fiscalização não localizada.', variant: 'destructive' })
+      toast({ title: t('workspace.not_found'), variant: 'destructive' })
       navigate('/inspections')
     } finally {
       setLoading(false)
@@ -108,16 +108,16 @@ export const InspectionDetail: React.FC = () => {
     try {
       await updateInspection(inspection.id, { status: newStatus })
       setInspection({ ...inspection, status: newStatus })
-      toast({ title: `Status atualizado para: ${newStatus}` })
+      toast({ title: t('workspace.status_updated').replace('{status}', newStatus) })
     } catch (err) {
-      toast({ title: 'Erro ao alterar status', variant: 'destructive' })
+      toast({ title: t('workspace.status_update_error'), variant: 'destructive' })
     }
   }
 
   if (loading || !inspection) {
     return (
       <div className="p-12 text-center text-xs font-semibold text-[#5B6B63]">
-        Carregando dados da fiscalização...
+        {t('workspace.loading')}
       </div>
     )
   }
@@ -169,12 +169,12 @@ export const InspectionDetail: React.FC = () => {
         </div>
       )}
 
-      {/* Workspace Header */}
-      <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
+      {/* Workspace Header: Refinado com gradiente sutil verde-floresta (#F9FCFA -> #EFF5F1) e cantos arredondados consistentes */}
+      <div className="rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-white via-[#F9FCFA] to-[#EFF5F1] p-6 sm:p-7 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-sm font-bold text-[#1B5E3A] bg-[#E7F2EC] px-3 py-1 rounded-md">
+              <span className="font-mono text-xs sm:text-sm font-bold text-[#1B5E3A] bg-[#E7F2EC] px-3 py-1 rounded-xl border border-[#1B5E3A]/20 shadow-2xs">
                 {inspection.id_number}
               </span>
 
@@ -183,51 +183,59 @@ export const InspectionDetail: React.FC = () => {
                 value={inspection.status}
                 onValueChange={(val: any) => handleStatusChange(val)}
               >
-                <SelectTrigger className="h-7 text-xs font-semibold rounded-full border-0 bg-transparent p-0 focus:ring-0">
+                <SelectTrigger className="h-7 text-xs font-semibold rounded-full border-0 bg-transparent p-0 focus:ring-0 focus:outline-none">
                   <StatusBadge status={inspection.status} />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Em coleta">Em coleta</SelectItem>
-                  <SelectItem value="Em análise">Em análise</SelectItem>
-                  <SelectItem value="Com pendências">Com pendências</SelectItem>
-                  <SelectItem value="Pronta para relatório">Pronta para relatório</SelectItem>
-                  <SelectItem value="Finalizada">Finalizada</SelectItem>
+                <SelectContent className="rounded-xl border-[#E2E8E4] shadow-md">
+                  <SelectItem value="Em coleta">{t('status.em_coleta')}</SelectItem>
+                  <SelectItem value="Em análise">{t('status.em_analise')}</SelectItem>
+                  <SelectItem value="Com pendências">{t('status.com_pendencias')}</SelectItem>
+                  <SelectItem value="Pronta para relatório">
+                    {t('status.pronta_relatorio')}
+                  </SelectItem>
+                  <SelectItem value="Finalizada">{t('status.finalizada')}</SelectItem>
                 </SelectContent>
               </Select>
 
               {isDemo && (
-                <span className="text-xs font-bold text-[#0F766E] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full">
+                <span className="text-[11px] font-bold text-[#0F766E] bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 rounded-full">
                   {t('badge.fictional_demo')}
                 </span>
               )}
             </div>
 
-            <h1 className="text-xl sm:text-2xl font-bold text-[#143028]">{inspection.location}</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#143028] tracking-tight">
+              {inspection.location}
+            </h1>
 
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#5B6B63]">
-              <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5" />
-                <span>
+              <span className="flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-[#1B5E3A]" />
+                <span className="font-medium text-[#143028]">
                   {inspection.municipality} - {inspection.state}
                 </span>
               </span>
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5" />
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-[#5B6B63]" />
                 <span>
-                  {inspection.date} às {inspection.time}
+                  {inspection.date} • {inspection.time}
                 </span>
               </span>
-              <span className="flex items-center gap-1">
-                <User className="w-3.5 h-3.5" />
-                <span>{inspection.agent}</span>
+              <span className="flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-[#5B6B63]" />
+                <span className="truncate">{inspection.agent}</span>
               </span>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <Link to={`/inspections/${inspection.id}/edit`}>
-              <Button variant="outline" size="sm" className="h-9 text-xs border-[#E2E8E4]">
-                <Edit2 className="w-3.5 h-3.5 mr-1.5" />
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-10 text-xs font-semibold border-[#E2E8E4] bg-white hover:bg-[#F7F9F8] text-[#143028] px-3.5 rounded-xl shadow-2xs hover:shadow-xs transition-all"
+              >
+                <Edit2 className="w-3.5 h-3.5 mr-1.5 text-[#5B6B63]" />
                 <span>{t('workspace.edit_inspection')}</span>
               </Button>
             </Link>
@@ -235,22 +243,24 @@ export const InspectionDetail: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab('report')}
-              className="inline-flex items-center justify-center bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-lg shadow-xs transition-colors"
+              className="inline-flex items-center justify-center bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-10 px-4.5 rounded-xl shadow-sm shadow-[#1B5E3A]/20 hover:shadow-md hover:shadow-[#1B5E3A]/30 transition-all transform hover:-translate-y-0.2 active:translate-y-0"
             >
-              <FileText className="w-3.5 h-3.5 mr-1.5" />
+              <FileText className="w-3.5 h-3.5 mr-1.5 text-emerald-200" />
               <span>{t('workspace.generate_report')}</span>
             </button>
           </div>
         </div>
 
         {/* Completeness Progress Card */}
-        <div className="rounded-2xl border border-emerald-200 bg-[#E7F2EC]/40 p-4 space-y-2">
+        <div className="rounded-2xl border border-emerald-200/90 bg-[#E7F2EC]/60 p-4 space-y-2.5">
           <div className="flex items-center justify-between text-xs font-semibold">
             <span className="text-[#1B5E3A] flex items-center gap-1.5">
-              <CheckSquare className="w-4 h-4" />
+              <CheckSquare className="w-4 h-4 text-[#1B5E3A]" />
               <span>{t('workspace.completeness_title')}: 78%</span>
             </span>
-            <span className="text-[#5B6B63] text-[11px]">{t('workspace.completeness_advice')}</span>
+            <span className="text-[#5B6B63] text-[11px] font-medium hidden sm:inline">
+              {t('workspace.completeness_advice')}
+            </span>
           </div>
 
           {/* Animated Progress Bar */}
@@ -263,7 +273,7 @@ export const InspectionDetail: React.FC = () => {
         </div>
 
         {/* Tab Navigation (Pitch Flow: Fiscalização -> Evidências -> Linha do tempo -> Verificação -> Lacunas -> Relatório) */}
-        <div className="border-t border-[#E2E8E4] pt-2 flex items-center gap-1 overflow-x-auto pb-1">
+        <div className="border-t border-[#E2E8E4] pt-3 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
           {[
             { key: 'overview', label: t('workspace.tabs.overview'), icon: Layers },
             {
@@ -282,13 +292,13 @@ export const InspectionDetail: React.FC = () => {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as any)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
                   isActive
-                    ? 'bg-[#1B5E3A] text-white shadow-xs'
-                    : 'text-[#5B6B63] hover:text-[#143028] hover:bg-[#F7F9F8]'
+                    ? 'bg-[#1B5E3A] text-white shadow-xs font-bold'
+                    : 'text-[#5B6B63] hover:text-[#143028] hover:bg-white/90 border border-transparent hover:border-[#E2E8E4]'
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#5B6B63]'}`} />
                 <span>{tab.label}</span>
               </button>
             )
@@ -300,40 +310,40 @@ export const InspectionDetail: React.FC = () => {
       {activeTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
+            <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-7 shadow-xs space-y-3">
               <h2 className="text-base font-bold text-[#143028]">
-                Contextualização e Fatos Observados
+                {t('workspace.overview_context_title')}
               </h2>
-              <p className="text-xs text-[#5B6B63] leading-relaxed">
-                {inspection.description || 'Nenhuma descrição inicial registrada.'}
+              <p className="text-xs sm:text-sm text-[#5B6B63] leading-relaxed">
+                {inspection.description || t('workspace.overview_no_desc')}
               </p>
 
               {inspection.notes && (
-                <div className="p-3.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-xs space-y-1">
-                  <span className="font-semibold text-[#143028]">
-                    Observações Complementares da Equipe:
+                <div className="p-4 rounded-2xl bg-[#F7F9F8] border border-[#E2E8E4] text-xs space-y-1.5 mt-3">
+                  <span className="font-bold text-[#143028]">
+                    {t('workspace.overview_notes_title')}
                   </span>
-                  <p className="text-[#5B6B63]">{inspection.notes}</p>
+                  <p className="text-[#5B6B63] leading-relaxed">{inspection.notes}</p>
                 </div>
               )}
             </div>
 
             {/* Evidence Preview Strip */}
-            <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
+            <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-7 shadow-xs space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-[#143028]">
-                  Evidências Coletadas em Campo ({evidenceList.length})
+                <h3 className="text-sm sm:text-base font-bold text-[#143028]">
+                  {t('workspace.field_evidence_title')} ({evidenceList.length})
                 </h3>
                 <button
                   onClick={() => setActiveTab('evidence')}
-                  className="text-xs font-semibold text-[#1B5E3A] hover:underline flex items-center gap-1"
+                  className="text-xs font-semibold text-[#1B5E3A] hover:underline flex items-center gap-1 group"
                 >
-                  <span>Ver todas</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  <span>{t('workspace.view_all_evidence')}</span>
+                  <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {evidenceList.slice(0, 4).map((evd) => (
                   <EvidenceCard
                     key={evd.id}
@@ -347,25 +357,27 @@ export const InspectionDetail: React.FC = () => {
 
           {/* Sidebar Info */}
           <div className="space-y-6">
-            <div className="rounded-2xl border border-[#E2E8E4] bg-white p-5 shadow-xs space-y-3">
+            <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-[#5B6B63]">
-                Dados Técnicos
+                {t('workspace.tech_data_title')}
               </h3>
 
-              <div className="space-y-2 text-xs">
+              <div className="space-y-3 text-xs">
                 <div>
-                  <span className="text-[#5B6B63]">Tipo de Ocorrência:</span>
-                  <div className="font-semibold text-[#0F766E]">{inspection.occurrence_type}</div>
-                </div>
-                <div>
-                  <span className="text-[#5B6B63]">Equipe Responsável:</span>
-                  <div className="font-semibold text-[#143028]">
-                    {inspection.team || 'Não informada'}
+                  <span className="text-[#5B6B63]">{t('workspace.tech_occurrence_type')}</span>
+                  <div className="font-semibold text-[#0F766E] text-sm mt-0.5">
+                    {inspection.occurrence_type}
                   </div>
                 </div>
                 <div>
-                  <span className="text-[#5B6B63]">Coordenadas de Referência:</span>
-                  <div className="font-mono font-semibold text-[#1B5E3A]">
+                  <span className="text-[#5B6B63]">{t('workspace.tech_team')}</span>
+                  <div className="font-semibold text-[#143028] mt-0.5">
+                    {inspection.team || t('workspace.tech_team_unspecified')}
+                  </div>
+                </div>
+                <div>
+                  <span className="text-[#5B6B63]">{t('workspace.tech_coords')}</span>
+                  <div className="font-mono font-semibold text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-1 rounded-lg mt-0.5 inline-block">
                     {inspection.latitude}, {inspection.longitude}
                   </div>
                 </div>
@@ -373,21 +385,20 @@ export const InspectionDetail: React.FC = () => {
             </div>
 
             {/* Quick Link to Verification & Gaps */}
-            <div className="rounded-2xl border border-amber-200 bg-amber-50/50 p-5 shadow-xs space-y-3">
+            <div className="rounded-3xl border border-amber-200/90 bg-gradient-to-b from-amber-50/60 to-amber-50/30 p-6 shadow-xs space-y-3">
               <div className="flex items-center gap-2 text-xs font-bold text-[#B45309]">
-                <AlertTriangle className="w-4 h-4" />
-                <span>Atenção: 3 Pendências e 1 Inconsistência</span>
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>{t('workspace.quick_alert_title')}</span>
               </div>
-              <p className="text-xs text-amber-900/80">
-                O sistema identificou possíveis divergências de coordenadas e documentos dominiais
-                ausentes.
+              <p className="text-xs text-amber-950/80 leading-relaxed">
+                {t('workspace.quick_alert_desc')}
               </p>
               <Button
                 size="sm"
                 onClick={() => setActiveTab('verification')}
-                className="w-full bg-[#B45309] hover:bg-amber-800 text-white text-xs font-semibold h-8 rounded-lg"
+                className="w-full bg-[#B45309] hover:bg-amber-800 text-white text-xs font-bold h-9 rounded-xl shadow-2xs transition-all"
               >
-                Verificar Integridade do Caso
+                {t('workspace.quick_alert_action')}
               </Button>
             </div>
           </div>
@@ -397,19 +408,23 @@ export const InspectionDetail: React.FC = () => {
       {/* Tab 2: Evidence Center for this Inspection */}
       {activeTab === 'evidence' && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-[#143028]">
-              Registros e Evidências da Vistoria ({evidenceList.length})
-            </h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-[#143028]">
+                {t('workspace.field_evidence_title')} ({evidenceList.length})
+              </h2>
+              <p className="text-xs text-[#5B6B63] mt-0.5">{t('evidence.file_help')}</p>
+            </div>
             <Button
               size="sm"
               onClick={() => {
                 setEditingEvidence(null)
                 setModalOpen(true)
               }}
-              className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-8 px-3 rounded-lg"
+              className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-9 px-4 rounded-xl shadow-2xs hover:shadow-xs transition-all self-start sm:self-auto"
             >
-              Adicionar Evidência
+              <Camera className="w-3.5 h-3.5 mr-1.5" />
+              <span>{t('workspace.add_evidence')}</span>
             </Button>
           </div>
 
@@ -467,38 +482,44 @@ export const InspectionDetail: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 3: Timeline */}
+      {/* Tab 3: Timeline Vertical com linha conectora polida e marcadores por tipo */}
       {activeTab === 'timeline' && (
-        <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-6">
-          <div>
-            <h2 className="text-base font-bold text-[#143028]">{t('timeline.title')}</h2>
-            <p className="text-xs text-[#5B6B63] mt-0.5">{t('timeline.subtitle')}</p>
+        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="space-y-1">
+            <h2 className="text-base sm:text-lg font-bold text-[#143028]">{t('timeline.title')}</h2>
+            <p className="text-xs text-[#5B6B63]">{t('timeline.subtitle')}</p>
           </div>
 
-          <div className="relative pl-6 border-l-2 border-[#1B5E3A]/30 space-y-6">
+          <div className="relative pl-7 border-l-2 border-[#1B5E3A]/25 space-y-6">
             {activitiesList.map((act, index) => (
               <div key={act.id || index} className="relative group">
-                {/* Node pin */}
-                <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-white border-2 border-[#1B5E3A] group-hover:bg-[#1B5E3A] transition-colors" />
+                {/* Node pin com animação suave */}
+                <div className="absolute -left-[35px] top-1 w-4 h-4 rounded-full bg-white border-2 border-[#1B5E3A] group-hover:bg-[#1B5E3A] group-hover:scale-110 transition-all shadow-xs" />
 
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-bold text-[#1B5E3A]">
+                <div className="p-4 rounded-2xl bg-[#F9FCFA] border border-[#E2E8E4] group-hover:border-[#1B5E3A]/40 transition-all duration-200 space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-mono text-xs font-bold text-[#1B5E3A] bg-[#E7F2EC] px-2 py-0.5 rounded-md">
                       {act.timestamp}
                     </span>
-                    <span className="text-[11px] font-medium text-[#5B6B63]">por {act.actor}</span>
+                    <span className="text-[11px] font-medium text-[#5B6B63]">
+                      {t('workspace.timeline_actor').replace('{actor}', act.actor)}
+                    </span>
                   </div>
 
-                  <p className="text-xs font-semibold text-[#143028]">{act.description}</p>
+                  <p className="text-xs sm:text-sm font-semibold text-[#143028] leading-relaxed">
+                    {act.description}
+                  </p>
 
                   {act.linked_evidence && (
-                    <div className="pt-1">
+                    <div className="pt-1 border-t border-[#E2E8E4]/60">
                       <Link
                         to={`/evidence?source=${act.linked_evidence}`}
-                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0F766E] hover:underline"
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0F766E] hover:underline group/link"
                       >
-                        <span>Ver evidência vinculada</span>
-                        <ChevronRight className="w-3 h-3" />
+                        <span>
+                          {t('workspace.timeline_view_linked')} ({act.linked_evidence})
+                        </span>
+                        <ChevronRight className="w-3 h-3 transition-transform group-link:translate-x-0.5" />
                       </Link>
                     </div>
                   )}
@@ -511,63 +532,71 @@ export const InspectionDetail: React.FC = () => {
 
       {/* Tab 4: Verification shortcut */}
       {activeTab === 'verification' && (
-        <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
+        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-bold text-[#143028]">{t('verification.title')}</h2>
-              <p className="text-xs text-[#5B6B63]">{t('verification.subtitle')}</p>
+              <h2 className="text-base sm:text-lg font-bold text-[#143028]">
+                {t('verification.title')}
+              </h2>
+              <p className="text-xs text-[#5B6B63] mt-0.5">{t('verification.subtitle')}</p>
             </div>
             <Link to="/verification">
-              <Button size="sm" className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs">
-                Abrir Painel Completo de Verificação
+              <Button
+                size="sm"
+                className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-9 px-4 rounded-xl shadow-2xs"
+              >
+                {t('workspace.verification_card_btn')}
               </Button>
             </Link>
           </div>
-          <p className="text-xs text-[#5B6B63]">
-            Acesse a tela dedicada para analisar cruzamentos detalhados de dados, horários,
-            coordenadas e inconsistências identificadas automaticamente com postura de apoio.
+          <p className="text-xs sm:text-sm text-[#5B6B63] leading-relaxed">
+            {t('workspace.verification_card_desc')}
           </p>
         </div>
       )}
 
       {/* Tab 5: Gaps shortcut */}
       {activeTab === 'gaps' && (
-        <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
+        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-bold text-[#143028]">{t('gaps.title')}</h2>
-              <p className="text-xs text-[#5B6B63]">{t('gaps.subtitle')}</p>
+              <h2 className="text-base sm:text-lg font-bold text-[#143028]">{t('gaps.title')}</h2>
+              <p className="text-xs text-[#5B6B63] mt-0.5">{t('gaps.subtitle')}</p>
             </div>
             <Link to="/gaps">
-              <Button size="sm" className="bg-[#B45309] hover:bg-amber-800 text-white text-xs">
-                Abrir Checklist de Pendências
+              <Button
+                size="sm"
+                className="bg-[#B45309] hover:bg-amber-800 text-white text-xs font-bold h-9 px-4 rounded-xl shadow-2xs"
+              >
+                {t('workspace.gaps_card_btn')}
               </Button>
             </Link>
           </div>
-          <p className="text-xs text-[#5B6B63]">
-            Veja a lista de requisitos técnicos e documentais que precisam ser revisados antes da
-            elaboração final do laudo pericial.
+          <p className="text-xs sm:text-sm text-[#5B6B63] leading-relaxed">
+            {t('workspace.gaps_card_desc')}
           </p>
         </div>
       )}
 
       {/* Tab 6: Report shortcut */}
       {activeTab === 'report' && (
-        <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
+        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-bold text-[#143028]">{t('report.title')}</h2>
-              <p className="text-xs text-[#5B6B63]">{t('report.draft_notice')}</p>
+              <h2 className="text-base sm:text-lg font-bold text-[#143028]">{t('report.title')}</h2>
+              <p className="text-xs text-[#5B6B63] mt-0.5">{t('report.draft_notice')}</p>
             </div>
             <Link to="/reports">
-              <Button size="sm" className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs">
-                Abrir Gerador de Relatório
+              <Button
+                size="sm"
+                className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-9 px-4 rounded-xl shadow-2xs"
+              >
+                {t('workspace.report_card_btn')}
               </Button>
             </Link>
           </div>
-          <p className="text-xs text-[#5B6B63]">
-            Relatório técnico preliminar com fundamentação em campo e rastreabilidade probatória
-            bidirecional até as evidências registradas.
+          <p className="text-xs sm:text-sm text-[#5B6B63] leading-relaxed">
+            {t('workspace.report_card_desc')}
           </p>
         </div>
       )}

@@ -181,84 +181,92 @@ export const GapsChecklist: React.FC = () => {
     if (route) {
       navigate(route)
     } else {
-      toast({ title: 'Item já conferido e validado.' })
+      toast({ title: t('gaps.toast_validated') })
     }
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#143028]">{t('gaps.title')}</h1>
-          <p className="text-xs text-[#5B6B63] mt-1">{t('gaps.subtitle')}</p>
-        </div>
+    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
+      {/* Header com gradiente sutil alinhado ao padrão da landing */}
+      <div className="rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-white via-[#F9FCFA] to-[#EFF5F1] p-6 sm:p-7 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#143028] tracking-tight">
+              {t('gaps.title')}
+            </h1>
+            <p className="text-xs sm:text-sm text-[#5B6B63] mt-1">{t('gaps.subtitle')}</p>
+          </div>
 
-        <Link to="/reports">
-          <Button className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-lg shadow-xs flex items-center gap-1.5">
-            <FileText className="w-4 h-4" />
-            <span>Ir para Elaboração de Relatório</span>
-          </Button>
-        </Link>
+          <Link to="/reports">
+            <Button className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-10 px-4.5 rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 self-start sm:self-auto">
+              <FileText className="w-4 h-4 text-emerald-200" />
+              <span>{t('gaps.go_to_report')}</span>
+            </Button>
+          </Link>
+        </div>
       </div>
 
-      {/* Completeness Card */}
-      <div className="rounded-3xl border border-emerald-200 bg-gradient-to-r from-[#E7F2EC] via-[#E7F2EC]/60 to-white p-6 sm:p-8 shadow-xs space-y-4">
+      {/* Completeness Card refinado com cantos consistentes e sombra suave */}
+      <div className="rounded-3xl border border-emerald-200/90 bg-gradient-to-r from-[#E7F2EC]/80 via-[#E7F2EC]/40 to-white p-6 sm:p-7 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="space-y-1">
             <span className="text-xs font-bold uppercase tracking-wider text-[#1B5E3A] flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4" />
-              <span>Status de Integridade da Fiscalização</span>
+              <span>{t('workspace.integrity_status_title')}</span>
             </span>
-            <h2 className="text-xl sm:text-2xl font-bold text-[#143028]">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#143028] tracking-tight">
               {t('workspace.completeness_title')}: {completeness}%
             </h2>
           </div>
-          <span className="text-xs font-semibold text-[#5B6B63] bg-white px-3 py-1.5 rounded-full border border-[#E2E8E4] shadow-xs">
-            {completedCount} de {totalCount} requisitos atendidos
+          <span className="text-xs font-semibold text-[#5B6B63] bg-white px-3.5 py-1 rounded-full border border-[#E2E8E4] shadow-2xs self-start sm:self-auto">
+            {t('workspace.items_fulfilled')
+              .replace('{completed}', String(completedCount))
+              .replace('{total}', String(totalCount))}
           </span>
         </div>
 
         {/* Animated Progress Bar */}
-        <div className="w-full bg-[#E2E8E4] h-3 rounded-full overflow-hidden">
+        <div className="w-full bg-[#E2E8E4] h-2.5 rounded-full overflow-hidden">
           <div
             className="bg-[#1B5E3A] h-full rounded-full transition-all duration-700 ease-out"
             style={{ width: `${completeness}%` }}
           />
         </div>
 
-        <p className="text-xs text-[#143028] font-medium">{t('workspace.completeness_advice')}</p>
+        <p className="text-xs text-[#143028] font-medium leading-relaxed">
+          {t('workspace.completeness_advice')}
+        </p>
       </div>
 
-      {/* Checklist Sections */}
+      {/* Checklist Sections com cards arredondados e bordas sutis */}
       <div className="space-y-4">
         {/* Completed items */}
-        <div className="rounded-2xl border border-[#E2E8E4] bg-white p-5 shadow-xs space-y-3">
-          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-[#2F9E5F]">
-            <CheckCircle2 className="w-4 h-4" />
+        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-5 sm:p-6 shadow-xs space-y-3">
+          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-emerald-800">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>
               {t('gaps.completed')} ({completedCount})
             </span>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {items
               .filter((i) => i.category === 'completed')
               .map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-xl bg-emerald-50/40 border border-emerald-200/60 text-xs"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 rounded-2xl bg-emerald-50/40 border border-emerald-200/70 text-xs transition-colors hover:bg-emerald-50/60"
                 >
                   <div className="space-y-0.5">
-                    <div className="font-bold text-[#143028] flex items-center gap-2">
+                    <div className="font-bold text-[#143028] flex items-center gap-2 text-sm">
                       <span>{item.status}</span>
                       <span>{item.title}</span>
                     </div>
-                    <p className="text-[11px] text-[#5B6B63]">{item.description}</p>
+                    <p className="text-xs text-[#5B6B63] leading-relaxed">{item.description}</p>
                   </div>
 
-                  <span className="text-[10px] font-bold text-[#2F9E5F] uppercase tracking-wider bg-white px-2 py-0.5 rounded border border-emerald-200">
-                    Validado
+                  <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider bg-white px-2.5 py-1 rounded-full border border-emerald-200 shadow-2xs self-start sm:self-center shrink-0">
+                    {t('workspace.item_validated')}
                   </span>
                 </div>
               ))}
@@ -266,35 +274,35 @@ export const GapsChecklist: React.FC = () => {
         </div>
 
         {/* Pending review items */}
-        <div className="rounded-2xl border border-amber-200 bg-white p-5 shadow-xs space-y-3">
-          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-[#D97706]">
-            <AlertTriangle className="w-4 h-4" />
+        <div className="rounded-3xl border border-amber-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-3">
+          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-amber-900">
+            <AlertTriangle className="w-4 h-4 text-amber-600" />
             <span>
               {t('gaps.pending_review')} ({items.filter((i) => i.category === 'pending').length})
             </span>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {items
               .filter((i) => i.category === 'pending')
               .map((item) => (
                 <div
                   key={item.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-amber-50/50 border border-amber-200 text-xs"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-amber-50/40 border border-amber-200/80 text-xs transition-colors hover:bg-amber-50/60"
                 >
                   <div className="space-y-0.5">
-                    <div className="font-bold text-[#143028] flex items-center gap-2">
+                    <div className="font-bold text-[#143028] flex items-center gap-2 text-sm">
                       <span>{item.status}</span>
                       <span>{item.title}</span>
                     </div>
-                    <p className="text-[11px] text-amber-950/80">{item.description}</p>
+                    <p className="text-xs text-amber-950/80 leading-relaxed">{item.description}</p>
                   </div>
 
                   {item.action && (
                     <Button
                       size="sm"
                       onClick={() => handleResolveAction(item.route || null)}
-                      className="self-end sm:self-center bg-[#B45309] hover:bg-amber-800 text-white text-xs font-semibold h-8 px-3 rounded-lg shadow-xs"
+                      className="self-end sm:self-center bg-[#B45309] hover:bg-amber-800 text-white text-xs font-bold h-9 px-3.5 rounded-xl shadow-2xs shrink-0"
                     >
                       <Plus className="w-3.5 h-3.5 mr-1" />
                       <span>{item.action || t('gaps.action_add')}</span>
@@ -306,34 +314,34 @@ export const GapsChecklist: React.FC = () => {
         </div>
 
         {/* Missing item */}
-        <div className="rounded-2xl border border-red-200 bg-white p-5 shadow-xs space-y-3">
-          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-[#B3261E]">
-            <XCircle className="w-4 h-4" />
+        <div className="rounded-3xl border border-rose-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-3">
+          <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider text-rose-900">
+            <XCircle className="w-4 h-4 text-rose-600" />
             <span>
               {t('gaps.missing_item')} ({items.filter((i) => i.category === 'missing').length})
             </span>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {items
               .filter((i) => i.category === 'missing')
               .map((item) => (
                 <div
                   key={item.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-red-50/50 border border-red-200 text-xs"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-rose-50/40 border border-rose-200/80 text-xs transition-colors hover:bg-rose-50/60"
                 >
                   <div className="space-y-0.5">
-                    <div className="font-bold text-[#B3261E] flex items-center gap-2">
+                    <div className="font-bold text-rose-950 flex items-center gap-2 text-sm">
                       <span>{item.status}</span>
                       <span>{item.title}</span>
                     </div>
-                    <p className="text-[11px] text-red-950/80">{item.description}</p>
+                    <p className="text-xs text-rose-950/80 leading-relaxed">{item.description}</p>
                   </div>
 
                   <Button
                     size="sm"
                     onClick={() => handleResolveAction(item.route)}
-                    className="self-end sm:self-center bg-[#B3261E] hover:bg-red-800 text-white text-xs font-semibold h-8 px-3 rounded-lg shadow-xs"
+                    className="self-end sm:self-center bg-[#B3261E] hover:bg-red-800 text-white text-xs font-bold h-9 px-3.5 rounded-xl shadow-2xs shrink-0"
                   >
                     <Plus className="w-3.5 h-3.5 mr-1" />
                     <span>{item.action || t('gaps.action_add')}</span>
