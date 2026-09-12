@@ -86,17 +86,24 @@ export const translations: Record<Language, Record<string, string>> = {
       'Organize registros, conecte evidências e identifique informações faltantes antes da elaboração do relatório de fiscalização.',
     'landing.start_inspection': 'Iniciar fiscalização',
     'landing.view_demo': 'Ver demonstração',
+    'landing.enter_demo': 'Entrar na Demonstração',
     'landing.flow_field': 'Campo',
     'landing.flow_evidence': 'Evidências',
     'landing.flow_verification': 'Verificação',
     'landing.flow_gaps': 'Lacunas',
     'landing.flow_report': 'Relatório',
+    'landing.flow_title': 'Fluxo Contínuo de Rastreabilidade',
+    'landing.flow_subtitle':
+      'Uma cadeia de custódia visual que conecta cada registro do início ao fim',
     'landing.problem_title': 'O problema na fiscalização de campo',
     'landing.problem_desc':
-      'Durante operações ambientais, informações vitais ficam dispersas entre diversos suportes físicos e digitais.',
+      'Durante operações ambientais, informações vitais ficam dispersas entre diversos suportes físicos e digitais, gerando fragilidade probatória.',
     'landing.problem_sources':
       'Fotografias, anotações de campo, coordenadas geográficas, documentos físicos, depoimentos informais, autos de infração e observações dispersas.',
+    'landing.problem_sources_subtitle': 'Fontes e registros fragmentados em campo',
     'landing.problem_risks_title': 'Riscos da organização manual',
+    'landing.problem_risks_subtitle':
+      'Falhas na conexão entre registros enfraquecem o auto e geram retrabalho pericial',
     'landing.risk_forgotten': 'Informações e detalhes de campo esquecidos',
     'landing.risk_context': 'Evidências sem contexto ou georreferenciamento claro',
     'landing.risk_inconsistencies': 'Inconsistências de horários e coordenadas',
@@ -105,10 +112,25 @@ export const translations: Record<Language, Record<string, string>> = {
     'landing.proposal_title': 'Nossa proposta',
     'landing.proposal_desc':
       'O RastroVerde cria uma trilha organizada entre cada evidência coletada e o relatório final.',
-    'landing.demo_card_title': 'Experimente a fiscalização modelo RV-DEMO-001',
+    'landing.proposal_highlight': 'Do relatório de volta à evidência.',
+    'landing.proposal_explanation':
+      'Rastreabilidade bidirecional que permite a qualquer auditor ou agente clicar em qualquer parágrafo do relatório e inspecionar imediatamente a coordenada, a foto original e a assinatura de campo.',
+    'landing.demo_card_title': 'Caso Demonstrativo Interativo: APA Setor Norte (RV-DEMO-001)',
     'landing.demo_card_desc':
-      'Navegue pelo caso de demonstração com evidências reais de campo, testes de consistência automáticos e relatório rastreável.',
-    'landing.open_demo': 'Explorar demonstração completa',
+      'Explore uma operação simulada completa com registros de desmatamento, cruzamento de dados com satélite e relatório técnico estruturado. Sem cadastro ou cartão.',
+    'landing.demo_step1': 'Dossiê da Área de Proteção Ambiental com coordenadas e equipe',
+    'landing.demo_step2': 'Registros de fotos georreferenciadas, áudios e depoimentos',
+    'landing.demo_step3': 'Cruzamento automático de consistência de horários e GPS',
+    'landing.demo_step4': 'Geração de relatório técnico com rastreabilidade clique-a-clique',
+    'landing.open_demo': 'Entrar na Demonstração',
+    'landing.access_block_title': 'Área de Agentes e Órgãos de Controle',
+    'landing.access_block_desc':
+      'Ambiente seguro para órgãos de fiscalização socioambiental, peritos e auditores.',
+    'landing.access_benefit_1': 'Organize evidências digitais com cadeia de custódia íntegra',
+    'landing.access_benefit_2': 'Verifique consistência de coordenadas e horários antes da emissão',
+    'landing.access_benefit_3': 'Gere relatórios técnicos padronizados com rastreabilidade direta',
+    'landing.btn_access_agent': 'Acessar com credencial',
+    'landing.btn_create_account': 'Criar conta de agente',
 
     // Dashboard
     'dashboard.title': 'Visão Geral da Fiscalização',
@@ -287,22 +309,43 @@ export const translations: Record<Language, Record<string, string>> = {
     'demo.read_only_tip':
       'Você está visualizando a demonstração fictícia com dados de campo reais.',
     'demo.login_prompt': 'Acesso Completo',
+    'demo.banner_title': 'Ambiente de Demonstração Interativa (RV-DEMO-001)',
+    'demo.banner_desc':
+      'Você está explorando uma fiscalização simulada na APA Setor Norte. Navegue pelas evidências, verifique consistências e teste a rastreabilidade do relatório final.',
+    'demo.back_to_landing': 'Voltar ao início',
+    'demo.tour_invite': 'Iniciar Tour Guiado (8 passos)',
+    'demo.agent_login': 'Entrar como agente',
 
     // Auth
     'auth.login_title': 'Acesso à Fiscalização',
+    'auth.login_subtitle':
+      'Entre com sua credencial funcional para acessar os dossiês e emitir relatórios rastreáveis.',
     'auth.signup_title': 'Criar Conta de Agente',
+    'auth.signup_subtitle':
+      'Cadastro exclusivo para agentes ambientais, peritos e servidores públicos de fiscalização.',
     'auth.email': 'E-mail institucional',
     'auth.password': 'Senha',
     'auth.confirm_password': 'Confirmar senha',
-    'auth.name': 'Nome completo',
+    'auth.name': 'Nome completo e cargo',
     'auth.login_btn': 'Entrar',
-    'auth.signup_btn': 'Criar conta',
+    'auth.signup_btn': 'Criar conta institucional',
     'auth.forgot_password': 'Esqueceu a senha?',
     'auth.forgot_password_title': 'Recuperar Senha',
+    'auth.forgot_password_subtitle':
+      'Informe seu e-mail institucional para receber o link seguro de redefinição.',
     'auth.forgot_password_btn': 'Enviar link de recuperação',
     'auth.reset_password_title': 'Redefinir Senha',
+    'auth.reset_password_subtitle':
+      'Defina uma nova senha para restabelecer o acesso à sua conta institucional.',
     'auth.have_account': 'Já possui cadastro? Entrar',
-    'auth.no_account': 'Não tem conta? Cadastre-se',
+    'auth.no_account': 'Não tem conta? Solicitar cadastro',
+    'auth.security_notice':
+      'Acesso monitorado e protegido para integridade da cadeia de custódia socioambiental.',
+    'auth.back_to_home': 'Voltar à página inicial',
+    'auth.back_to_login': 'Voltar ao login',
+    'auth.demo_entry_prompt': 'Quer apenas conhecer a ferramenta?',
+    'auth.demo_entry_btn': 'Ver Demonstração sem cadastro',
+    'auth.password_min_length': 'Mínimo de 8 caracteres recomendando letras e números',
   },
   en: {
     // Brand & header
@@ -382,17 +425,24 @@ export const translations: Record<Language, Record<string, string>> = {
       'Organize records, connect evidence and identify missing information before drafting the inspection report.',
     'landing.start_inspection': 'Start inspection',
     'landing.view_demo': 'View demo',
+    'landing.enter_demo': 'Enter Demo',
     'landing.flow_field': 'Field',
     'landing.flow_evidence': 'Evidence',
     'landing.flow_verification': 'Verification',
     'landing.flow_gaps': 'Gaps',
     'landing.flow_report': 'Report',
+    'landing.flow_title': 'Continuous Traceability Pipeline',
+    'landing.flow_subtitle':
+      'A visual chain of custody linking every field record from start to finish',
     'landing.problem_title': 'The challenge in field enforcement',
     'landing.problem_desc':
-      'During environmental operations, vital information is scattered across diverse physical and digital mediums.',
+      'During environmental operations, vital information is scattered across diverse physical and digital mediums, weakening legal integrity.',
     'landing.problem_sources':
       'Photographs, field notes, geographic coordinates, physical documents, informal testimonies, violation records, and scattered observations.',
+    'landing.problem_sources_subtitle': 'Fragmented and isolated field sources',
     'landing.problem_risks_title': 'Risks of manual organization',
+    'landing.problem_risks_subtitle':
+      'Gaps between disconnected records weaken the administrative process and cause forensic rework',
     'landing.risk_forgotten': 'Forgotten field details and critical observations',
     'landing.risk_context': 'Evidence lacking clear context or georeferencing',
     'landing.risk_inconsistencies': 'Time and coordinate discrepancies',
@@ -401,10 +451,25 @@ export const translations: Record<Language, Record<string, string>> = {
     'landing.proposal_title': 'Our proposal',
     'landing.proposal_desc':
       'RastroVerde creates an organized trail between each piece of collected evidence and the final report.',
-    'landing.demo_card_title': 'Try model inspection RV-DEMO-001',
+    'landing.proposal_highlight': 'From the report right back to the evidence.',
+    'landing.proposal_explanation':
+      'Bidirectional traceability enabling any auditor or officer to click any paragraph in the final report and immediately inspect original coordinates, raw photo evidence, and field signatures.',
+    'landing.demo_card_title': 'Interactive Demo Case: North Sector APA (RV-DEMO-001)',
     'landing.demo_card_desc':
-      'Explore our complete demo case with real field evidence, automated consistency checks, and a traceable report.',
-    'landing.open_demo': 'Explore full demo',
+      'Explore a full simulated operation with deforestation records, satellite data cross-checking, and a structured technical report. No registration required.',
+    'landing.demo_step1': 'Protected Environmental Area dossier with coordinates and crew',
+    'landing.demo_step2': 'Georeferenced photo records, audio notes, and testimonies',
+    'landing.demo_step3': 'Automated consistency cross-check for timestamps and GPS',
+    'landing.demo_step4': 'Technical report generation with click-by-click traceability',
+    'landing.open_demo': 'Enter Demo Case',
+    'landing.access_block_title': 'Officers & Oversight Authorities Portal',
+    'landing.access_block_desc':
+      'Secure workspace for socio-environmental enforcement agencies, forensic experts, and auditors.',
+    'landing.access_benefit_1': 'Organize digital evidence with an uncompromised chain of custody',
+    'landing.access_benefit_2': 'Verify GPS and timestamp consistency prior to official issuance',
+    'landing.access_benefit_3': 'Generate standardized technical reports with direct traceability',
+    'landing.btn_access_agent': 'Sign in with credentials',
+    'landing.btn_create_account': 'Register officer account',
 
     // Dashboard
     'dashboard.title': 'Enforcement Overview',
@@ -579,22 +644,43 @@ export const translations: Record<Language, Record<string, string>> = {
     'demo.nav_badge': 'Demo Mode (RV-DEMO-001)',
     'demo.read_only_tip': 'You are viewing the fictional demonstration with realistic field data.',
     'demo.login_prompt': 'Full Access',
+    'demo.banner_title': 'Interactive Demonstration Environment (RV-DEMO-001)',
+    'demo.banner_desc':
+      'You are exploring a simulated inspection in the North Sector APA. Browse evidence, run consistency checks, and verify report traceability.',
+    'demo.back_to_landing': 'Back to home',
+    'demo.tour_invite': 'Start Guided Tour (8 steps)',
+    'demo.agent_login': 'Sign in as officer',
 
     // Auth
     'auth.login_title': 'Officer Sign In',
+    'auth.login_subtitle':
+      'Sign in with your official agency credentials to manage dossiers and generate traceable reports.',
     'auth.signup_title': 'Register Officer Account',
+    'auth.signup_subtitle':
+      'Dedicated access for environmental enforcement officers, forensic experts, and public auditors.',
     'auth.email': 'Official email',
     'auth.password': 'Password',
     'auth.confirm_password': 'Confirm password',
-    'auth.name': 'Full name',
+    'auth.name': 'Full name and title',
     'auth.login_btn': 'Sign In',
-    'auth.signup_btn': 'Create account',
+    'auth.signup_btn': 'Create official account',
     'auth.forgot_password': 'Forgot password?',
     'auth.forgot_password_title': 'Recover Password',
+    'auth.forgot_password_subtitle':
+      'Provide your registered official email to receive a secure recovery link.',
     'auth.forgot_password_btn': 'Send reset link',
     'auth.reset_password_title': 'Set New Password',
+    'auth.reset_password_subtitle':
+      'Choose a new password to re-establish your secure workspace access.',
     'auth.have_account': 'Already registered? Sign in',
-    'auth.no_account': 'Need an account? Sign up',
+    'auth.no_account': 'Need an account? Request access',
+    'auth.security_notice':
+      'Monitored and protected access ensuring socio-environmental chain of custody integrity.',
+    'auth.back_to_home': 'Back to home',
+    'auth.back_to_login': 'Back to sign in',
+    'auth.demo_entry_prompt': 'Just exploring the platform?',
+    'auth.demo_entry_btn': 'View Demo without signing up',
+    'auth.password_min_length': 'Minimum 8 characters with letters and numbers recommended',
   },
 }
 

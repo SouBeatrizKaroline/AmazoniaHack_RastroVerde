@@ -1,6 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useI18n } from '@/lib/i18n'
+import { useAuth } from '@/lib/auth'
+import { useTour } from '@/components/TourProvider'
 import {
   Compass,
   Camera,
@@ -15,53 +17,73 @@ import {
   ChevronDown,
   Layers,
   FileSearch,
+  Sparkles,
+  Lock,
+  UserCheck,
+  CheckSquare,
+  FileCheck2,
+  ExternalLink,
+  Shield,
+  ArrowUpRight,
+  Eye,
+  Activity,
+  GitBranch,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export const Index: React.FC = () => {
   const { t } = useI18n()
+  const { isAuthenticated } = useAuth()
+  const { startTour } = useTour()
+  const navigate = useNavigate()
+  const [hoveredStep, setHoveredStep] = useState<number | null>(null)
 
   const flowSteps = [
     {
       step: '01',
       icon: MapPin,
       label: t('landing.flow_field'),
-      desc: 'Fixação de marco georreferenciado e vistoria inicial',
+      desc: 'Marco inicial georreferenciado e vistoria da área protegida.',
+      highlight: 'Poligonal & Coordenadas',
     },
     {
       step: '02',
       icon: Camera,
       label: t('landing.flow_evidence'),
-      desc: 'Fotos, coordenadas, áudios e depoimentos coletados',
+      desc: 'Fotografias com carimbo de tempo, notas técnicas e áudios.',
+      highlight: 'Cadeia de Custódia',
     },
     {
       step: '03',
       icon: Search,
       label: t('landing.flow_verification'),
-      desc: 'Cruzamento de dados, horários e coerência espacial',
+      desc: 'Varredura automática e cruzamento de horários e coordenadas GPS.',
+      highlight: 'Postura Cautelosa',
     },
     {
       step: '04',
       icon: Puzzle,
       label: t('landing.flow_gaps'),
-      desc: 'Identificação inteligente de dados ausentes e pendências',
+      desc: 'Checklist inteligente de dados ausentes antes da emissão final.',
+      highlight: 'Integridade Jurídica',
     },
     {
       step: '05',
       icon: FileText,
       label: t('landing.flow_report'),
-      desc: 'Elaboração do relatório com rastreabilidade direta',
+      desc: 'Relatório estruturado com rastreabilidade clique-a-clique.',
+      highlight: 'Do Relatório à Evidência',
     },
   ]
 
   const problemSources = [
-    'Fotografias em celulares e câmeras',
-    'Anotações manuais de campo em prancheta',
-    'Coordenadas de pontos de GPS dispersas',
-    'Documentos de propriedade e CAR em papel',
-    'Depoimentos e relatos verbais informais',
-    'Autos de infração e laudos parciais',
-    'Observações técnicas preliminares',
+    { name: 'Fotografias em celulares e câmeras', type: 'Mídia isolada' },
+    { name: 'Anotações manuais de campo em prancheta', type: 'Texto vulnerável' },
+    { name: 'Coordenadas de pontos de GPS dispersas', type: 'Sem polígono' },
+    { name: 'Documentos dominiais e CAR em papel', type: 'Sem vínculo' },
+    { name: 'Depoimentos e relatos verbais de testemunhas', type: 'Volatilidade' },
+    { name: 'Autos de infração e autos de embargo avulsos', type: 'Risco de perda' },
+    { name: 'Laudos periciais e relatórios de satélite', type: 'Formatos heterogêneos' },
   ]
 
   const risks = [
@@ -72,29 +94,52 @@ export const Index: React.FC = () => {
     t('landing.risk_gaps'),
   ]
 
+  const demoFeatures = [
+    {
+      title: t('landing.demo_step1'),
+      badge: 'RV-DEMO-001',
+      icon: MapPin,
+    },
+    {
+      title: t('landing.demo_step2'),
+      badge: 'EVD-001 a EVD-014',
+      icon: Camera,
+    },
+    {
+      title: t('landing.demo_step3'),
+      badge: 'Detecção IA + Geo',
+      icon: Search,
+    },
+    {
+      title: t('landing.demo_step4'),
+      badge: 'Rastreável 100%',
+      icon: FileText,
+    },
+  ]
+
   return (
-    <div className="space-y-16 lg:space-y-24">
+    <div className="space-y-16 sm:space-y-20 lg:space-y-28 animate-in fade-in duration-500">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-white via-white to-[#F7F9F8] p-8 sm:p-12 lg:p-16 shadow-xs">
+      <section className="relative overflow-hidden rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-white via-[#FCFDFD] to-[#F4F7F5] p-6 sm:p-12 lg:p-16 shadow-xs">
         {/* Subtle topographical SVG background pattern */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
+        <div className="absolute inset-0 pointer-events-none opacity-[0.035]">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="topo" width="100" height="100" patternUnits="userSpaceOnUse">
+              <pattern id="topo" width="120" height="120" patternUnits="userSpaceOnUse">
                 <path
-                  d="M0 50 Q 25 20, 50 50 T 100 50"
+                  d="M0 60 Q 30 25, 60 60 T 120 60"
                   fill="none"
                   stroke="#1B5E3A"
                   strokeWidth="2"
                 />
                 <path
-                  d="M0 25 Q 25 -5, 50 25 T 100 25"
+                  d="M0 30 Q 30 -5, 60 30 T 120 30"
                   fill="none"
                   stroke="#1B5E3A"
                   strokeWidth="1.5"
                 />
                 <path
-                  d="M0 75 Q 25 45, 50 75 T 100 75"
+                  d="M0 90 Q 30 55, 60 90 T 120 90"
                   fill="none"
                   stroke="#1B5E3A"
                   strokeWidth="1.5"
@@ -105,144 +150,372 @@ export const Index: React.FC = () => {
           </svg>
         </div>
 
-        <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
+        {/* Ambient forest green aura */}
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#1B5E3A]/5 blur-3xl rounded-full pointer-events-none" />
+
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6">
           {/* Eyebrows */}
           <div className="flex flex-wrap items-center justify-center gap-2">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/20 bg-[#E7F2EC] px-3.5 py-1 text-xs font-semibold text-[#1B5E3A]">
-              <Compass className="w-3.5 h-3.5" />
-              <span>RastroVerde • GovTech Ambiental</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/25 bg-[#E7F2EC] px-3.5 py-1 text-xs font-semibold text-[#1B5E3A] shadow-2xs">
+              <Compass className="w-3.5 h-3.5 animate-spin-slow" />
+              <span>RastroVerde • GovTech Socioambiental</span>
             </div>
             <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8E4] bg-white/90 backdrop-blur-xs px-3.5 py-1 text-xs font-medium text-[#5B6B63] shadow-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E]" />
+              <span className="w-2 h-2 rounded-full bg-[#0F766E] animate-pulse" />
               <span>{t('landing.amazoniahack_badge')}</span>
             </div>
           </div>
 
           {/* Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#143028] leading-[1.15]">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#143028] leading-[1.12]">
             {t('landing.headline')}
           </h1>
 
           {/* Subheadline */}
-          <p className="text-base sm:text-lg text-[#5B6B63] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-[#5B6B63] max-w-2xl mx-auto leading-relaxed">
             {t('landing.subheadline')}
           </p>
 
-          {/* Action CTAs: 2 portas de entrada claras (Demo e Login) */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Link to="/inspections/RV-DEMO-001" className="w-full sm:w-auto">
-              <Button
-                size="lg"
-                className="w-full sm:w-auto bg-[#1B5E3A] hover:bg-[#14502F] text-white font-semibold shadow-md px-6 h-12 rounded-xl flex items-center justify-center gap-2"
-              >
-                <Compass className="w-4 h-4" />
-                <span>{t('landing.view_demo')}</span>
-                <span className="ml-1 text-xs font-normal text-emerald-100">(RV-DEMO-001)</span>
-              </Button>
-            </Link>
-
-            <Link to="/login" className="w-full sm:w-auto">
+          {/* Action CTAs: Hierarquia inequívoca — Demonstração é a rota mais óbvia para quem avalia o produto */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4 max-w-xl mx-auto">
+            {/* CTA 1: Iniciar fiscalização (leva para new inspection se logado, ou login se visitante) */}
+            <Link to={isAuthenticated ? '/inspections/new' : '/login'} className="w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto border-[#E2E8E4] bg-white text-[#143028] hover:bg-[#F7F9F8] hover:border-[#1B5E3A] font-semibold h-12 px-6 rounded-xl shadow-xs flex items-center justify-center gap-2"
+                className="w-full sm:w-auto border-[#1B5E3A]/30 bg-white hover:bg-[#F7F9F8] text-[#143028] font-bold h-13 px-7 rounded-2xl shadow-xs transition-all hover:border-[#1B5E3A] flex items-center justify-center gap-2"
               >
-                <span>
-                  {t('nav.login')} / {t('nav.signup')}
+                <FileCheck2 className="w-4 h-4 text-[#1B5E3A]" />
+                <span>{t('landing.start_inspection')}</span>
+              </Button>
+            </Link>
+
+            {/* CTA 2: Demonstração Interativa (Destaque principal e visual inequívoco) */}
+            <Link to="/inspections/RV-DEMO-001" className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                className="w-full sm:w-auto bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold shadow-lg shadow-[#1B5E3A]/20 hover:shadow-xl hover:shadow-[#1B5E3A]/30 h-13 px-8 rounded-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5"
+              >
+                <Compass className="w-5 h-5 text-emerald-200" />
+                <span className="text-base">{t('landing.enter_demo')}</span>
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-white/20 text-white">
+                  RV-DEMO-001
                 </span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 text-emerald-200" />
               </Button>
             </Link>
           </div>
 
-          <div className="pt-2">
-            <span className="inline-block text-xs text-[#5B6B63]">{t('brand.tagline')}</span>
+          {/* Microcopy persuasivo e ético */}
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-2 text-xs text-[#5B6B63]">
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#1B5E3A]" />
+              <span>Sem cadastro prévio para demonstração</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#1B5E3A]" />
+              <span>Dossiê georreferenciado e dados fictícios</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#1B5E3A]" />
+              <span>Cadeia de custódia auditável</span>
+            </span>
           </div>
         </div>
 
-        {/* Visual Animated Flow Strip: Campo -> Evidências -> Verificação -> Lacunas -> Relatório */}
-        <div className="relative z-10 mt-14 pt-8 border-t border-[#E2E8E4]">
-          <div className="text-center text-xs font-bold uppercase tracking-wider text-[#5B6B63] mb-6">
-            Fluxo Contínuo de Rastreabilidade
+        {/* Visual Animated Flow Strip: Trilha no mapa entre as etapas */}
+        <div className="relative z-10 mt-16 pt-10 border-t border-[#E2E8E4]">
+          <div className="text-center max-w-xl mx-auto mb-8 space-y-1">
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#1B5E3A]">
+              <GitBranch className="w-3.5 h-3.5" />
+              <span>{t('landing.flow_title')}</span>
+            </div>
+            <p className="text-xs text-[#5B6B63]">{t('landing.flow_subtitle')}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 relative">
-            {flowSteps.map((step, idx) => {
-              const Icon = step.icon
-              return (
-                <div
-                  key={step.label}
-                  className="relative flex flex-col items-center text-center p-4 rounded-2xl bg-white border border-[#E2E8E4] shadow-xs hover:border-[#1B5E3A] hover:shadow-md transition-all group"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-[#E7F2EC] text-[#1B5E3A] flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
-                    <Icon className="w-6 h-6" />
+          {/* Connected Steps Grid with trail line */}
+          <div className="relative">
+            {/* Trail connector line (desktop) */}
+            <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-0.5 border-t-2 border-dashed border-[#1B5E3A]/30 z-0" />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative z-10">
+              {flowSteps.map((step, idx) => {
+                const Icon = step.icon
+                const isHovered = hoveredStep === idx
+                return (
+                  <div
+                    key={step.step}
+                    onMouseEnter={() => setHoveredStep(idx)}
+                    onMouseLeave={() => setHoveredStep(null)}
+                    className={`relative flex flex-col items-center text-center p-5 rounded-2xl bg-white border transition-all duration-300 ${
+                      isHovered
+                        ? 'border-[#1B5E3A] shadow-md -translate-y-1'
+                        : 'border-[#E2E8E4] shadow-2xs hover:border-[#1B5E3A]/60'
+                    }`}
+                  >
+                    {/* Node indicator */}
+                    <div className="relative mb-3">
+                      <div
+                        className={`w-13 h-13 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                          isHovered
+                            ? 'bg-[#1B5E3A] text-white shadow-md scale-105'
+                            : 'bg-[#E7F2EC] text-[#1B5E3A]'
+                        }`}
+                      >
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-[#143028] text-white font-mono text-[10px] font-bold">
+                        {step.step}
+                      </span>
+                    </div>
+
+                    <div className="text-sm font-bold text-[#143028] mb-1">{step.label}</div>
+                    <span className="text-[10px] font-semibold text-[#0F766E] uppercase tracking-wider mb-2">
+                      {step.highlight}
+                    </span>
+                    <p className="text-xs text-[#5B6B63] leading-relaxed">{step.desc}</p>
                   </div>
-                  <div className="text-xs font-mono font-semibold text-[#0F766E] mb-1">
-                    {step.step}
-                  </div>
-                  <div className="text-sm font-bold text-[#143028]">{step.label}</div>
-                  <div className="text-xs text-[#5B6B63] mt-1 line-clamp-2">{step.desc}</div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
         </div>
 
         {/* Scroll cue */}
         <div className="flex justify-center pt-8">
-          <ChevronDown className="w-5 h-5 text-[#5B6B63] animate-bounce" />
+          <a
+            href="#demo-section"
+            className="text-[#5B6B63] hover:text-[#1B5E3A] transition-colors p-2"
+            title="Avançar para a demonstração"
+          >
+            <ChevronDown className="w-5 h-5 animate-bounce" />
+          </a>
         </div>
       </section>
 
-      {/* "O Problema" Section */}
+      {/* Interactive Demonstration Showcase Card (RV-DEMO-001) */}
+      <section
+        id="demo-section"
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#143028] via-[#1B5E3A] to-[#0F766E] text-white p-7 sm:p-12 lg:p-14 shadow-xl border border-emerald-900/40"
+      >
+        {/* Subtle topographical background */}
+        <div className="absolute inset-0 pointer-events-none opacity-10">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="url(#topo)" />
+          </svg>
+        </div>
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left Column: Context, Value Proposition & CTA */}
+          <div className="lg:col-span-7 space-y-6 text-left">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-md px-3.5 py-1 text-xs font-bold text-emerald-100 border border-white/25">
+                <FileSearch className="w-3.5 h-3.5" />
+                <span>{t('badge.fictional_demo')}</span>
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-900/60 backdrop-blur-md px-3 py-1 text-xs font-mono font-medium text-emerald-200 border border-emerald-700/50">
+                APA Setor Norte • 1.450 ha
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                {t('landing.demo_card_title')}
+              </h2>
+              <p className="text-sm sm:text-base text-emerald-100/95 leading-relaxed">
+                {t('landing.demo_card_desc')}
+              </p>
+            </div>
+
+            {/* 4 Mini Steps of what visitor sees in demo */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              {demoFeatures.map((item, idx) => {
+                const Icon = item.icon
+                return (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3 p-3 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-emerald-400/20 flex items-center justify-center shrink-0 mt-0.5 text-emerald-200">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-mono font-bold text-emerald-300 block uppercase">
+                        {item.badge}
+                      </span>
+                      <span className="text-xs font-medium text-white/95 leading-snug block">
+                        {item.title}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Demo CTAs */}
+            <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <Link to="/inspections/RV-DEMO-001">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-white hover:bg-emerald-50 text-[#1B5E3A] font-extrabold shadow-lg px-7 h-12 rounded-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
+                >
+                  <Eye className="w-4 h-4" />
+                  <span>{t('landing.open_demo')}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                onClick={startTour}
+                className="w-full sm:w-auto border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold h-12 px-5 rounded-xl flex items-center justify-center gap-2"
+              >
+                <Compass className="w-4 h-4 text-emerald-200" />
+                <span>{t('tour.button')} (Pitch)</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Right Column: Interactive Dossier Card Preview */}
+          <div className="lg:col-span-5">
+            <div className="rounded-3xl bg-white text-[#143028] p-6 shadow-2xl border border-emerald-100/30 space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E2E8E4]">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-emerald-600 animate-pulse" />
+                  <span className="font-mono text-xs font-bold text-[#1B5E3A]">RV-DEMO-001</span>
+                </div>
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#E7F2EC] text-[#1B5E3A]">
+                  Pronta para relatório
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                <h3 className="font-bold text-base text-[#143028]">
+                  APA Setor Norte — Gleba Castanhal
+                </h3>
+                <p className="text-xs text-[#5B6B63]">
+                  Novo Progresso • PA • Vistoria Integrada de Alerta DETER
+                </p>
+              </div>
+
+              {/* Dossier quick metrics */}
+              <div className="grid grid-cols-3 gap-2 py-2">
+                <div className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-center">
+                  <span className="text-[10px] text-[#5B6B63] block font-medium">Evidências</span>
+                  <span className="text-base font-extrabold text-[#1B5E3A]">14</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-center">
+                  <span className="text-[10px] text-[#5B6B63] block font-medium">Completude</span>
+                  <span className="text-base font-extrabold text-[#0F766E]">78%</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-center">
+                  <span className="text-[10px] text-[#5B6B63] block font-medium">Pendências</span>
+                  <span className="text-base font-extrabold text-[#B45309]">3</span>
+                </div>
+              </div>
+
+              {/* Simulated trace link */}
+              <div className="p-3 rounded-xl bg-emerald-50/80 border border-emerald-200 text-xs text-[#143028] space-y-1.5">
+                <div className="flex items-center justify-between font-bold text-[#1B5E3A]">
+                  <span className="flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>Rastreabilidade Validada</span>
+                  </span>
+                  <span className="text-[10px] font-mono">EVD-014 ↔ Relatório</span>
+                </div>
+                <p className="text-[11px] text-[#5B6B63]">
+                  Cada achado técnico possui âncora direta para a coordenada e fotografia de campo
+                  correspondente.
+                </p>
+              </div>
+
+              <Link to="/inspections/RV-DEMO-001" className="block pt-1">
+                <Button className="w-full bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold text-xs h-10 rounded-xl">
+                  Abrir Dossiê Demonstrativo Completo →
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* "O Problema" Section: Cenário real em campo e riscos da fragmentação */}
       <section className="space-y-6">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#B45309]">
             <AlertTriangle className="w-4 h-4" />
             <span>O Cenário Real em Campo</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#143028] mt-1">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#143028] mt-1 tracking-tight">
             {t('landing.problem_title')}
           </h2>
-          <p className="text-[#5B6B63] text-sm sm:text-base mt-2">{t('landing.problem_desc')}</p>
+          <p className="text-[#5B6B63] text-sm sm:text-base mt-2 leading-relaxed">
+            {t('landing.problem_desc')}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Scattered Sources Card */}
-          <div className="rounded-2xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
-            <div className="flex items-center gap-2 font-bold text-[#143028] text-base">
-              <Layers className="w-5 h-5 text-[#0F766E]" />
-              <span>Fontes e Registros Espalhados</span>
+          <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
+            <div className="flex items-center gap-2.5 font-bold text-[#143028] text-base">
+              <div className="w-8 h-8 rounded-xl bg-[#E7F2EC] text-[#0F766E] flex items-center justify-center">
+                <Layers className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="block leading-tight">{t('landing.problem_sources_subtitle')}</span>
+                <span className="text-xs font-normal text-[#5B6B63]">
+                  Fontes dispersas sem padrão de custódia
+                </span>
+              </div>
             </div>
-            <p className="text-xs text-[#5B6B63]">{t('landing.problem_sources')}</p>
-            <ul className="space-y-2 pt-2">
+
+            <p className="text-xs text-[#5B6B63] leading-relaxed">{t('landing.problem_sources')}</p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
               {problemSources.map((item, i) => (
-                <li
+                <div
                   key={i}
-                  className="flex items-center gap-2.5 text-xs font-medium text-[#143028]"
+                  className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] flex items-center justify-between gap-2"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E]" />
-                  <span>{item}</span>
-                </li>
+                  <span className="text-xs font-medium text-[#143028] truncate">{item.name}</span>
+                  <span className="text-[10px] font-semibold text-[#5B6B63] bg-white px-2 py-0.5 rounded border border-[#E2E8E4] shrink-0">
+                    {item.type}
+                  </span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
 
           {/* Risks of manual organization */}
-          <div className="rounded-2xl border border-red-200 bg-red-50/50 p-6 shadow-xs space-y-4">
-            <div className="flex items-center gap-2 font-bold text-[#B3261E] text-base">
-              <AlertTriangle className="w-5 h-5" />
-              <span>{t('landing.problem_risks_title')}</span>
+          <div className="rounded-3xl border border-red-200 bg-red-50/40 p-6 sm:p-8 shadow-xs space-y-4">
+            <div className="flex items-center gap-2.5 font-bold text-[#B3261E] text-base">
+              <div className="w-8 h-8 rounded-xl bg-red-100 text-[#B3261E] flex items-center justify-center">
+                <AlertTriangle className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="block leading-tight">{t('landing.problem_risks_title')}</span>
+                <span className="text-xs font-normal text-red-800/80">
+                  Vulnerabilidades processuais
+                </span>
+              </div>
             </div>
-            <p className="text-xs text-red-900/80">
-              Falhas na conexão entre os elementos enfraquecem o processo administrativo e causam
-              retrabalho pericial.
+
+            <p className="text-xs text-red-950/80 leading-relaxed">
+              {t('landing.problem_risks_subtitle')}
             </p>
+
             <ul className="space-y-2.5 pt-2">
               {risks.map((risk, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-xs font-medium text-red-950">
-                  <span className="text-[#B3261E] font-bold">✕</span>
-                  <span>{risk}</span>
+                <li
+                  key={i}
+                  className="flex items-start gap-3 p-2.5 rounded-xl bg-white/80 border border-red-200/80 text-xs font-medium text-red-950"
+                >
+                  <span className="w-5 h-5 rounded-full bg-red-100 text-[#B3261E] font-bold text-xs flex items-center justify-center shrink-0">
+                    ✕
+                  </span>
+                  <span className="leading-snug">{risk}</span>
                 </li>
               ))}
             </ul>
@@ -250,77 +523,135 @@ export const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* "Nossa Proposta" Section */}
-      <section className="rounded-3xl border border-[#E2E8E4] bg-white p-8 sm:p-12 text-center space-y-6 shadow-xs">
-        <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/20 bg-[#E7F2EC] px-3 py-1 text-xs font-semibold text-[#1B5E3A]">
-          <ShieldCheck className="w-4 h-4" />
-          <span>{t('landing.proposal_title')}</span>
+      {/* "Nossa Proposta" Section: Rastreabilidade bidirecional */}
+      <section className="rounded-3xl border border-[#E2E8E4] bg-white p-8 sm:p-12 shadow-xs space-y-8">
+        <div className="max-w-3xl mx-auto text-center space-y-3">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/20 bg-[#E7F2EC] px-3.5 py-1 text-xs font-semibold text-[#1B5E3A]">
+            <ShieldCheck className="w-4 h-4" />
+            <span>{t('landing.proposal_title')}</span>
+          </div>
+
+          <h3 className="text-2xl sm:text-4xl font-extrabold text-[#143028] tracking-tight">
+            "{t('landing.proposal_highlight')}"
+          </h3>
+
+          <p className="text-sm sm:text-base text-[#5B6B63] leading-relaxed">
+            {t('landing.proposal_explanation')}
+          </p>
         </div>
 
-        <h3 className="text-2xl sm:text-3xl font-bold text-[#143028] max-w-3xl mx-auto">
-          "{t('landing.proposal_desc')}"
-        </h3>
-
         {/* Trail Graphic */}
-        <div className="max-w-2xl mx-auto py-6">
+        <div className="max-w-3xl mx-auto py-4">
           <div className="relative flex items-center justify-between">
-            <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 h-1 border-t-2 border-dashed border-[#1B5E3A]/40" />
-            {['Coleta', 'Georreferenciamento', 'Validação', 'Auditoria', 'Emissão'].map(
-              (label, idx) => (
-                <div key={label} className="relative z-10 flex flex-col items-center">
-                  <div className="w-8 h-8 rounded-full bg-[#1B5E3A] text-white text-xs font-bold flex items-center justify-center ring-4 ring-white shadow-xs">
-                    {idx + 1}
-                  </div>
-                  <span className="text-[11px] font-medium text-[#143028] mt-2 whitespace-nowrap hidden sm:block">
-                    {label}
-                  </span>
+            <div className="absolute inset-x-6 top-1/2 -translate-y-1/2 h-0.5 border-t-2 border-dashed border-[#1B5E3A]/40" />
+            {[
+              { label: 'Coleta de Campo', sub: 'Lat/Long + Fotos' },
+              { label: 'Georreferenciamento', sub: 'Poligonal & SIG' },
+              { label: 'Consistência', sub: 'Validação IA' },
+              { label: 'Auditoria de Lacunas', sub: 'Checklist Prévio' },
+              { label: 'Emissão Rastreável', sub: 'Laudo Pericial' },
+            ].map((step, idx) => (
+              <div key={step.label} className="relative z-10 flex flex-col items-center">
+                <div className="w-9 h-9 rounded-full bg-[#1B5E3A] text-white text-xs font-bold flex items-center justify-center ring-4 ring-white shadow-sm">
+                  {idx + 1}
                 </div>
-              ),
-            )}
+                <span className="text-xs font-bold text-[#143028] mt-2 whitespace-nowrap hidden sm:block">
+                  {step.label}
+                </span>
+                <span className="text-[10px] text-[#5B6B63] hidden md:block">{step.sub}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Pitch Demo Banner Card */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1B5E3A] via-[#14502F] to-[#0F766E] p-8 sm:p-12 text-white shadow-lg">
-        <div className="relative z-10 max-w-2xl space-y-4">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-xs px-3 py-1 text-xs font-semibold text-emerald-100">
-            <FileSearch className="w-3.5 h-3.5" />
-            <span>{t('badge.fictional_demo')}</span>
+      {/* Seção de Acesso Institucional / Agentes */}
+      <section className="rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-[#F7F9F8] to-white p-8 sm:p-12 shadow-xs">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-7 space-y-4 text-left">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#143028]/20 bg-white px-3 py-1 text-xs font-semibold text-[#143028]">
+              <Lock className="w-3.5 h-3.5 text-[#1B5E3A]" />
+              <span>Ambiente Restrito & Monitorado</span>
+            </div>
+
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#143028] tracking-tight">
+              {t('landing.access_block_title')}
+            </h3>
+
+            <p className="text-sm text-[#5B6B63] leading-relaxed">
+              {t('landing.access_block_desc')}
+            </p>
+
+            <div className="space-y-2.5 pt-2">
+              {[
+                t('landing.access_benefit_1'),
+                t('landing.access_benefit_2'),
+                t('landing.access_benefit_3'),
+              ].map((benefit, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2.5 text-xs font-semibold text-[#143028]"
+                >
+                  <CheckCircle2 className="w-4 h-4 text-[#1B5E3A] shrink-0" />
+                  <span>{benefit}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <h3 className="text-2xl sm:text-4xl font-bold tracking-tight">
-            {t('landing.demo_card_title')}
-          </h3>
-
-          <p className="text-emerald-100 text-sm sm:text-base leading-relaxed">
-            {t('landing.demo_card_desc')}
-          </p>
-
-          <div className="pt-4 flex flex-wrap gap-3">
-            <Link to="/inspections/RV-DEMO-001">
+          <div className="lg:col-span-5 flex flex-col gap-3">
+            <Link to="/login" className="w-full">
               <Button
                 size="lg"
-                className="bg-white text-[#1B5E3A] hover:bg-emerald-50 font-semibold shadow-md px-6 h-12 rounded-xl flex items-center gap-2"
+                className="w-full bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold h-12 rounded-xl shadow-xs flex items-center justify-center gap-2"
               >
-                <Compass className="w-4 h-4" />
-                <span>{t('landing.open_demo')}</span>
-                <ArrowRight className="w-4 h-4" />
+                <UserCheck className="w-4 h-4" />
+                <span>{t('landing.btn_access_agent')}</span>
               </Button>
             </Link>
 
-            <Link to="/login">
+            <Link to="/signup" className="w-full">
               <Button
                 variant="outline"
                 size="lg"
-                className="border-white/30 text-white hover:bg-white/10 font-semibold h-12 px-6 rounded-xl"
+                className="w-full border-[#E2E8E4] bg-white hover:bg-[#F7F9F8] text-[#143028] font-semibold h-12 rounded-xl shadow-xs flex items-center justify-center gap-2"
               >
-                <span>{t('nav.login')}</span>
+                <span>{t('landing.btn_create_account')}</span>
+                <ArrowRight className="w-4 h-4 text-[#5B6B63]" />
               </Button>
             </Link>
+
+            <p className="text-[11px] text-center text-[#5B6B63] pt-1">
+              {t('auth.security_notice')}
+            </p>
           </div>
         </div>
       </section>
+
+      {/* Open Source / AmazoniaHack Institutional Seal Card */}
+      <div className="rounded-2xl border border-[#1B5E3A]/20 bg-[#E7F2EC]/40 p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-white text-[#1B5E3A] border border-[#1B5E3A]/20 flex items-center justify-center shrink-0">
+            <Compass className="w-4 h-4" />
+          </div>
+          <div className="text-xs">
+            <span className="font-bold text-[#143028] block">
+              {t('landing.amazoniahack_badge')}
+            </span>
+            <span className="text-[#5B6B63]">
+              Tecnologia de apoio técnico à fiscalização socioambiental da Amazônia.
+            </span>
+          </div>
+        </div>
+
+        <Link
+          to="/about"
+          className="inline-flex items-center gap-1 text-xs font-bold text-[#1B5E3A] hover:underline shrink-0"
+        >
+          <span>Conhecer o projeto</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
     </div>
   )
 }
