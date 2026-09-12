@@ -125,8 +125,9 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const emitTourOpen = () => {
         window.dispatchEvent(new CustomEvent('tour-open-evidence', { detail: { code: 'EVD-014' } }))
       }
-      setTimeout(emitTourOpen, 350)
-      setTimeout(emitTourOpen, 800)
+      setTimeout(emitTourOpen, 150)
+      setTimeout(emitTourOpen, 400)
+      setTimeout(emitTourOpen, 900)
     }
   }
 

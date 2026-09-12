@@ -113,14 +113,29 @@ export const EvidenceCenter: React.FC = () => {
 
   // Also react when evidenceList changes if source param exists, or when custom tour event fires
   useEffect(() => {
-    if (sourceEvidenceParam && evidenceList.length > 0) {
-      const target = evidenceList.find(
-        (e) =>
-          e.code.toLowerCase() === sourceEvidenceParam.toLowerCase() ||
-          e.id === sourceEvidenceParam,
-      )
-      if (target) {
-        setDetailModalEvidence(target)
+    if (sourceEvidenceParam) {
+      if (evidenceList.length > 0) {
+        const target = evidenceList.find(
+          (e) =>
+            e.code.toLowerCase() === sourceEvidenceParam.toLowerCase() ||
+            e.id === sourceEvidenceParam,
+        )
+        if (target) {
+          setDetailModalEvidence(target)
+        }
+      } else {
+        getAllEvidence()
+          .then((all) => {
+            const target = all.find(
+              (e) =>
+                e.code.toLowerCase() === sourceEvidenceParam.toLowerCase() ||
+                e.id === sourceEvidenceParam,
+            )
+            if (target) {
+              setDetailModalEvidence(target)
+            }
+          })
+          .catch(() => {})
       }
     }
 
@@ -137,14 +152,16 @@ export const EvidenceCenter: React.FC = () => {
             setDetailModalEvidence(found)
           }
         } else {
-          getAllEvidence().then((all) => {
-            const found = all.find(
-              (e) => e.code.toLowerCase() === code.toLowerCase() || e.id === code,
-            )
-            if (found) {
-              setDetailModalEvidence(found)
-            }
-          })
+          getAllEvidence()
+            .then((all) => {
+              const found = all.find(
+                (e) => e.code.toLowerCase() === code.toLowerCase() || e.id === code,
+              )
+              if (found) {
+                setDetailModalEvidence(found)
+              }
+            })
+            .catch(() => {})
         }
       }
     }

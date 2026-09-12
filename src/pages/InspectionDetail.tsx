@@ -53,8 +53,9 @@ export const InspectionDetail: React.FC = () => {
   const navigate = useNavigate()
   const { toast } = useToast()
 
-  // Se id vier indefinido, string 'undefined' ou vazio, adotar imediatamente 'RV-DEMO-001'
-  const targetId = !rawId || rawId === 'undefined' || rawId === 'null' ? 'RV-DEMO-001' : rawId
+  // Se id vier indefinido, string 'undefined', 'demo' ou vazio, adotar imediatamente 'RV-DEMO-001'
+  const targetId =
+    !rawId || rawId === 'undefined' || rawId === 'null' || rawId === 'demo' ? 'RV-DEMO-001' : rawId
 
   const [inspection, setInspection] = useState<InspectionRecord | null>(null)
   const [evidenceList, setEvidenceList] = useState<EvidenceRecord[]>([])
@@ -91,8 +92,8 @@ export const InspectionDetail: React.FC = () => {
       let record: InspectionRecord | null = null
       const id = targetId
 
-      // Direct check: is it RV-DEMO-001 or id starts with RV-
-      if (id === 'RV-DEMO-001' || id.includes('RV-DEMO-001')) {
+      // Direct check: is it RV-DEMO-001, id starts with RV-, or matches demo
+      if (id === 'RV-DEMO-001' || id.includes('RV-DEMO-001') || id === 'demo') {
         try {
           record = await getInspectionByNumber('RV-DEMO-001')
         } catch (e1) {
@@ -115,6 +116,47 @@ export const InspectionDetail: React.FC = () => {
                 // Ignore and proceed
               }
             }
+          }
+        }
+
+        // If backend query failed or record still empty, fallback to demo fallback record
+        if (!record) {
+          try {
+            const all = await getInspections()
+            record =
+              all.find((i) => i.id_number === 'RV-DEMO-001' || i.id === '9ykaitbzexx3fy5') ||
+              all[0] ||
+              null
+          } catch {
+            /* proceed to fallback object */
+          }
+        }
+
+        // Ultimate safety fallback so visitor NEVER gets an empty or broken screen
+        if (!record) {
+          record = {
+            id: '9ykaitbzexx3fy5',
+            collectionId: 'pbc_1993632484',
+            collectionName: 'inspections',
+            created: '2026-09-12T21:51:40.833Z',
+            updated: '2026-09-12T23:27:33.664Z',
+            id_number: 'RV-DEMO-001',
+            date: '2026-09-12',
+            time: '08:30',
+            agent: 'Agente 01 — Léo',
+            team: 'Equipe Tática Ambiental Setor Norte',
+            location: 'Área de Proteção Ambiental — Setor Norte',
+            municipality: 'Rio Claro',
+            state: 'PA',
+            latitude: -8.0015,
+            longitude: -34.0042,
+            occurrence_type: 'Desmatamento',
+            description:
+              'Identificação preliminar de supressão de vegetação nativa em área protegida com evidências de maquinário pesado e cortes rasos recentes.',
+            notes:
+              'Fiscalização realizada em atendimento a alerta satelital. Área com relevo acidentado e trilhas de acesso recente.',
+            status: 'Em análise',
+            is_demo: true,
           }
         }
       } else if (id.startsWith('RV-')) {
@@ -591,8 +633,13 @@ export const InspectionDetail: React.FC = () => {
             onSave={async (data) => {
               try {
                 if (editingEvidence) {
+                  if (data instanceof FormData) {
+                    if (!data.get('inspection')) data.set('inspection', inspection.id)
+                  }
                   await updateEvidence(editingEvidence.id, data)
-                  toast({ title: t('evidence.update_success') || 'Evidência atualizada' })
+                  toast({
+                    title: t('evidence.update_success') || 'Evidência atualizada com sucesso!',
+                  })
                 } else {
                   if (data instanceof FormData) {
                     if (!data.get('inspection')) data.set('inspection', inspection.id)
@@ -607,15 +654,16 @@ export const InspectionDetail: React.FC = () => {
                       code: data.code || `EVD-${Math.floor(100 + Math.random() * 900)}`,
                     })
                   }
-                  toast({ title: t('evidence.create_success') || 'Evidência criada com sucesso' })
+                  toast({ title: t('evidence.create_success') || 'Evidência criada com sucesso!' })
                 }
               } catch (err: any) {
-                console.error(err)
+                console.error('InspectionDetail error saving evidence:', err)
                 toast({
                   title: 'Erro ao salvar evidência',
-                  description: err?.message,
+                  description: err?.message || 'Falha ao gravar registro no banco.',
                   variant: 'destructive',
                 })
+                throw err
               }
               await loadData()
             }}
