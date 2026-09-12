@@ -135,7 +135,7 @@ export const Signup: React.FC = () => {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ex: Agente Beatriz Silva (Perita Ambiental)"
+              placeholder="Ex: Agente Ana Ribeiro (Perita Ambiental)"
               className="h-11 text-xs rounded-xl border-[#E2E8E4] focus-visible:ring-[#1B5E3A] transition-all"
             />
           </div>

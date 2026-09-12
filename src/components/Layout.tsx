@@ -34,7 +34,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation()
 
   // O visitante da demo está em rota demonstrativa pública (RV-DEMO-001) sem estar logado
-  const isDemoInspectionRoute = location.pathname.startsWith('/inspections/RV-DEMO-001')
+  const isDemoInspectionRoute =
+    location.pathname.startsWith('/inspections/RV-DEMO-001') ||
+    location.pathname === '/demo' ||
+    location.pathname === '/inspections/demo'
 
   // Navbar horizontal comum conforme pedido do usuário:
   // (Visão Geral, Fiscalizações, Evidências, Mapa, Verificação, Pendências, Relatórios, Histórico, Sobre)

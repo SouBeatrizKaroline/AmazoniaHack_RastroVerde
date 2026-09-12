@@ -53,6 +53,14 @@ export const App: React.FC = () => {
                 {/* Demo Routes - Portas abertas para demonstração e pitch sem exigir login */}
                 <Route path="/inspections/RV-DEMO-001" element={<InspectionDetail />} />
                 <Route path="/demo" element={<Navigate to="/inspections/RV-DEMO-001" replace />} />
+                <Route
+                  path="/inspections/demo"
+                  element={<Navigate to="/inspections/RV-DEMO-001" replace />}
+                />
+                <Route
+                  path="/inspections/undefined"
+                  element={<Navigate to="/inspections/RV-DEMO-001" replace />}
+                />
 
                 {/* Rotas Operacionais Protegidas - Exigem usuário logado */}
                 <Route

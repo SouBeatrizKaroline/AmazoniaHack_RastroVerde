@@ -49,9 +49,12 @@ import {
 
 export const InspectionDetail: React.FC = () => {
   const { t } = useI18n()
-  const { id } = useParams<{ id: string }>()
+  const { id: rawId } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { toast } = useToast()
+
+  // Se id vier indefinido, string 'undefined' ou vazio, adotar imediatamente 'RV-DEMO-001'
+  const targetId = !rawId || rawId === 'undefined' || rawId === 'null' ? 'RV-DEMO-001' : rawId
 
   const [inspection, setInspection] = useState<InspectionRecord | null>(null)
   const [evidenceList, setEvidenceList] = useState<EvidenceRecord[]>([])
@@ -76,11 +79,6 @@ export const InspectionDetail: React.FC = () => {
   const [loadError, setLoadError] = useState<string | null>(null)
 
   const loadData = async () => {
-    if (!id) {
-      setLoading(false)
-      return
-    }
-
     setLoading(true)
     setLoadError(null)
 
@@ -91,6 +89,7 @@ export const InspectionDetail: React.FC = () => {
 
     const fetchPromise = (async () => {
       let record: InspectionRecord | null = null
+      const id = targetId
 
       // Direct check: is it RV-DEMO-001 or id starts with RV-
       if (id === 'RV-DEMO-001' || id.includes('RV-DEMO-001')) {
@@ -197,7 +196,7 @@ export const InspectionDetail: React.FC = () => {
 
   useEffect(() => {
     loadData()
-  }, [id])
+  }, [targetId])
 
   const handleStatusChange = async (newStatus: InspectionRecord['status']) => {
     if (!inspection) return
@@ -217,14 +216,13 @@ export const InspectionDetail: React.FC = () => {
         <div className="text-xs font-semibold text-[#5B6B63] tracking-wide animate-pulse">
           {t('workspace.loading')}
         </div>
-        <p className="text-[11px] text-[#5B6B63]/70 font-mono">
-          Identificador: {id || 'RV-DEMO-001'}
-        </p>
+        <p className="text-[11px] text-[#5B6B63]/70 font-mono">Identificador: {targetId}</p>
       </div>
     )
   }
 
   if (!inspection) {
+    const displayId = targetId || 'RV-DEMO-001'
     return (
       <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl border border-[#E2E8E4] bg-white text-center space-y-4 shadow-sm">
         <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center mx-auto">
@@ -236,7 +234,7 @@ export const InspectionDetail: React.FC = () => {
         <p className="text-xs text-[#5B6B63] max-w-md mx-auto leading-relaxed">
           {loadError
             ? `Ocorreu uma instabilidade: ${loadError}`
-            : `O registro solicitado (${id}) não pôde ser carregado. Você pode tentar novamente, retornar ao início ou recarregar a demonstração interativa.`}
+            : `O registro solicitado (${displayId}) não pôde ser carregado. Você pode tentar novamente, retornar ao início ou recarregar a demonstração interativa.`}
         </p>
         <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
           <Button

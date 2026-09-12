@@ -28,6 +28,7 @@ import {
   createInspection,
   updateInspection,
   getInspectionById,
+  getInspectionByNumber,
   type InspectionRecord,
 } from '@/services/dataService'
 
@@ -38,6 +39,8 @@ export const InspectionForm: React.FC = () => {
   const isEditing = !!id
   const { toast } = useToast()
 
+  const [loadingInitial, setLoadingInitial] = useState(isEditing)
+  const [initialError, setInitialError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     id_number: '',
@@ -72,8 +75,31 @@ export const InspectionForm: React.FC = () => {
   }, [id, isEditing])
 
   const loadExisting = async (inspId: string) => {
+    setLoadingInitial(true)
+    setInitialError(null)
+
+    const timeoutPromise = new Promise<'TIMEOUT'>((resolve) => {
+      setTimeout(() => resolve('TIMEOUT'), 8000)
+    })
+
+    const fetchPromise = (async () => {
+      let data: InspectionRecord
+      try {
+        data = await getInspectionById(inspId)
+      } catch (err) {
+        // Tenta também por número
+        data = await getInspectionByNumber(inspId)
+      }
+      return data
+    })()
+
     try {
-      const data = await getInspectionById(inspId)
+      const race = await Promise.race([fetchPromise, timeoutPromise])
+      if (race === 'TIMEOUT') {
+        setInitialError('Tempo limite excedido ao carregar os dados da fiscalização.')
+        return
+      }
+      const data = race as InspectionRecord
       setFormData({
         id_number: data.id_number || '',
         date: data.date || '',
@@ -90,12 +116,11 @@ export const InspectionForm: React.FC = () => {
         notes: data.notes || '',
         status: data.status || 'Em análise',
       })
-    } catch (err) {
-      toast({
-        title: 'Erro ao carregar fiscalização',
-        variant: 'destructive',
-      })
-      navigate('/inspections')
+    } catch (err: any) {
+      console.error('Failed to load inspection for edit:', err)
+      setInitialError(err?.message || 'Erro ao carregar fiscalização para edição.')
+    } finally {
+      setLoadingInitial(false)
     }
   }
 
@@ -157,6 +182,42 @@ export const InspectionForm: React.FC = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (loadingInitial) {
+    return (
+      <div className="flex flex-col items-center justify-center p-16 sm:p-24 space-y-4 min-h-[400px]">
+        <div className="w-10 h-10 border-3 border-[#1B5E3A] border-t-transparent rounded-full animate-spin" />
+        <div className="text-xs font-semibold text-[#5B6B63] tracking-wide animate-pulse">
+          {t('workspace.loading')}
+        </div>
+      </div>
+    )
+  }
+
+  if (initialError) {
+    return (
+      <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl border border-[#E2E8E4] bg-white text-center space-y-4 shadow-sm">
+        <h2 className="text-lg font-bold text-[#143028]">Erro ao carregar fiscalização</h2>
+        <p className="text-xs text-[#5B6B63]">{initialError}</p>
+        <div className="pt-2 flex justify-center gap-2">
+          {id && (
+            <Button
+              size="sm"
+              onClick={() => loadExisting(id)}
+              className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs"
+            >
+              Tentar novamente
+            </Button>
+          )}
+          <Link to="/inspections">
+            <Button variant="outline" size="sm" className="text-xs">
+              Voltar para a lista
+            </Button>
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
