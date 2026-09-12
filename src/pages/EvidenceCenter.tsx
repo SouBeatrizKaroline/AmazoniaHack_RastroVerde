@@ -1,0 +1,325 @@
+import React, { useState, useEffect } from 'react'
+import { useSearchParams, Link } from 'react-router-dom'
+import { useI18n } from '@/lib/i18n'
+import {
+  Camera,
+  Plus,
+  Search,
+  Filter,
+  CheckCircle2,
+  Calendar,
+  Clock,
+  MapPin,
+  Tag,
+  ArrowLeft,
+  X,
+  Compass,
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { EvidenceCard } from '@/components/EvidenceCard'
+import { EvidenceModal } from '@/components/EvidenceModal'
+import {
+  getAllEvidence,
+  createEvidence,
+  updateEvidence,
+  deleteEvidence,
+  type EvidenceRecord,
+} from '@/services/dataService'
+import { useRealtime } from '@/hooks/use-realtime'
+import { useToast } from '@/hooks/use-toast'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+
+export const EvidenceCenter: React.FC = () => {
+  const { t } = useI18n()
+  const { toast } = useToast()
+  const [searchParams] = useSearchParams()
+  const sourceEvidenceParam = searchParams.get('source')
+
+  const [evidenceList, setEvidenceList] = useState<EvidenceRecord[]>([])
+  const [search, setSearch] = useState('')
+  const [selectedType, setSelectedType] = useState<string>('ALL')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [editingEvidence, setEditingEvidence] = useState<EvidenceRecord | null>(null)
+  const [detailModalEvidence, setDetailModalEvidence] = useState<EvidenceRecord | null>(null)
+
+  useRealtime('evidence', () => {
+    loadData()
+  })
+
+  const loadData = async () => {
+    try {
+      const list = await getAllEvidence()
+      setEvidenceList(list)
+
+      // If source param is provided, open detail automatically
+      if (sourceEvidenceParam) {
+        const target = list.find(
+          (e) => e.code === sourceEvidenceParam || e.id === sourceEvidenceParam,
+        )
+        if (target) {
+          setDetailModalEvidence(target)
+        }
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  useEffect(() => {
+    loadData()
+  }, [sourceEvidenceParam])
+
+  const types = [
+    { key: 'ALL', label: t('evidence.all_types') },
+    { key: 'Fotografia', label: 'Fotografia' },
+    { key: 'Vídeo', label: 'Vídeo' },
+    { key: 'Áudio', label: 'Áudio' },
+    { key: 'Documento', label: 'Documento' },
+    { key: 'Anotação', label: 'Anotação' },
+    { key: 'Localização', label: 'Localização' },
+    { key: 'Depoimento', label: 'Depoimento' },
+  ]
+
+  const filtered = evidenceList.filter((evd) => {
+    const matchesType = selectedType === 'ALL' || evd.type === selectedType
+    const term = search.toLowerCase()
+    const matchesSearch =
+      evd.code.toLowerCase().includes(term) ||
+      evd.description.toLowerCase().includes(term) ||
+      evd.officer?.toLowerCase().includes(term) ||
+      evd.tags?.toLowerCase().includes(term) ||
+      evd.notes?.toLowerCase().includes(term)
+    return matchesType && matchesSearch
+  })
+
+  const handleSave = async (data: Partial<EvidenceRecord>) => {
+    if (editingEvidence) {
+      await updateEvidence(editingEvidence.id, data)
+      toast({ title: t('evidence.update_success') })
+    } else {
+      await createEvidence(data)
+      toast({ title: t('evidence.create_success') })
+    }
+    loadData()
+  }
+
+  const handleDelete = async (evd: EvidenceRecord) => {
+    try {
+      await deleteEvidence(evd.id)
+      toast({ title: t('evidence.delete_success') })
+      loadData()
+    } catch (err) {
+      toast({ title: 'Erro ao remover evidência.', variant: 'destructive' })
+    }
+  }
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-300">
+      {/* Traceability back-banner if arrived from report */}
+      {sourceEvidenceParam && (
+        <div className="flex items-center justify-between p-4 rounded-xl bg-[#E7F2EC] border border-[#1B5E3A]/30 text-xs text-[#1B5E3A]">
+          <div className="flex items-center gap-2 font-semibold">
+            <Compass className="w-4 h-4" />
+            <span>{t('evidence.source_banner')}</span>
+            <span className="font-mono bg-white px-2 py-0.5 rounded border border-[#1B5E3A]/30">
+              {sourceEvidenceParam}
+            </span>
+          </div>
+          <Link to="/reports" className="text-xs font-bold underline hover:text-[#14502F]">
+            {t('evidence.back_to_report')}
+          </Link>
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#143028]">{t('evidence.title')}</h1>
+          <p className="text-xs text-[#5B6B63] mt-1">
+            Repositório central de registros, fotografias georreferenciadas, anotações e documentos
+            comprobatórios.
+          </p>
+        </div>
+
+        <Button
+          onClick={() => {
+            setEditingEvidence(null)
+            setModalOpen(true)
+          }}
+          className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-lg shadow-xs flex items-center gap-1.5"
+        >
+          <Plus className="w-4 h-4" />
+          <span>{t('evidence.add')}</span>
+        </Button>
+      </div>
+
+      {/* Filters and Search */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 rounded-2xl border border-[#E2E8E4] bg-white shadow-xs">
+        <div className="relative flex-1">
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#5B6B63]" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={t('evidence.search_placeholder')}
+            className="pl-9 h-9 text-xs border-[#E2E8E4] bg-[#F7F9F8] focus-visible:ring-[#1B5E3A]"
+          />
+        </div>
+
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+          {types.map((type) => (
+            <button
+              key={type.key}
+              onClick={() => setSelectedType(type.key)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                selectedType === type.key
+                  ? 'bg-[#1B5E3A] text-white shadow-xs'
+                  : 'bg-[#F7F9F8] text-[#5B6B63] hover:text-[#143028] hover:bg-[#E2E8E4]/50'
+              }`}
+            >
+              {type.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filtered.map((evd) => (
+          <EvidenceCard
+            key={evd.id}
+            evidence={evd}
+            isHighlighted={sourceEvidenceParam === evd.code}
+            onSelect={(item) => setDetailModalEvidence(item)}
+            onEdit={(item) => {
+              setEditingEvidence(item)
+              setModalOpen(true)
+            }}
+            onDelete={handleDelete}
+          />
+        ))}
+
+        {filtered.length === 0 && (
+          <div className="col-span-full p-12 text-center rounded-2xl border border-dashed border-[#E2E8E4] bg-white">
+            <p className="text-sm font-medium text-[#5B6B63]">{t('evidence.empty')}</p>
+          </div>
+        )}
+      </div>
+
+      {/* Modal for Add / Edit */}
+      <EvidenceModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        inspectionId={evidenceList[0]?.inspection || ''}
+        evidenceToEdit={editingEvidence}
+        onSave={handleSave}
+      />
+
+      {/* Modal for Full Evidence Detail */}
+      <Dialog
+        open={!!detailModalEvidence}
+        onOpenChange={(open) => !open && setDetailModalEvidence(null)}
+      >
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          {detailModalEvidence && (
+            <div className="space-y-4">
+              <DialogHeader>
+                <div className="flex items-center justify-between gap-2 border-b border-[#E2E8E4] pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs font-bold text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-1 rounded-md">
+                      {detailModalEvidence.code}
+                    </span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#F7F9F8] border border-[#E2E8E4]">
+                      {detailModalEvidence.type}
+                    </span>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      {detailModalEvidence.status}
+                    </span>
+                  </div>
+                </div>
+                <DialogTitle className="text-base font-bold text-[#143028] pt-2 text-left">
+                  {detailModalEvidence.description}
+                </DialogTitle>
+              </DialogHeader>
+
+              {/* Simulated photo visual for photography */}
+              {detailModalEvidence.type === 'Fotografia' && (
+                <div className="relative h-48 rounded-xl overflow-hidden border border-[#E2E8E4] bg-gradient-to-tr from-[#1B5E3A]/20 via-[#0F766E]/20 to-[#B45309]/20 flex items-center justify-center">
+                  <div className="flex flex-col items-center text-xs font-semibold text-[#1B5E3A] bg-white/90 backdrop-blur-xs px-4 py-2 rounded-xl border border-[#E2E8E4] shadow-sm">
+                    <Camera className="w-5 h-5 mb-1" />
+                    <span>Registro Fotográfico Original Georreferenciado</span>
+                    <span className="text-[11px] text-[#5B6B63] font-mono">
+                      {detailModalEvidence.code} • Latitude {detailModalEvidence.latitude},
+                      Longitude {detailModalEvidence.longitude}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Data Table */}
+              <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-xs">
+                <div>
+                  <span className="text-[#5B6B63]">Data e Hora:</span>
+                  <div className="font-semibold text-[#143028]">
+                    {detailModalEvidence.date} às {detailModalEvidence.time}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-[#5B6B63]">Responsável pelo Registro:</span>
+                  <div className="font-semibold text-[#143028]">
+                    {detailModalEvidence.officer || (
+                      <span className="text-[#B3261E] italic">Não informado</span>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-[#5B6B63]">Coordenadas Geográficas:</span>
+                  <div className="font-mono font-semibold text-[#0F766E]">
+                    {detailModalEvidence.latitude != null && detailModalEvidence.longitude != null
+                      ? `${detailModalEvidence.latitude}, ${detailModalEvidence.longitude}`
+                      : 'Não registradas'}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-[#5B6B63]">Tags de Rastreabilidade:</span>
+                  <div className="font-semibold text-[#1B5E3A]">
+                    {detailModalEvidence.tags || 'Sem tags'}
+                  </div>
+                </div>
+              </div>
+
+              {detailModalEvidence.notes && (
+                <div className="p-3 rounded-xl bg-white border border-[#E2E8E4] text-xs space-y-1">
+                  <span className="font-bold text-[#143028]">Observações Técnicas de Campo:</span>
+                  <p className="text-[#5B6B63] leading-relaxed">{detailModalEvidence.notes}</p>
+                </div>
+              )}
+
+              {/* Traceability link */}
+              <div className="pt-2 flex items-center justify-between border-t border-[#E2E8E4]">
+                <Link
+                  to="/reports"
+                  className="text-xs font-semibold text-[#1B5E3A] hover:underline"
+                >
+                  ← {t('evidence.back_to_report')}
+                </Link>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setDetailModalEvidence(null)}
+                  className="text-xs"
+                >
+                  Fechar
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+export default EvidenceCenter
