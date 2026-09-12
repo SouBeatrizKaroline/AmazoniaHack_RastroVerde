@@ -20,6 +20,7 @@ import {
 import { Button } from '@/components/ui/button'
 
 export interface TourStep {
+  id?: string
   route: string
   titleKey: string
   descKey: string
@@ -30,6 +31,7 @@ export interface TourStep {
 
 const TOUR_STEPS: TourStep[] = [
   {
+    id: 'step-inspection',
     route: '/inspections/RV-DEMO-001',
     titleKey: 'tour.step1_title',
     descKey: 'tour.step1_desc',
@@ -37,6 +39,7 @@ const TOUR_STEPS: TourStep[] = [
     icon: FileCheck2,
   },
   {
+    id: 'step-evidence',
     route: '/evidence',
     titleKey: 'tour.step2_title',
     descKey: 'tour.step2_desc',
@@ -44,6 +47,7 @@ const TOUR_STEPS: TourStep[] = [
     icon: Camera,
   },
   {
+    id: 'step-map',
     route: '/map',
     titleKey: 'tour.step3_title',
     descKey: 'tour.step3_desc',
@@ -51,6 +55,7 @@ const TOUR_STEPS: TourStep[] = [
     icon: MapPin,
   },
   {
+    id: 'step-history',
     route: '/history',
     titleKey: 'tour.step4_title',
     descKey: 'tour.step4_desc',
@@ -58,6 +63,7 @@ const TOUR_STEPS: TourStep[] = [
     icon: Clock,
   },
   {
+    id: 'step-verification',
     route: '/verification',
     titleKey: 'tour.step5_title',
     descKey: 'tour.step5_desc',
@@ -65,6 +71,7 @@ const TOUR_STEPS: TourStep[] = [
     icon: SearchCheck,
   },
   {
+    id: 'step-gaps',
     route: '/gaps',
     titleKey: 'tour.step6_title',
     descKey: 'tour.step6_desc',
@@ -72,6 +79,7 @@ const TOUR_STEPS: TourStep[] = [
     icon: CheckSquare,
   },
   {
+    id: 'step-reports',
     route: '/reports',
     titleKey: 'tour.step7_title',
     descKey: 'tour.step7_desc',
@@ -79,6 +87,7 @@ const TOUR_STEPS: TourStep[] = [
     icon: FileText,
   },
   {
+    id: 'step-traceability-anchor',
     route: '/evidence?source=EVD-014',
     titleKey: 'tour.step8_title',
     descKey: 'tour.step8_desc',
@@ -105,17 +114,28 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const location = useLocation()
   const { t } = useI18n()
 
+  const goToStep = (idx: number) => {
+    const targetStep = TOUR_STEPS[idx]
+    if (!targetStep) return
+    setCurrentStepIndex(idx)
+    navigate(targetStep.route)
+
+    // Se o passo for o 8 (EVD-014), emitir evento com leve retardo para abrir o modal
+    if (targetStep.id === 'step-traceability-anchor') {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('tour-open-evidence', { detail: { code: 'EVD-014' } }))
+      }, 350)
+    }
+  }
+
   const startTour = () => {
     setIsTourActive(true)
-    setCurrentStepIndex(0)
-    navigate(TOUR_STEPS[0].route)
+    goToStep(0)
   }
 
   const nextStep = () => {
     if (currentStepIndex < TOUR_STEPS.length - 1) {
-      const nextIdx = currentStepIndex + 1
-      setCurrentStepIndex(nextIdx)
-      navigate(TOUR_STEPS[nextIdx].route)
+      goToStep(currentStepIndex + 1)
     } else {
       endTour()
     }
@@ -123,9 +143,7 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const prevStep = () => {
     if (currentStepIndex > 0) {
-      const prevIdx = currentStepIndex - 1
-      setCurrentStepIndex(prevIdx)
-      navigate(TOUR_STEPS[prevIdx].route)
+      goToStep(currentStepIndex - 1)
     }
   }
 
@@ -209,10 +227,7 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
               <button
                 key={idx}
                 type="button"
-                onClick={() => {
-                  setCurrentStepIndex(idx)
-                  navigate(step.route)
-                }}
+                onClick={() => goToStep(idx)}
                 title={`Ir para passo ${idx + 1}`}
                 className={`h-1.5 rounded-full transition-all ${
                   idx === currentStepIndex

@@ -80,7 +80,7 @@ export const EvidenceCenter: React.FC = () => {
     loadData()
   }, [sourceEvidenceParam])
 
-  // Also react when evidenceList changes if source param exists
+  // Also react when evidenceList changes if source param exists, or when custom tour event fires
   useEffect(() => {
     if (sourceEvidenceParam && evidenceList.length > 0) {
       const target = evidenceList.find(
@@ -91,6 +91,24 @@ export const EvidenceCenter: React.FC = () => {
       if (target) {
         setDetailModalEvidence(target)
       }
+    }
+
+    const handleTourOpenEvidence = (evt: Event) => {
+      const customEvt = evt as CustomEvent<{ code: string }>
+      const code = customEvt.detail?.code
+      if (code && evidenceList.length > 0) {
+        const found = evidenceList.find(
+          (e) => e.code.toLowerCase() === code.toLowerCase() || e.id === code,
+        )
+        if (found) {
+          setDetailModalEvidence(found)
+        }
+      }
+    }
+
+    window.addEventListener('tour-open-evidence', handleTourOpenEvidence)
+    return () => {
+      window.removeEventListener('tour-open-evidence', handleTourOpenEvidence)
     }
   }, [sourceEvidenceParam, evidenceList])
 

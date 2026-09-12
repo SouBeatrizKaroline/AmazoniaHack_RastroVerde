@@ -54,15 +54,11 @@ export const ResetPassword: React.FC = () => {
     try {
       await confirmPasswordReset(effectiveToken, password, passwordConfirm)
       toast({
-        title: 'Senha redefinida com sucesso!',
-        description: 'Faça login com a sua nova credencial institucional.',
+        title: t('auth.password_reset_success'),
       })
       navigate('/login')
     } catch (err: any) {
-      setError(
-        err?.message ||
-          'Token expirado ou inválido. Solicite uma nova redefinição se o token tiver vencido.',
-      )
+      setError(err?.message || t('auth.password_reset_error'))
     } finally {
       setLoading(false)
     }

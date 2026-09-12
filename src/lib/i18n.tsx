@@ -83,54 +83,56 @@ export const translations: Record<Language, Record<string, string>> = {
     // Landing
     'landing.headline': 'Da evidência de campo ao relatório ambiental.',
     'landing.subheadline':
-      'Organize registros, conecte evidências e identifique informações faltantes antes da elaboração do relatório de fiscalização.',
+      'Organize registros de campo, amarre evidências georreferenciadas e detecte lacunas probatórias antes de emitir o relatório pericial.',
     'landing.start_inspection': 'Iniciar fiscalização',
     'landing.view_demo': 'Ver demonstração',
-    'landing.enter_demo': 'Entrar na Demonstração',
-    'landing.flow_field': 'Campo',
-    'landing.flow_evidence': 'Evidências',
-    'landing.flow_verification': 'Verificação',
-    'landing.flow_gaps': 'Lacunas',
-    'landing.flow_report': 'Relatório',
-    'landing.flow_title': 'Fluxo Contínuo de Rastreabilidade',
+    'landing.enter_demo': 'Acessar demonstração interativa',
+    'landing.flow_field': 'Vistoria em campo',
+    'landing.flow_evidence': 'Custódia de evidências',
+    'landing.flow_verification': 'Checagem de consistência',
+    'landing.flow_gaps': 'Auditoria de lacunas',
+    'landing.flow_report': 'Relatório rastreável',
+    'landing.flow_title': 'Trilha Contínua de Rastreabilidade',
     'landing.flow_subtitle':
-      'Uma cadeia de custódia visual que conecta cada registro do início ao fim',
-    'landing.problem_title': 'O problema na fiscalização de campo',
+      'Cadeia de custódia digital do primeiro ponto de GPS até a conclusão técnica',
+    'landing.problem_title': 'O desafio real da fiscalização em campo',
     'landing.problem_desc':
-      'Durante operações ambientais, informações vitais ficam dispersas entre diversos suportes físicos e digitais, gerando fragilidade probatória.',
+      'Em operações ambientais, dados críticos ficam dispersos em múltiplos suportes físicos e digitais, gerando fragilidade processual e retrabalho técnico.',
     'landing.problem_sources':
-      'Fotografias, anotações de campo, coordenadas geográficas, documentos físicos, depoimentos informais, autos de infração e observações dispersas.',
-    'landing.problem_sources_subtitle': 'Fontes e registros fragmentados em campo',
-    'landing.problem_risks_title': 'Riscos da organização manual',
+      'Fotos no celular, cadernetas em papel, coordenadas avulsas de GPS, documentos dominiais, autos físicos e relatos verbais desvinculados.',
+    'landing.problem_sources_subtitle': 'Fontes fragmentadas e sem amarra de custódia',
+    'landing.problem_risks_title': 'Riscos da compilação manual',
     'landing.problem_risks_subtitle':
-      'Falhas na conexão entre registros enfraquecem o auto e geram retrabalho pericial',
-    'landing.risk_forgotten': 'Informações e detalhes de campo esquecidos',
-    'landing.risk_context': 'Evidências sem contexto ou georreferenciamento claro',
-    'landing.risk_inconsistencies': 'Inconsistências de horários e coordenadas',
-    'landing.risk_duplications': 'Duplicidade de registros e dados ambíguos',
-    'landing.risk_gaps': 'Lacunas cruciais identificadas apenas na fase final',
-    'landing.proposal_title': 'Nossa proposta',
+      'A falta de conexão imediata entre fatos e evidências compromete a validade dos autos',
+    'landing.risk_forgotten': 'Fatos e detalhes cruciais perdidos entre o campo e o gabinete',
+    'landing.risk_context': 'Fotografias e mídias sem coordenadas geográficas certificadas',
+    'landing.risk_inconsistencies':
+      'Divergências ocultas entre carimbos de hora e posições de satélite',
+    'landing.risk_duplications': 'Duplicações e registros sobrepostos que confundem a perícia',
+    'landing.risk_gaps': 'Documentos dominiais pendentes descobertos apenas no prazo final',
+    'landing.proposal_title': 'Nossa proposta técnica',
     'landing.proposal_desc':
-      'O RastroVerde cria uma trilha organizada entre cada evidência coletada e o relatório final.',
-    'landing.proposal_highlight': 'Do relatório de volta à evidência.',
+      'O RastroVerde estabelece um elo auditável entre cada elemento coletado em campo e o relatório final.',
+    'landing.proposal_highlight': 'Do relatório de volta à evidência original.',
     'landing.proposal_explanation':
-      'Rastreabilidade bidirecional que permite a qualquer auditor ou agente clicar em qualquer parágrafo do relatório e inspecionar imediatamente a coordenada, a foto original e a assinatura de campo.',
+      'Rastreabilidade bidirecional: peritos, fiscais e tribunais podem clicar em qualquer apontamento do relatório para inspecionar imediatamente a coordenada, a foto bruta e a assinatura funcional.',
     'landing.demo_card_title': 'Caso Demonstrativo Interativo: APA Setor Norte (RV-DEMO-001)',
     'landing.demo_card_desc':
-      'Explore uma operação simulada completa com registros de desmatamento, cruzamento de dados com satélite e relatório técnico estruturado. Sem cadastro ou cartão.',
-    'landing.demo_step1': 'Dossiê da Área de Proteção Ambiental com coordenadas e equipe',
-    'landing.demo_step2': 'Registros de fotos georreferenciadas, áudios e depoimentos',
-    'landing.demo_step3': 'Cruzamento automático de consistência de horários e GPS',
-    'landing.demo_step4': 'Geração de relatório técnico com rastreabilidade clique-a-clique',
-    'landing.open_demo': 'Entrar na Demonstração',
-    'landing.access_block_title': 'Área de Agentes e Órgãos de Controle',
+      'Navegue por uma fiscalização simulada com alertas DETER, marcas de maquinário, checagem automatizada de consistência e 3 falhas propositais para testar a ferramenta.',
+    'landing.demo_step1': 'Dossiê georreferenciado da Unidade de Conservação com equipe e alertas',
+    'landing.demo_step2': 'Repositório de fotos brutas, notas de campo, coordenadas e anexos',
+    'landing.demo_step3': 'Varredura automática de coerência entre cronologia e coordenadas GNSS',
+    'landing.demo_step4':
+      'Emissão de relatório técnico estruturado com âncoras diretas para as fontes',
+    'landing.open_demo': 'Explorar caso interativo',
+    'landing.access_block_title': 'Acesso Institucional para Órgãos de Controle',
     'landing.access_block_desc':
-      'Ambiente seguro para órgãos de fiscalização socioambiental, peritos e auditores.',
-    'landing.access_benefit_1': 'Organize evidências digitais com cadeia de custódia íntegra',
-    'landing.access_benefit_2': 'Verifique consistência de coordenadas e horários antes da emissão',
-    'landing.access_benefit_3': 'Gere relatórios técnicos padronizados com rastreabilidade direta',
-    'landing.btn_access_agent': 'Acessar com credencial',
-    'landing.btn_create_account': 'Criar conta de agente',
+      'Plataforma segura para equipes de fiscalização ambiental, peritos criminais e analistas de órgãos gestores.',
+    'landing.access_benefit_1': 'Cadeia de custódia digital inviolável para registros de campo',
+    'landing.access_benefit_2': 'Cruzamento cauteloso de horários e coordenadas antes da emissão',
+    'landing.access_benefit_3': 'Relatórios técnicos estruturados com rastreabilidade bidirecional',
+    'landing.btn_access_agent': 'Entrar com credencial funcional',
+    'landing.btn_create_account': 'Solicitar cadastro institucional',
 
     // Dashboard
     'dashboard.title': 'Visão Geral da Fiscalização',
@@ -337,6 +339,10 @@ export const translations: Record<Language, Record<string, string>> = {
     'auth.reset_password_title': 'Redefinir Senha',
     'auth.reset_password_subtitle':
       'Defina uma nova senha para restabelecer o acesso à sua conta institucional.',
+    'auth.password_reset_success':
+      'Senha alterada com sucesso! Você já pode acessar a plataforma com sua nova credencial.',
+    'auth.password_reset_error':
+      'Não foi possível redefinir a senha. O token pode estar incorreto ou expirado. Solicite um novo link.',
     'auth.have_account': 'Já possui cadastro? Entrar',
     'auth.no_account': 'Não tem conta? Solicitar cadastro',
     'auth.security_notice':
@@ -422,54 +428,59 @@ export const translations: Record<Language, Record<string, string>> = {
     // Landing
     'landing.headline': 'From field evidence to environmental reports.',
     'landing.subheadline':
-      'Organize records, connect evidence and identify missing information before drafting the inspection report.',
+      'Organize field records, bind georeferenced evidence, and detect evidentiary gaps before issuing the forensic report.',
     'landing.start_inspection': 'Start inspection',
     'landing.view_demo': 'View demo',
-    'landing.enter_demo': 'Enter Demo',
-    'landing.flow_field': 'Field',
-    'landing.flow_evidence': 'Evidence',
-    'landing.flow_verification': 'Verification',
-    'landing.flow_gaps': 'Gaps',
-    'landing.flow_report': 'Report',
+    'landing.enter_demo': 'Explore interactive demo',
+    'landing.flow_field': 'Field inspection',
+    'landing.flow_evidence': 'Evidence custody',
+    'landing.flow_verification': 'Consistency check',
+    'landing.flow_gaps': 'Gaps audit',
+    'landing.flow_report': 'Traceable report',
     'landing.flow_title': 'Continuous Traceability Pipeline',
     'landing.flow_subtitle':
-      'A visual chain of custody linking every field record from start to finish',
-    'landing.problem_title': 'The challenge in field enforcement',
+      'A digital chain of custody from the first GPS coordinate to the final technical conclusion',
+    'landing.problem_title': 'The actual challenge in field enforcement',
     'landing.problem_desc':
-      'During environmental operations, vital information is scattered across diverse physical and digital mediums, weakening legal integrity.',
+      'During environmental operations, critical data is scattered across disconnected mediums, creating administrative vulnerability and expert rework.',
     'landing.problem_sources':
-      'Photographs, field notes, geographic coordinates, physical documents, informal testimonies, violation records, and scattered observations.',
-    'landing.problem_sources_subtitle': 'Fragmented and isolated field sources',
-    'landing.problem_risks_title': 'Risks of manual organization',
+      'Phone photos, paper clipboards, isolated GPS waypoints, land title registries, physical notices, and detached witness statements.',
+    'landing.problem_sources_subtitle': 'Fragmented field sources lacking custodial linkage',
+    'landing.problem_risks_title': 'Risks of manual consolidation',
     'landing.problem_risks_subtitle':
-      'Gaps between disconnected records weaken the administrative process and cause forensic rework',
-    'landing.risk_forgotten': 'Forgotten field details and critical observations',
-    'landing.risk_context': 'Evidence lacking clear context or georeferencing',
-    'landing.risk_inconsistencies': 'Time and coordinate discrepancies',
-    'landing.risk_duplications': 'Duplicate records and ambiguous entries',
-    'landing.risk_gaps': 'Critical gaps discovered only at final drafting',
-    'landing.proposal_title': 'Our proposal',
+      'The disconnect between facts and evidence weakens administrative enforcement',
+    'landing.risk_forgotten':
+      'Crucial field observations lost between ground operations and headquarters',
+    'landing.risk_context': 'Photographs and recordings lacking certified geographic coordinates',
+    'landing.risk_inconsistencies':
+      'Latent discrepancies between timestamps and satellite readings',
+    'landing.risk_duplications':
+      'Duplicate records and conflicting descriptions that impede review',
+    'landing.risk_gaps': 'Missing title deeds or permits discovered only when deadlines expire',
+    'landing.proposal_title': 'Our technical proposal',
     'landing.proposal_desc':
-      'RastroVerde creates an organized trail between each piece of collected evidence and the final report.',
-    'landing.proposal_highlight': 'From the report right back to the evidence.',
+      'RastroVerde creates an unbroken, auditable link between each field finding and the final report.',
+    'landing.proposal_highlight': 'From the report straight back to original evidence.',
     'landing.proposal_explanation':
-      'Bidirectional traceability enabling any auditor or officer to click any paragraph in the final report and immediately inspect original coordinates, raw photo evidence, and field signatures.',
-    'landing.demo_card_title': 'Interactive Demo Case: North Sector APA (RV-DEMO-001)',
+      'Bidirectional traceability: auditors, prosecutors, and magistrates can click any paragraph in the technical report to immediately review the raw photo, coordinate metadata, and officer signature.',
+    'landing.demo_card_title': 'Interactive Demonstration Case: North Sector APA (RV-DEMO-001)',
     'landing.demo_card_desc':
-      'Explore a full simulated operation with deforestation records, satellite data cross-checking, and a structured technical report. No registration required.',
-    'landing.demo_step1': 'Protected Environmental Area dossier with coordinates and crew',
-    'landing.demo_step2': 'Georeferenced photo records, audio notes, and testimonies',
-    'landing.demo_step3': 'Automated consistency cross-check for timestamps and GPS',
-    'landing.demo_step4': 'Technical report generation with click-by-click traceability',
-    'landing.open_demo': 'Enter Demo Case',
-    'landing.access_block_title': 'Officers & Oversight Authorities Portal',
+      'Experience a simulated operation featuring DETER alerts, heavy machinery tracks, automated consistency checks, and 3 deliberate gaps to test verification.',
+    'landing.demo_step1': 'Conservation unit dossier with georeferenced coordinates and field crew',
+    'landing.demo_step2': 'Custodial repository of raw photographs, audio notes, and attachments',
+    'landing.demo_step3': 'Automated cross-check validating timestamps against GNSS coordinates',
+    'landing.demo_step4':
+      'Structured technical report generation with direct anchors to ground sources',
+    'landing.open_demo': 'Launch interactive case',
+    'landing.access_block_title': 'Institutional Portal for Oversight Agencies',
     'landing.access_block_desc':
-      'Secure workspace for socio-environmental enforcement agencies, forensic experts, and auditors.',
-    'landing.access_benefit_1': 'Organize digital evidence with an uncompromised chain of custody',
-    'landing.access_benefit_2': 'Verify GPS and timestamp consistency prior to official issuance',
-    'landing.access_benefit_3': 'Generate standardized technical reports with direct traceability',
-    'landing.btn_access_agent': 'Sign in with credentials',
-    'landing.btn_create_account': 'Register officer account',
+      'Secure environment for socio-environmental enforcement squads, forensic experts, and inspectors.',
+    'landing.access_benefit_1': 'Tamper-evident digital chain of custody for field observations',
+    'landing.access_benefit_2':
+      'Cautious cross-checking of timestamps and coordinates prior to release',
+    'landing.access_benefit_3': 'Standardized technical reports with direct source traceability',
+    'landing.btn_access_agent': 'Sign in with official credentials',
+    'landing.btn_create_account': 'Request institutional account',
 
     // Dashboard
     'dashboard.title': 'Enforcement Overview',
@@ -672,6 +683,10 @@ export const translations: Record<Language, Record<string, string>> = {
     'auth.reset_password_title': 'Set New Password',
     'auth.reset_password_subtitle':
       'Choose a new password to re-establish your secure workspace access.',
+    'auth.password_reset_success':
+      'Password changed successfully! You can now sign in with your new credential.',
+    'auth.password_reset_error':
+      'Could not reset password. The token may be incorrect or expired. Please request a new link.',
     'auth.have_account': 'Already registered? Sign in',
     'auth.no_account': 'Need an account? Request access',
     'auth.security_notice':

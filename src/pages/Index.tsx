@@ -43,47 +43,47 @@ export const Index: React.FC = () => {
       step: '01',
       icon: MapPin,
       label: t('landing.flow_field'),
-      desc: 'Marco inicial georreferenciado e vistoria da área protegida.',
-      highlight: 'Poligonal & Coordenadas',
+      desc: 'Fixação de ponto georreferenciado, polígono da área e abertura do auto.',
+      highlight: 'Datum SIRGAS 2000',
     },
     {
       step: '02',
       icon: Camera,
       label: t('landing.flow_evidence'),
-      desc: 'Fotografias com carimbo de tempo, notas técnicas e áudios.',
+      desc: 'Fotos com metadados, gravações, notas técnicas e arquivos comprobatórios.',
       highlight: 'Cadeia de Custódia',
     },
     {
       step: '03',
       icon: Search,
       label: t('landing.flow_verification'),
-      desc: 'Varredura automática e cruzamento de horários e coordenadas GPS.',
-      highlight: 'Postura Cautelosa',
+      desc: 'Varredura automática e cruzamento prudente de horários e coordenadas GPS.',
+      highlight: 'Linguagem Cautelosa',
     },
     {
       step: '04',
       icon: Puzzle,
       label: t('landing.flow_gaps'),
-      desc: 'Checklist inteligente de dados ausentes antes da emissão final.',
-      highlight: 'Integridade Jurídica',
+      desc: 'Auditoria prévia de requisitos: identificação de agentes e títulos pendentes.',
+      highlight: 'Checklist de Validade',
     },
     {
       step: '05',
       icon: FileText,
       label: t('landing.flow_report'),
-      desc: 'Relatório estruturado com rastreabilidade clique-a-clique.',
-      highlight: 'Do Relatório à Evidência',
+      desc: 'Laudo pericial estruturado com âncoras diretas para a evidência de campo.',
+      highlight: 'Rastreabilidade Total',
     },
   ]
 
   const problemSources = [
-    { name: 'Fotografias em celulares e câmeras', type: 'Mídia isolada' },
-    { name: 'Anotações manuais de campo em prancheta', type: 'Texto vulnerável' },
-    { name: 'Coordenadas de pontos de GPS dispersas', type: 'Sem polígono' },
-    { name: 'Documentos dominiais e CAR em papel', type: 'Sem vínculo' },
-    { name: 'Depoimentos e relatos verbais de testemunhas', type: 'Volatilidade' },
-    { name: 'Autos de infração e autos de embargo avulsos', type: 'Risco de perda' },
-    { name: 'Laudos periciais e relatórios de satélite', type: 'Formatos heterogêneos' },
+    { name: 'Fotografias em celulares e câmeras avulsas', type: 'Sem metadado amarrado' },
+    { name: 'Anotações manuais em prancheta de campo', type: 'Vulnerável a perda' },
+    { name: 'Waypoints dispersos em receptores GPS', type: 'Sem vínculo ao auto' },
+    { name: 'Certidões dominiais e recibos de CAR', type: 'Desconectados do laudo' },
+    { name: 'Relatos e depoimentos verbais de terceiros', type: 'Sem custódia formal' },
+    { name: 'Autos de embargo e notificações preliminares', type: 'Dispersão de autos' },
+    { name: 'Alertas DETER e imagens de satélite', type: 'Formatos não integrados' },
   ]
 
   const risks = [
@@ -118,9 +118,9 @@ export const Index: React.FC = () => {
   ]
 
   return (
-    <div className="space-y-16 sm:space-y-20 lg:space-y-28 animate-in fade-in duration-500">
+    <div className="space-y-14 sm:space-y-18 lg:space-y-24 animate-in fade-in duration-500">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-white via-[#FCFDFD] to-[#F4F7F5] p-6 sm:p-12 lg:p-16 shadow-xs">
+      <section className="relative overflow-hidden rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-white via-[#F9FCFA] to-[#EFF5F1] p-6 sm:p-10 lg:p-16 shadow-xs">
         {/* Subtle topographical SVG background pattern */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.035]">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -151,17 +151,17 @@ export const Index: React.FC = () => {
         </div>
 
         {/* Ambient forest green aura */}
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#1B5E3A]/5 blur-3xl rounded-full pointer-events-none" />
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[640px] h-[320px] bg-[#1B5E3A]/6 blur-3xl rounded-full pointer-events-none" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6">
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6 sm:space-y-7">
           {/* Eyebrows */}
-          <div className="flex flex-wrap items-center justify-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/25 bg-[#E7F2EC] px-3.5 py-1 text-xs font-semibold text-[#1B5E3A] shadow-2xs">
-              <Compass className="w-3.5 h-3.5 animate-spin-slow" />
+              <Compass className="w-3.5 h-3.5 text-[#1B5E3A]" />
               <span>RastroVerde • GovTech Socioambiental</span>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8E4] bg-white/90 backdrop-blur-xs px-3.5 py-1 text-xs font-medium text-[#5B6B63] shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#0F766E] animate-pulse" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8E4] bg-white/95 backdrop-blur-xs px-3.5 py-1 text-xs font-medium text-[#5B6B63] shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-[#0F766E]" />
               <span>{t('landing.amazoniahack_badge')}</span>
             </div>
           </div>
@@ -172,60 +172,60 @@ export const Index: React.FC = () => {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-base sm:text-lg lg:text-xl text-[#5B6B63] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base lg:text-lg text-[#5B6B63] max-w-2xl mx-auto leading-relaxed">
             {t('landing.subheadline')}
           </p>
 
-          {/* Action CTAs: Hierarquia inequívoca — Demonstração é a rota mais óbvia para quem avalia o produto */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4 max-w-xl mx-auto">
-            {/* CTA 1: Iniciar fiscalização (leva para new inspection se logado, ou login se visitante) */}
-            <Link to={isAuthenticated ? '/inspections/new' : '/login'} className="w-full sm:w-auto">
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto border-[#1B5E3A]/30 bg-white hover:bg-[#F7F9F8] text-[#143028] font-bold h-13 px-7 rounded-2xl shadow-xs transition-all hover:border-[#1B5E3A] flex items-center justify-center gap-2"
-              >
-                <FileCheck2 className="w-4 h-4 text-[#1B5E3A]" />
-                <span>{t('landing.start_inspection')}</span>
-              </Button>
-            </Link>
-
-            {/* CTA 2: Demonstração Interativa (Destaque principal e visual inequívoco) */}
+          {/* Action CTAs: Hierarquia refinada com hover states modernos */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 max-w-xl mx-auto">
+            {/* CTA 1: Demonstração Interativa (Foco principal imediato para avaliação) */}
             <Link to="/inspections/RV-DEMO-001" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                className="w-full sm:w-auto bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold shadow-lg shadow-[#1B5E3A]/20 hover:shadow-xl hover:shadow-[#1B5E3A]/30 h-13 px-8 rounded-2xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5"
+                className="w-full sm:w-auto bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold shadow-md shadow-[#1B5E3A]/20 hover:shadow-lg hover:shadow-[#1B5E3A]/30 h-12 px-7 rounded-xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
               >
-                <Compass className="w-5 h-5 text-emerald-200" />
-                <span className="text-base">{t('landing.enter_demo')}</span>
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-white/20 text-white">
+                <Compass className="w-4 h-4 text-emerald-200" />
+                <span className="text-sm sm:text-base">{t('landing.enter_demo')}</span>
+                <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white/20 text-white">
                   RV-DEMO-001
                 </span>
                 <ArrowRight className="w-4 h-4 text-emerald-200" />
               </Button>
             </Link>
+
+            {/* CTA 2: Iniciar fiscalização (leva para new inspection se logado, ou login se visitante) */}
+            <Link to={isAuthenticated ? '/inspections/new' : '/login'} className="w-full sm:w-auto">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto border-[#1B5E3A]/30 bg-white hover:bg-[#F7F9F8] text-[#143028] font-bold h-12 px-6 rounded-xl shadow-xs transition-all hover:border-[#1B5E3A] flex items-center justify-center gap-2"
+              >
+                <FileCheck2 className="w-4 h-4 text-[#1B5E3A]" />
+                <span>{t('landing.start_inspection')}</span>
+              </Button>
+            </Link>
           </div>
 
-          {/* Microcopy persuasivo e ético */}
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-2 text-xs text-[#5B6B63]">
+          {/* Microcopy persuasivo e técnico */}
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-1 text-xs text-[#5B6B63]">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#1B5E3A]" />
-              <span>Sem cadastro prévio para demonstração</span>
+              <span>Acesso imediato sem necessidade de cadastro</span>
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#1B5E3A]" />
-              <span>Dossiê georreferenciado e dados fictícios</span>
+              <span>Dossiê georreferenciado com 3 falhas de teste</span>
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#1B5E3A]" />
-              <span>Cadeia de custódia auditável</span>
+              <span>Cadeia de custódia auditável ponta a ponta</span>
             </span>
           </div>
         </div>
 
         {/* Visual Animated Flow Strip: Trilha no mapa entre as etapas */}
-        <div className="relative z-10 mt-16 pt-10 border-t border-[#E2E8E4]">
-          <div className="text-center max-w-xl mx-auto mb-8 space-y-1">
+        <div className="relative z-10 mt-12 sm:mt-16 pt-8 sm:pt-10 border-t border-[#E2E8E4]">
+          <div className="text-center max-w-xl mx-auto mb-7 space-y-1">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#1B5E3A]">
               <GitBranch className="w-3.5 h-3.5" />
               <span>{t('landing.flow_title')}</span>
@@ -236,9 +236,9 @@ export const Index: React.FC = () => {
           {/* Connected Steps Grid with trail line */}
           <div className="relative">
             {/* Trail connector line (desktop) */}
-            <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-0.5 border-t-2 border-dashed border-[#1B5E3A]/30 z-0" />
+            <div className="hidden lg:block absolute top-10 left-[8%] right-[8%] h-0.5 border-t-2 border-dashed border-[#1B5E3A]/25 z-0" />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative z-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 relative z-10">
               {flowSteps.map((step, idx) => {
                 const Icon = step.icon
                 const isHovered = hoveredStep === idx
@@ -247,7 +247,7 @@ export const Index: React.FC = () => {
                     key={step.step}
                     onMouseEnter={() => setHoveredStep(idx)}
                     onMouseLeave={() => setHoveredStep(null)}
-                    className={`relative flex flex-col items-center text-center p-5 rounded-2xl bg-white border transition-all duration-300 ${
+                    className={`relative flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-white border transition-all duration-300 ${
                       isHovered
                         ? 'border-[#1B5E3A] shadow-md -translate-y-1'
                         : 'border-[#E2E8E4] shadow-2xs hover:border-[#1B5E3A]/60'
@@ -256,21 +256,21 @@ export const Index: React.FC = () => {
                     {/* Node indicator */}
                     <div className="relative mb-3">
                       <div
-                        className={`w-13 h-13 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                        className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
                           isHovered
                             ? 'bg-[#1B5E3A] text-white shadow-md scale-105'
                             : 'bg-[#E7F2EC] text-[#1B5E3A]'
                         }`}
                       >
-                        <Icon className="w-6 h-6" />
+                        <Icon className="w-5 h-5" />
                       </div>
-                      <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-[#143028] text-white font-mono text-[10px] font-bold">
+                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#143028] text-white font-mono text-[9px] font-bold">
                         {step.step}
                       </span>
                     </div>
 
-                    <div className="text-sm font-bold text-[#143028] mb-1">{step.label}</div>
-                    <span className="text-[10px] font-semibold text-[#0F766E] uppercase tracking-wider mb-2">
+                    <div className="text-sm font-bold text-[#143028] mb-0.5">{step.label}</div>
+                    <span className="text-[10px] font-semibold text-[#0F766E] uppercase tracking-wider mb-1.5">
                       {step.highlight}
                     </span>
                     <p className="text-xs text-[#5B6B63] leading-relaxed">{step.desc}</p>
@@ -282,13 +282,13 @@ export const Index: React.FC = () => {
         </div>
 
         {/* Scroll cue */}
-        <div className="flex justify-center pt-8">
+        <div className="flex justify-center pt-6">
           <a
             href="#demo-section"
             className="text-[#5B6B63] hover:text-[#1B5E3A] transition-colors p-2"
             title="Avançar para a demonstração"
           >
-            <ChevronDown className="w-5 h-5 animate-bounce" />
+            <ChevronDown className="w-4 h-4 animate-bounce" />
           </a>
         </div>
       </section>
@@ -296,7 +296,7 @@ export const Index: React.FC = () => {
       {/* Interactive Demonstration Showcase Card (RV-DEMO-001) */}
       <section
         id="demo-section"
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#143028] via-[#1B5E3A] to-[#0F766E] text-white p-7 sm:p-12 lg:p-14 shadow-xl border border-emerald-900/40"
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#122820] via-[#1B5E3A] to-[#0F766E] text-white p-6 sm:p-10 lg:p-14 shadow-xl border border-emerald-900/40"
       >
         {/* Subtle topographical background */}
         <div className="absolute inset-0 pointer-events-none opacity-10">
@@ -307,37 +307,37 @@ export const Index: React.FC = () => {
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Context, Value Proposition & CTA */}
-          <div className="lg:col-span-7 space-y-6 text-left">
+          <div className="lg:col-span-7 space-y-5 text-left">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-md px-3.5 py-1 text-xs font-bold text-emerald-100 border border-white/25">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-md px-3 py-0.5 text-xs font-bold text-emerald-100 border border-white/25">
                 <FileSearch className="w-3.5 h-3.5" />
                 <span>{t('badge.fictional_demo')}</span>
               </span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-900/60 backdrop-blur-md px-3 py-1 text-xs font-mono font-medium text-emerald-200 border border-emerald-700/50">
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-950/60 backdrop-blur-md px-3 py-0.5 text-xs font-mono font-medium text-emerald-200 border border-emerald-700/50">
                 APA Setor Norte • 1.450 ha
               </span>
             </div>
 
-            <div className="space-y-3">
-              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+            <div className="space-y-2.5">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight">
                 {t('landing.demo_card_title')}
               </h2>
-              <p className="text-sm sm:text-base text-emerald-100/95 leading-relaxed">
+              <p className="text-xs sm:text-sm lg:text-base text-emerald-100/95 leading-relaxed">
                 {t('landing.demo_card_desc')}
               </p>
             </div>
 
             {/* 4 Mini Steps of what visitor sees in demo */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
               {demoFeatures.map((item, idx) => {
                 const Icon = item.icon
                 return (
                   <div
                     key={idx}
-                    className="flex items-start gap-3 p-3 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15"
+                    className="flex items-start gap-2.5 p-3 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15"
                   >
                     <div className="w-7 h-7 rounded-lg bg-emerald-400/20 flex items-center justify-center shrink-0 mt-0.5 text-emerald-200">
-                      <Icon className="w-4 h-4" />
+                      <Icon className="w-3.5 h-3.5" />
                     </div>
                     <div className="min-w-0">
                       <span className="text-[10px] font-mono font-bold text-emerald-300 block uppercase">
@@ -353,11 +353,11 @@ export const Index: React.FC = () => {
             </div>
 
             {/* Demo CTAs */}
-            <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
               <Link to="/inspections/RV-DEMO-001">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-white hover:bg-emerald-50 text-[#1B5E3A] font-extrabold shadow-lg px-7 h-12 rounded-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
+                  className="w-full sm:w-auto bg-white hover:bg-emerald-50 text-[#1B5E3A] font-extrabold shadow-md px-6 h-11 rounded-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
                 >
                   <Eye className="w-4 h-4" />
                   <span>{t('landing.open_demo')}</span>
@@ -370,7 +370,7 @@ export const Index: React.FC = () => {
                 variant="outline"
                 size="lg"
                 onClick={startTour}
-                className="w-full sm:w-auto border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold h-12 px-5 rounded-xl flex items-center justify-center gap-2"
+                className="w-full sm:w-auto border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold h-11 px-5 rounded-xl flex items-center justify-center gap-2"
               >
                 <Compass className="w-4 h-4 text-emerald-200" />
                 <span>{t('tour.button')} (Pitch)</span>
@@ -380,10 +380,10 @@ export const Index: React.FC = () => {
 
           {/* Right Column: Interactive Dossier Card Preview */}
           <div className="lg:col-span-5">
-            <div className="rounded-3xl bg-white text-[#143028] p-6 shadow-2xl border border-emerald-100/30 space-y-4">
+            <div className="rounded-3xl bg-white text-[#143028] p-5 sm:p-6 shadow-2xl border border-emerald-100/30 space-y-3.5">
               <div className="flex items-center justify-between pb-3 border-b border-[#E2E8E4]">
                 <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-emerald-600 animate-pulse" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
                   <span className="font-mono text-xs font-bold text-[#1B5E3A]">RV-DEMO-001</span>
                 </div>
                 <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#E7F2EC] text-[#1B5E3A]">
@@ -391,7 +391,7 @@ export const Index: React.FC = () => {
                 </span>
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 <h3 className="font-bold text-base text-[#143028]">
                   APA Setor Norte — Gleba Castanhal
                 </h3>
@@ -401,10 +401,10 @@ export const Index: React.FC = () => {
               </div>
 
               {/* Dossier quick metrics */}
-              <div className="grid grid-cols-3 gap-2 py-2">
+              <div className="grid grid-cols-3 gap-2 py-1">
                 <div className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-center">
                   <span className="text-[10px] text-[#5B6B63] block font-medium">Evidências</span>
-                  <span className="text-base font-extrabold text-[#1B5E3A]">14</span>
+                  <span className="text-base font-extrabold text-[#1B5E3A]">11</span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-center">
                   <span className="text-[10px] text-[#5B6B63] block font-medium">Completude</span>
@@ -417,7 +417,7 @@ export const Index: React.FC = () => {
               </div>
 
               {/* Simulated trace link */}
-              <div className="p-3 rounded-xl bg-emerald-50/80 border border-emerald-200 text-xs text-[#143028] space-y-1.5">
+              <div className="p-3 rounded-xl bg-emerald-50/80 border border-emerald-200 text-xs text-[#143028] space-y-1">
                 <div className="flex items-center justify-between font-bold text-[#1B5E3A]">
                   <span className="flex items-center gap-1">
                     <ShieldCheck className="w-3.5 h-3.5" />
@@ -425,14 +425,14 @@ export const Index: React.FC = () => {
                   </span>
                   <span className="text-[10px] font-mono">EVD-014 ↔ Relatório</span>
                 </div>
-                <p className="text-[11px] text-[#5B6B63]">
+                <p className="text-[11px] text-[#5B6B63] leading-relaxed">
                   Cada achado técnico possui âncora direta para a coordenada e fotografia de campo
                   correspondente.
                 </p>
               </div>
 
               <Link to="/inspections/RV-DEMO-001" className="block pt-1">
-                <Button className="w-full bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold text-xs h-10 rounded-xl">
+                <Button className="w-full bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold text-xs h-10 rounded-xl shadow-xs">
                   Abrir Dossiê Demonstrativo Completo →
                 </Button>
               </Link>
@@ -524,38 +524,38 @@ export const Index: React.FC = () => {
       </section>
 
       {/* "Nossa Proposta" Section: Rastreabilidade bidirecional */}
-      <section className="rounded-3xl border border-[#E2E8E4] bg-white p-8 sm:p-12 shadow-xs space-y-8">
-        <div className="max-w-3xl mx-auto text-center space-y-3">
+      <section className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-10 lg:p-12 shadow-xs space-y-6 sm:space-y-8">
+        <div className="max-w-3xl mx-auto text-center space-y-2.5">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/20 bg-[#E7F2EC] px-3.5 py-1 text-xs font-semibold text-[#1B5E3A]">
             <ShieldCheck className="w-4 h-4" />
             <span>{t('landing.proposal_title')}</span>
           </div>
 
-          <h3 className="text-2xl sm:text-4xl font-extrabold text-[#143028] tracking-tight">
+          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#143028] tracking-tight">
             "{t('landing.proposal_highlight')}"
           </h3>
 
-          <p className="text-sm sm:text-base text-[#5B6B63] leading-relaxed">
+          <p className="text-xs sm:text-sm lg:text-base text-[#5B6B63] leading-relaxed">
             {t('landing.proposal_explanation')}
           </p>
         </div>
 
         {/* Trail Graphic */}
-        <div className="max-w-3xl mx-auto py-4">
+        <div className="max-w-3xl mx-auto py-2">
           <div className="relative flex items-center justify-between">
-            <div className="absolute inset-x-6 top-1/2 -translate-y-1/2 h-0.5 border-t-2 border-dashed border-[#1B5E3A]/40" />
+            <div className="absolute inset-x-6 top-1/2 -translate-y-1/2 h-0.5 border-t-2 border-dashed border-[#1B5E3A]/30" />
             {[
-              { label: 'Coleta de Campo', sub: 'Lat/Long + Fotos' },
-              { label: 'Georreferenciamento', sub: 'Poligonal & SIG' },
-              { label: 'Consistência', sub: 'Validação IA' },
+              { label: 'Coleta em Campo', sub: 'Fotos & Lat/Long' },
+              { label: 'Georreferenciamento', sub: 'Polígono SIRGAS' },
+              { label: 'Consistência', sub: 'Cruzamento GNSS' },
               { label: 'Auditoria de Lacunas', sub: 'Checklist Prévio' },
-              { label: 'Emissão Rastreável', sub: 'Laudo Pericial' },
+              { label: 'Laudo Rastreável', sub: 'Vínculo Bidirecional' },
             ].map((step, idx) => (
               <div key={step.label} className="relative z-10 flex flex-col items-center">
-                <div className="w-9 h-9 rounded-full bg-[#1B5E3A] text-white text-xs font-bold flex items-center justify-center ring-4 ring-white shadow-sm">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#1B5E3A] text-white text-xs font-bold flex items-center justify-center ring-4 ring-white shadow-sm">
                   {idx + 1}
                 </div>
-                <span className="text-xs font-bold text-[#143028] mt-2 whitespace-nowrap hidden sm:block">
+                <span className="text-[11px] sm:text-xs font-bold text-[#143028] mt-2 whitespace-nowrap hidden sm:block">
                   {step.label}
                 </span>
                 <span className="text-[10px] text-[#5B6B63] hidden md:block">{step.sub}</span>
@@ -566,23 +566,23 @@ export const Index: React.FC = () => {
       </section>
 
       {/* Seção de Acesso Institucional / Agentes */}
-      <section className="rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-[#F7F9F8] to-white p-8 sm:p-12 shadow-xs">
+      <section className="rounded-3xl border border-[#E2E8E4] bg-gradient-to-b from-[#F7F9F8] to-white p-6 sm:p-10 lg:p-12 shadow-xs">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7 space-y-4 text-left">
+          <div className="lg:col-span-7 space-y-3.5 text-left">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#143028]/20 bg-white px-3 py-1 text-xs font-semibold text-[#143028]">
               <Lock className="w-3.5 h-3.5 text-[#1B5E3A]" />
-              <span>Ambiente Restrito & Monitorado</span>
+              <span>Ambiente Institucional Restrito</span>
             </div>
 
             <h3 className="text-2xl sm:text-3xl font-extrabold text-[#143028] tracking-tight">
               {t('landing.access_block_title')}
             </h3>
 
-            <p className="text-sm text-[#5B6B63] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#5B6B63] leading-relaxed">
               {t('landing.access_block_desc')}
             </p>
 
-            <div className="space-y-2.5 pt-2">
+            <div className="space-y-2 pt-1">
               {[
                 t('landing.access_benefit_1'),
                 t('landing.access_benefit_2'),
@@ -599,11 +599,11 @@ export const Index: React.FC = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-5 flex flex-col gap-3">
+          <div className="lg:col-span-5 flex flex-col gap-2.5">
             <Link to="/login" className="w-full">
               <Button
                 size="lg"
-                className="w-full bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold h-12 rounded-xl shadow-xs flex items-center justify-center gap-2"
+                className="w-full bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold h-11 rounded-xl shadow-xs flex items-center justify-center gap-2"
               >
                 <UserCheck className="w-4 h-4" />
                 <span>{t('landing.btn_access_agent')}</span>
@@ -614,14 +614,14 @@ export const Index: React.FC = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full border-[#E2E8E4] bg-white hover:bg-[#F7F9F8] text-[#143028] font-semibold h-12 rounded-xl shadow-xs flex items-center justify-center gap-2"
+                className="w-full border-[#E2E8E4] bg-white hover:bg-[#F7F9F8] text-[#143028] font-semibold h-11 rounded-xl shadow-xs flex items-center justify-center gap-2"
               >
                 <span>{t('landing.btn_create_account')}</span>
                 <ArrowRight className="w-4 h-4 text-[#5B6B63]" />
               </Button>
             </Link>
 
-            <p className="text-[11px] text-center text-[#5B6B63] pt-1">
+            <p className="text-[11px] text-center text-[#5B6B63] pt-0.5">
               {t('auth.security_notice')}
             </p>
           </div>
