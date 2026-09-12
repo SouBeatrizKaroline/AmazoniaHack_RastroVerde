@@ -27,26 +27,36 @@ export const translations: Record<Language, Record<string, string>> = {
     'tour.next': 'Próximo',
     'tour.prev': 'Anterior',
     'tour.end': 'Encerrar tour',
+    'tour.finish': 'Concluir pitch',
+    'tour.step1_badge': 'Dossiê',
+    'tour.step2_badge': 'Evidências',
+    'tour.step3_badge': 'Geo',
+    'tour.step4_badge': 'Timeline',
+    'tour.step5_badge': 'Consistência',
+    'tour.step6_badge': 'Lacunas',
+    'tour.step7_badge': 'Relatório',
+    'tour.step8_badge': 'Rastreabilidade',
     'tour.step1_title': '1. Fiscalização Demo (RV-DEMO-001)',
     'tour.step1_desc':
       'Início do dossiê: área de proteção ambiental com alertas de satélite e equipe em campo.',
     'tour.step2_title': '2. Evidências Coletadas',
     'tour.step2_desc':
-      'Centro de evidências: fotografias de campo, medições de coordenadas e notificações.',
+      'Centro de evidências: fotografias de campo, medições de coordenadas, anexos e notificações.',
     'tour.step3_title': '3. Mapa Georreferenciado',
     'tour.step3_desc': 'Visualização espacial das evidências sobre a poligonal da área protegida.',
     'tour.step4_title': '4. Linha do Tempo Cronológica',
     'tour.step4_desc': 'Rastreabilidade minuto a minuto das ações registradas pela equipe.',
     'tour.step5_title': '5. Verificação de Consistência',
     'tour.step5_desc':
-      'Detecção inteligente de possíveis discrepâncias entre horários e coordenadas.',
+      'Detecção inteligente de possíveis discrepâncias entre horários e coordenadas com postura cautelosa.',
     'tour.step6_title': '6. Lacunas e Pendências',
     'tour.step6_desc': 'Checklist automático: o que ainda falta antes de emitir o relatório.',
     'tour.step7_title': '7. Gerar Relatório Técnico',
     'tour.step7_desc':
       'Dossiê estruturado com rastreabilidade direta: clique em "Ver evidência de origem".',
-    'tour.step8_title': '8. Rastreabilidade Completa',
-    'tour.step8_desc': 'Do relatório de volta à evidência original! Fim da demonstração do pitch.',
+    'tour.step8_title': '8. Rastreabilidade Completa (EVD-014)',
+    'tour.step8_desc':
+      'Do relatório de volta à evidência original (EVD-014)! Conexão bidirecional validada.',
     'footer.rights': '',
 
     // Navigation
@@ -308,12 +318,21 @@ export const translations: Record<Language, Record<string, string>> = {
     'tour.next': 'Next',
     'tour.prev': 'Previous',
     'tour.end': 'End tour',
+    'tour.finish': 'Complete pitch',
+    'tour.step1_badge': 'Dossier',
+    'tour.step2_badge': 'Evidence',
+    'tour.step3_badge': 'Geo',
+    'tour.step4_badge': 'Timeline',
+    'tour.step5_badge': 'Consistency',
+    'tour.step6_badge': 'Gaps',
+    'tour.step7_badge': 'Report',
+    'tour.step8_badge': 'Traceability',
     'tour.step1_title': '1. Demo Inspection (RV-DEMO-001)',
     'tour.step1_desc':
       'Dossier start: protected environmental area with satellite alert and field officers.',
     'tour.step2_title': '2. Collected Evidence',
     'tour.step2_desc':
-      'Evidence center: field photos, georeferenced coordinates, and formal notices.',
+      'Evidence center: field photos, georeferenced coordinates, attachments and formal notices.',
     'tour.step3_title': '3. Georeferenced Map',
     'tour.step3_desc':
       'Spatial layout of evidence markers on top of the protected reserve polygon.',
@@ -321,15 +340,15 @@ export const translations: Record<Language, Record<string, string>> = {
     'tour.step4_desc': 'Minute-by-minute traceability of all operational field activities.',
     'tour.step5_title': '5. Consistency Verification',
     'tour.step5_desc':
-      'Smart detection of potential discrepancies between field notes and GPS readings.',
+      'Smart detection of potential discrepancies between field notes and GPS readings with cautious tone.',
     'tour.step6_title': '6. Gaps & Completeness',
     'tour.step6_desc': 'Automated checklist: identifying missing items before drafting the report.',
     'tour.step7_title': '7. Generate Technical Report',
     'tour.step7_desc':
       'Structured report with direct traceability: click on "View source evidence".',
-    'tour.step8_title': '8. Full Traceability Achieved',
+    'tour.step8_title': '8. Full Traceability Achieved (EVD-014)',
     'tour.step8_desc':
-      'From the final report right back to the original field evidence! Pitch sequence completed.',
+      'From the final report right back to the original field evidence (EVD-014)! Bidirectional link verified.',
     'footer.rights': '',
 
     // Navigation

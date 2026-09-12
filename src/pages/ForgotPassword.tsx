@@ -51,17 +51,35 @@ export const ForgotPassword: React.FC = () => {
       </div>
 
       {sent ? (
-        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 space-y-3 text-center">
-          <p className="font-semibold">Solicitação registrada com sucesso!</p>
-          <p className="text-[11px] text-emerald-800">
-            Verifique a caixa de entrada do e-mail <strong>{email}</strong> para prosseguir com a
-            redefinição de senha.
+        <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 space-y-3 text-center">
+          <p className="font-semibold text-sm">Solicitação registrada com sucesso!</p>
+          <p className="text-[11px] text-emerald-800 leading-relaxed">
+            Se o endereço <strong>{email}</strong> estiver cadastrado na base institucional, o link
+            de recuperação foi enviado.
           </p>
-          <Link to="/login">
-            <Button size="sm" variant="outline" className="mt-2 text-xs">
-              Voltar ao login
-            </Button>
-          </Link>
+          <div className="p-3 bg-white/80 rounded-xl border border-emerald-300 text-left space-y-1.5 text-[11px] text-[#143028]">
+            <span className="font-bold text-[#1B5E3A] block">Como prosseguir:</span>
+            <p>1. Clique diretamente no link recebido por e-mail para abrir a redefinição; ou</p>
+            <p>
+              2. Se preferir, copie o token/código recebido e insira manualmente na página de
+              redefinição.
+            </p>
+          </div>
+          <div className="pt-2 flex flex-col sm:flex-row gap-2 justify-center">
+            <Link to="/reset-password">
+              <Button
+                size="sm"
+                className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs w-full sm:w-auto"
+              >
+                Inserir token de redefinição
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button size="sm" variant="outline" className="text-xs w-full sm:w-auto">
+                Voltar ao login
+              </Button>
+            </Link>
+          </div>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">

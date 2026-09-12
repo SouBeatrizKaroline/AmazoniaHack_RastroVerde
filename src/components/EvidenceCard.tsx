@@ -113,12 +113,30 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
           {/* File Thumbnail / Media Display */}
           {evidence.file ? (
             <div className="relative h-32 rounded-xl overflow-hidden border border-[#E2E8E4] bg-black/5 flex items-center justify-center">
-              {evidence.file.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
+              {evidence.file.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i) ? (
                 <img
-                  src={getEvidenceFileUrl(evidence) || ''}
+                  src={
+                    getEvidenceFileUrl(evidence, '400x300') || getEvidenceFileUrl(evidence) || ''
+                  }
                   alt={evidence.code}
                   className="w-full h-full object-cover"
                 />
+              ) : evidence.file.match(/\.(mp4|webm|mov)$/i) ? (
+                <div className="flex flex-col items-center p-3 text-center">
+                  <Video className="w-8 h-8 text-[#0F766E] mb-1" />
+                  <span className="text-xs font-semibold text-[#143028] max-w-[200px] truncate">
+                    {evidence.file}
+                  </span>
+                  <span className="text-[10px] text-[#5B6B63] font-mono mt-0.5">Vídeo anexado</span>
+                </div>
+              ) : evidence.file.match(/\.(mp3|wav|ogg|m4a)$/i) ? (
+                <div className="flex flex-col items-center p-3 text-center">
+                  <Mic className="w-8 h-8 text-purple-700 mb-1" />
+                  <span className="text-xs font-semibold text-[#143028] max-w-[200px] truncate">
+                    {evidence.file}
+                  </span>
+                  <span className="text-[10px] text-[#5B6B63] font-mono mt-0.5">Áudio gravado</span>
+                </div>
               ) : (
                 <div className="flex flex-col items-center p-3 text-center">
                   <FileText className="w-8 h-8 text-[#1B5E3A] mb-1" />
@@ -132,7 +150,7 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
                     className="inline-flex items-center gap-1 text-[11px] text-[#1B5E3A] font-bold mt-1 hover:underline"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <span>Abrir arquivo</span>
+                    <span>Abrir documento</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>

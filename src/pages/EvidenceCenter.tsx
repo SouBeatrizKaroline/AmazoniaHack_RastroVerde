@@ -54,15 +54,18 @@ export const EvidenceCenter: React.FC = () => {
   const loadData = async () => {
     try {
       const [allInsp, list] = await Promise.all([getInspections(), getAllEvidence()])
-      if (allInsp.length > 0) {
-        setDefaultInspectionId(allInsp[0].id)
+      const demoInsp = allInsp.find((i) => i.id_number === 'RV-DEMO-001') || allInsp[0]
+      if (demoInsp) {
+        setDefaultInspectionId(demoInsp.id)
       }
       setEvidenceList(list)
 
       // If source param is provided, open detail automatically
       if (sourceEvidenceParam) {
         const target = list.find(
-          (e) => e.code === sourceEvidenceParam || e.id === sourceEvidenceParam,
+          (e) =>
+            e.code.toLowerCase() === sourceEvidenceParam.toLowerCase() ||
+            e.id === sourceEvidenceParam,
         )
         if (target) {
           setDetailModalEvidence(target)
@@ -76,6 +79,20 @@ export const EvidenceCenter: React.FC = () => {
   useEffect(() => {
     loadData()
   }, [sourceEvidenceParam])
+
+  // Also react when evidenceList changes if source param exists
+  useEffect(() => {
+    if (sourceEvidenceParam && evidenceList.length > 0) {
+      const target = evidenceList.find(
+        (e) =>
+          e.code.toLowerCase() === sourceEvidenceParam.toLowerCase() ||
+          e.id === sourceEvidenceParam,
+      )
+      if (target) {
+        setDetailModalEvidence(target)
+      }
+    }
+  }, [sourceEvidenceParam, evidenceList])
 
   const types = [
     { key: 'ALL', label: t('evidence.all_types') },
@@ -103,6 +120,11 @@ export const EvidenceCenter: React.FC = () => {
   const handleSave = async (data: FormData | Partial<EvidenceRecord>) => {
     try {
       if (editingEvidence) {
+        if (data instanceof FormData) {
+          if (!data.get('inspection')) {
+            data.set('inspection', editingEvidence.inspection || defaultInspectionId)
+          }
+        }
         await updateEvidence(editingEvidence.id, data)
         toast({ title: t('evidence.update_success') })
       } else {
@@ -124,15 +146,16 @@ export const EvidenceCenter: React.FC = () => {
         }
         toast({ title: t('evidence.create_success') })
       }
+      await loadData()
     } catch (err: any) {
       console.error(err)
       toast({
         title: 'Erro ao salvar evidência',
-        description: err?.message,
+        description: err?.message || 'Falha na persistência da evidência.',
         variant: 'destructive',
       })
+      throw err
     }
-    loadData()
   }
 
   const handleDelete = async (evd: EvidenceRecord) => {
@@ -275,31 +298,64 @@ export const EvidenceCenter: React.FC = () => {
 
               {/* File Display / Preview */}
               {detailModalEvidence.file ? (
-                <div className="relative rounded-2xl overflow-hidden border border-[#E2E8E4] bg-black/5 p-2 flex flex-col items-center justify-center">
-                  {detailModalEvidence.file.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
-                    <img
-                      src={getEvidenceFileUrl(detailModalEvidence) || ''}
-                      alt={detailModalEvidence.code}
-                      className="max-h-72 w-auto object-contain rounded-xl shadow-xs"
-                    />
+                <div className="relative rounded-2xl overflow-hidden border border-[#E2E8E4] bg-black/5 p-3 flex flex-col items-center justify-center">
+                  {detailModalEvidence.file.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i) ? (
+                    <div className="space-y-2 text-center w-full">
+                      <img
+                        src={getEvidenceFileUrl(detailModalEvidence) || ''}
+                        alt={detailModalEvidence.code}
+                        className="max-h-72 w-auto mx-auto object-contain rounded-xl shadow-xs border border-[#E2E8E4]"
+                      />
+                      <a
+                        href={getEvidenceFileUrl(detailModalEvidence) || '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] text-[#1B5E3A] font-semibold hover:underline"
+                      >
+                        <span>Abrir imagem em alta resolução</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  ) : detailModalEvidence.file.match(/\.(mp4|webm|mov)$/i) ? (
+                    <div className="w-full space-y-2">
+                      <video
+                        controls
+                        src={getEvidenceFileUrl(detailModalEvidence) || ''}
+                        className="max-h-72 w-full rounded-xl"
+                      />
+                      <div className="text-center text-xs font-semibold text-[#143028]">
+                        {detailModalEvidence.file}
+                      </div>
+                    </div>
+                  ) : detailModalEvidence.file.match(/\.(mp3|wav|ogg|m4a)$/i) ? (
+                    <div className="w-full p-4 space-y-2 text-center">
+                      <audio
+                        controls
+                        src={getEvidenceFileUrl(detailModalEvidence) || ''}
+                        className="w-full"
+                      />
+                      <div className="text-xs font-semibold text-[#143028]">
+                        Gravação de áudio anexada: {detailModalEvidence.file}
+                      </div>
+                    </div>
                   ) : (
-                    <div className="p-6 text-center space-y-2">
+                    <div className="p-6 text-center space-y-3">
                       <div className="text-sm font-semibold text-[#143028]">
-                        Anexo: {detailModalEvidence.file}
+                        Documento probatório: {detailModalEvidence.file}
                       </div>
                       <a
                         href={getEvidenceFileUrl(detailModalEvidence) || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1B5E3A] text-white text-xs font-semibold hover:bg-[#14502F]"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1B5E3A] text-white text-xs font-semibold hover:bg-[#14502F] shadow-xs"
                       >
-                        <span>Abrir / Baixar arquivo</span>
+                        <span>Visualizar / Baixar documento anexado</span>
                         <ExternalLink className="w-4 h-4" />
                       </a>
                     </div>
                   )}
                   <div className="mt-2 text-[11px] text-[#5B6B63] font-mono">
-                    Arquivo persistido no servidor com integridade probatória
+                    ✓ Arquivo persistido no banco com integridade probatória
                   </div>
                 </div>
               ) : (

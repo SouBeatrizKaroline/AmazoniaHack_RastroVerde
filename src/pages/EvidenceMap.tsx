@@ -274,17 +274,31 @@ export const EvidenceMap: React.FC = () => {
 
             {/* Thumbnail / Real File */}
             {selectedEvidence.file ? (
-              <div className="mt-2.5 h-24 rounded-lg overflow-hidden border border-[#E2E8E4] bg-black/5 flex items-center justify-center">
-                {selectedEvidence.file.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
+              <div className="mt-2.5 h-28 rounded-xl overflow-hidden border border-[#E2E8E4] bg-black/5 flex items-center justify-center">
+                {selectedEvidence.file.match(/\.(jpg|jpeg|png|webp|gif|svg)$/i) ? (
                   <img
-                    src={getEvidenceFileUrl(selectedEvidence) || ''}
+                    src={
+                      getEvidenceFileUrl(selectedEvidence, '300x200') ||
+                      getEvidenceFileUrl(selectedEvidence) ||
+                      ''
+                    }
                     alt={selectedEvidence.code}
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-[11px] font-semibold text-[#1B5E3A]">
-                    {selectedEvidence.file}
-                  </span>
+                  <div className="p-3 text-center">
+                    <span className="text-[11px] font-semibold text-[#1B5E3A] block truncate max-w-[200px]">
+                      📄 {selectedEvidence.file}
+                    </span>
+                    <a
+                      href={getEvidenceFileUrl(selectedEvidence) || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] text-[#0F766E] underline font-bold mt-1 inline-block"
+                    >
+                      Acessar anexo
+                    </a>
+                  </div>
                 )}
               </div>
             ) : (

@@ -419,7 +419,7 @@ export const InspectionDetail: React.FC = () => {
                   variant: 'destructive',
                 })
               }
-              loadData()
+              await loadData()
             }}
           />
         </div>

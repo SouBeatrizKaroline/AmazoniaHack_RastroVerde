@@ -347,7 +347,17 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
             {file && (
               <div className="text-[11px] font-medium text-[#1B5E3A] flex items-center gap-1 mt-1">
                 <span>
-                  ✓ Anexado: {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                  ✓ Novo arquivo selecionado: {file.name} ({(file.size / (1024 * 1024)).toFixed(2)}{' '}
+                  MB)
+                </span>
+              </div>
+            )}
+
+            {evidenceToEdit?.file && !file && (
+              <div className="text-[11px] font-medium text-[#0F766E] flex items-center gap-1 mt-1">
+                <span>
+                  Arquivo atual no servidor: <strong>{evidenceToEdit.file}</strong> (selecione outro
+                  arquivo acima se desejar substituir)
                 </span>
               </div>
             )}

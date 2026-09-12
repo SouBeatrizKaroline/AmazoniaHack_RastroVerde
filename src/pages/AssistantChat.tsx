@@ -15,21 +15,30 @@ interface Message {
 }
 
 export const AssistantChat: React.FC = () => {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
 
-  const suggestedCommands = [
-    'Quais informações ainda estão faltando?',
-    'Existem conflitos entre as evidências?',
-    'Resuma a fiscalização.',
-    'Organize as evidências por horário.',
-    'Quais registros possuem localização?',
-    'Quais pontos precisam de revisão?',
-  ]
+  const suggestedCommands =
+    lang === 'en'
+      ? [
+          'What information is still missing?',
+          'Are there conflicts between evidence?',
+          'Summarize the inspection.',
+          'Which records have location?',
+          'Which points need review?',
+        ]
+      : [
+          'Quais informações ainda estão faltando?',
+          'Existem conflitos entre as evidências?',
+          'Resuma a fiscalização.',
+          'Organize as evidências por horário.',
+          'Quais registros possuem localização?',
+          'Quais pontos precisam de revisão?',
+        ]
 
   // Deterministic domain responses ensuring instant pitch reliability + fallback
   const mockKnowledge: Record<string, string> = {
     'Quais informações ainda estão faltando?':
-      'Na fiscalização RV-DEMO-001 foram identificadas as seguintes pendências para revisão:\n\n1. O documento de propriedade e Cadastro Ambiental Rural (CAR) relativo à notificação DOC-003 ainda não foi anexado;\n2. O responsável legal pela área não foi qualificado formalmente;\n3. A área total estimada de supressão ainda não foi calculada;\n4. A evidência EVD-008 (marca de motosserra) não possui identificação do agente responsável.\n\nRecomenda-se suprir essas lacunas antes da emissão definitiva do relatório de infração.',
+      'Na fiscalização RV-DEMO-001 foram identificadas as seguintes pendências para revisão:\n\n1. O documento de propriedade e Cadastro Ambiental Rural (CAR) relativo à notificação DOC-003 ainda não foi anexado;\n2. O responsável legal pela área não foi qualificado formalmente;\n3. A área total estimada de supressão ainda não foi calculada;\n4. A evidência EVD-008 (marca de motosserra) não possui identificação do agente responsável.\n\nRecomenda-se suprir essas lacunas antes da emissão definitiva do relatório. Lembramos que a decisão cabe exclusivamente à autoridade competente.',
 
     'Existem conflitos entre as evidências?':
       'Sim, foi detectada uma possível divergência na evidência EVD-018:\n\nA descrição em anotação indica "acampamento temporário a 3 km ao sul da sede", enquanto as coordenadas georreferenciadas registradas no dispositivo (-8.0010, -34.0012) posicionam o ponto a aproximadamente 800 metros ao norte.\n\nRecomenda-se confirmar a localização exata em campo antes de consolidar o documento.',
@@ -44,14 +53,33 @@ export const AssistantChat: React.FC = () => {
       'Todas as evidências EVD-014 a EVD-021 contam com coordenadas georreferenciadas de latitude e longitude registradas, incluindo o ponto de marco de entrada (EVD-020: -8.0015, -34.0042) e o ponto da vegetação suprimida (EVD-014: -8.0000, -34.0000).\n\nRecomenda-se atenção especial à conferência de coordenadas da EVD-018.',
 
     'Quais pontos precisam de revisão?':
-      'Os pontos prioritários para revisão no dossiê RV-DEMO-001 são:\n\n1. EVD-008: ausência de identificação do agente responsável pelo registro;\n2. EVD-018: divergência entre a descrição textual de distância e a coordenada GNSS registrada;\n3. EVD-017: documento comprobatório de posse/propriedade pendente de juntada (DOC-003).',
+      'Os pontos prioritários para revisão no dossiê RV-DEMO-001 são:\n\n1. EVD-008: ausência de identificação do agente responsável pelo registro;\n2. EVD-018: divergência entre a descrição textual de distância e a coordenada GNSS registrada;\n3. EVD-017: documento comprobatório de posse/propriedade pendente de juntada (DOC-003).\n\nEssas observações têm caráter técnico de apoio e não presumem infração.',
+
+    // English prompts
+    'What information is still missing?':
+      'In inspection RV-DEMO-001, the following pending items were identified for review:\n\n1. Land title document and Rural Environmental Registry (CAR) for notice DOC-003 have not yet been attached;\n2. The legal entity responsible has not been formally identified;\n3. Total estimated suppression area is not calculated yet;\n4. Evidence EVD-008 lacks recording officer identification.\n\nIt is recommended to address these gaps before report consolidation.',
+
+    'Are there conflicts between evidence?':
+      'Yes, a potential discrepancy was flagged in evidence EVD-018:\n\nThe textual note states "temporary campsite 3 km south of headquarters", whereas the recorded GPS coordinates (-8.0010, -34.0012) place the marker approx. 800 meters north.\n\nIt is recommended to verify the exact field coordinates before consolidating the file.',
+
+    'Summarize the inspection.':
+      'Inspection RV-DEMO-001 was initiated on 12/09/2026 in the Environmental Protection Area — North Sector (Rio Claro/PA), prompted by a forest clearing alert.\n\nThe team registered photographic evidence of recent clearings (EVD-014), tractor tracks (EVD-015), and stacked logs (EVD-016), plus informal testimony (EVD-021). The case is currently "Under analysis" with ~78% completeness.',
+
+    'Which records have location?':
+      'All records EVD-014 through EVD-021 have registered geographic latitude/longitude coordinates, including the entrance marker (EVD-020: -8.0015, -34.0042) and suppression site (EVD-014: -8.0000, -34.0000).\n\nSpecial verification is recommended for EVD-018 coordinates.',
+
+    'Which points need review?':
+      'Priority items for review in dossier RV-DEMO-001:\n\n1. EVD-008: missing recording officer identification;\n2. EVD-018: discrepancy between narrative distance and GNSS coordinates;\n3. EVD-017: pending land ownership documentation (DOC-003).\n\nThese notes serve as technical support and never assert guilt or infractions.',
   }
 
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'm-init',
       sender: 'assistant',
-      text: 'Olá, sou o Assistente RastroVerde. Estou conectado à fiscalização RV-DEMO-001 (APA Setor Norte) e posso apoiá-lo na auditoria de evidências, identificação de lacunas e organização cronológica.\n\nComo posso apoiar a sua análise técnica hoje?',
+      text:
+        lang === 'en'
+          ? 'Hello, I am the RastroVerde Assistant. Connected to inspection RV-DEMO-001 (APA North Sector), I can assist you with evidence audits, gaps detection, and chronological organization.\n\nHow can I support your technical analysis today?'
+          : 'Olá, sou o Assistente RastroVerde. Estou conectado à fiscalização RV-DEMO-001 (APA Setor Norte) e posso apoiá-lo na auditoria de evidências, identificação de lacunas e organização cronológica.\n\nComo posso apoiar a sua análise técnica hoje?',
       timestamp: '15:30',
     },
   ])
@@ -121,46 +149,100 @@ export const AssistantChat: React.FC = () => {
           const demoInsp = allInsp.find((i) => i.id_number === 'RV-DEMO-001') || allInsp[0]
           const q = text.toLowerCase()
 
-          if (q.includes('faltando') || q.includes('lacuna') || q.includes('pendên')) {
+          if (
+            q.includes('faltando') ||
+            q.includes('lacuna') ||
+            q.includes('pendên') ||
+            q.includes('missing') ||
+            q.includes('gap')
+          ) {
             const missingOfficer = allEvd.filter((e) => !e.officer || e.officer.trim() === '')
             const inReview = allEvd.filter((e) => e.status === 'Em revisão')
             assistantText =
-              `Na fiscalização ${demoInsp?.id_number || 'RV-DEMO-001'} foram identificadas as seguintes pendências reais no banco de dados:\n\n` +
-              `1. ${missingOfficer.length} evidência(s) sem agente fiscal identificado (${missingOfficer.map((e) => e.code).join(', ') || 'Nenhuma'});\n` +
-              `2. ${inReview.length} evidência(s) em estado de revisão técnica (${inReview.map((e) => e.code).join(', ') || 'Nenhuma'});\n` +
-              `3. Poligonal vetorial e shapefile definitivo da área estimada.\n\n` +
-              `Recomenda-se suprir essas lacunas antes da emissão definitiva do relatório de infração.`
-          } else if (q.includes('conflito') || q.includes('divergên')) {
+              lang === 'en'
+                ? `In inspection ${demoInsp?.id_number || 'RV-DEMO-001'}, the following live items were identified in database:\n\n` +
+                  `1. ${missingOfficer.length} evidence record(s) without identified officer (${missingOfficer.map((e) => e.code).join(', ') || 'None'});\n` +
+                  `2. ${inReview.length} evidence record(s) under technical review (${inReview.map((e) => e.code).join(', ') || 'None'});\n` +
+                  `3. Vector polygon and shapefile confirmation.\n\n` +
+                  `It is recommended to address these gaps before final consolidation. Merit decisions remain under the competent authority.`
+                : `Na fiscalização ${demoInsp?.id_number || 'RV-DEMO-001'} foram identificadas as seguintes pendências reais no banco de dados:\n\n` +
+                  `1. ${missingOfficer.length} evidência(s) sem agente fiscal identificado (${missingOfficer.map((e) => e.code).join(', ') || 'Nenhuma'});\n` +
+                  `2. ${inReview.length} evidência(s) em estado de revisão técnica (${inReview.map((e) => e.code).join(', ') || 'Nenhuma'});\n` +
+                  `3. Poligonal vetorial e shapefile definitivo da área estimada.\n\n` +
+                  `Recomenda-se suprir essas lacunas antes da emissão definitiva do relatório. Decisões de mérito cabem exclusivamente à autoridade fiscalizatória.`
+          } else if (
+            q.includes('conflito') ||
+            q.includes('divergên') ||
+            q.includes('conflict') ||
+            q.includes('discrepan')
+          ) {
             const inReview = allEvd.find((e) => e.status === 'Em revisão')
             assistantText = inReview
-              ? `Foi detectada pendência técnica na evidência ${inReview.code} ("${inReview.description}"). Recomenda-se confirmar a localização exata e as notas de campo antes de consolidar o documento.`
-              : 'Nenhum conflito crítico identificado entre os registros validados no momento.'
-          } else if (q.includes('resuma') || q.includes('resumo')) {
+              ? lang === 'en'
+                ? `A potential discrepancy was flagged in evidence ${inReview.code} ("${inReview.description}"). It is recommended to verify coordinates and field notes before final report filing.`
+                : `Foi detectada pendência técnica na evidência ${inReview.code} ("${inReview.description}"). Recomenda-se confirmar a localização exata e as notas de campo antes de consolidar o documento.`
+              : lang === 'en'
+                ? 'No critical conflicts identified among verified records at this time.'
+                : 'Nenhum conflito crítico identificado entre os registros validados no momento.'
+          } else if (
+            q.includes('resuma') ||
+            q.includes('resumo') ||
+            q.includes('summar') ||
+            q.includes('overview')
+          ) {
             assistantText =
-              `A fiscalização ${demoInsp?.id_number || 'RV-DEMO-001'} foi deflagrada em ${demoInsp?.date || '12/09/2026'} na localidade ${demoInsp?.location || 'Setor Norte'}, motivada por ocorrência de ${demoInsp?.occurrence_type || 'supressão vegetal'}.\n\n` +
-              `A base de dados conta atualmente com ${allEvd.length} evidências registradas (${allEvd.filter((e) => e.type === 'Fotografia').length} fotos, ${allEvd.filter((e) => e.type === 'Documento').length} documentos) e status operacional "${demoInsp?.status || 'Em análise'}".`
-          } else if (q.includes('horário') || q.includes('cronolog')) {
+              lang === 'en'
+                ? `Inspection ${demoInsp?.id_number || 'RV-DEMO-001'} was started on ${demoInsp?.date || '12/09/2026'} at ${demoInsp?.location || 'North Sector'}, triggered by ${demoInsp?.occurrence_type || 'vegetation suppression'}.\n\n` +
+                  `The database holds ${allEvd.length} evidence records (${allEvd.filter((e) => e.type === 'Fotografia').length} photos, ${allEvd.filter((e) => e.type === 'Documento').length} documents) with status "${demoInsp?.status || 'Under analysis'}".`
+                : `A fiscalização ${demoInsp?.id_number || 'RV-DEMO-001'} foi deflagrada em ${demoInsp?.date || '12/09/2026'} na localidade ${demoInsp?.location || 'Setor Norte'}, motivada por ocorrência de ${demoInsp?.occurrence_type || 'supressão vegetal'}.\n\n` +
+                  `A base de dados conta atualmente com ${allEvd.length} evidências registradas (${allEvd.filter((e) => e.type === 'Fotografia').length} fotos, ${allEvd.filter((e) => e.type === 'Documento').length} documentos) e status operacional "${demoInsp?.status || 'Em análise'}".`
+          } else if (
+            q.includes('horário') ||
+            q.includes('cronolog') ||
+            q.includes('time') ||
+            q.includes('order')
+          ) {
             const sorted = [...allEvd].sort((a, b) => (a.time || '').localeCompare(b.time || ''))
             assistantText =
-              `Cronologia das evidências cadastradas na operação:\n\n` +
-              sorted
-                .slice(0, 8)
-                .map((e) => `• ${e.time || '00:00'} — ${e.code} (${e.type}: ${e.description})`)
-                .join('\n')
-          } else if (q.includes('localização') || q.includes('coordenada')) {
+              lang === 'en'
+                ? `Chronology of registered evidence:\n\n` +
+                  sorted
+                    .slice(0, 8)
+                    .map((e) => `• ${e.time || '00:00'} — ${e.code} (${e.type}: ${e.description})`)
+                    .join('\n')
+                : `Cronologia das evidências cadastradas na operação:\n\n` +
+                  sorted
+                    .slice(0, 8)
+                    .map((e) => `• ${e.time || '00:00'} — ${e.code} (${e.type}: ${e.description})`)
+                    .join('\n')
+          } else if (
+            q.includes('localização') ||
+            q.includes('coordenada') ||
+            q.includes('location') ||
+            q.includes('coord')
+          ) {
             const withCoords = allEvd.filter((e) => e.latitude && e.longitude)
             assistantText =
-              `Atualmente ${withCoords.length} de ${allEvd.length} evidências possuem coordenadas georreferenciadas completas no sistema (SIRGAS 2000).\n\n` +
-              `Exemplos registrados: ${withCoords
-                .slice(0, 3)
-                .map((e) => `${e.code} (Lat ${e.latitude}, Lon ${e.longitude})`)
-                .join('; ')}.`
+              lang === 'en'
+                ? `Currently ${withCoords.length} of ${allEvd.length} records have geographic coordinates registered.\n\n` +
+                  `Sample: ${withCoords
+                    .slice(0, 3)
+                    .map((e) => `${e.code} (Lat ${e.latitude}, Lon ${e.longitude})`)
+                    .join('; ')}.`
+                : `Atualmente ${withCoords.length} de ${allEvd.length} evidências possuem coordenadas georreferenciadas completas no sistema (SIRGAS 2000).\n\n` +
+                  `Exemplos registrados: ${withCoords
+                    .slice(0, 3)
+                    .map((e) => `${e.code} (Lat ${e.latitude}, Lon ${e.longitude})`)
+                    .join('; ')}.`
           } else if (mockKnowledge[text]) {
             assistantText = mockKnowledge[text]
           } else {
             assistantText =
-              `Com base nas ${allEvd.length} evidências cadastradas para a fiscalização ${demoInsp?.id_number || 'RV-DEMO-001'}, recomenda-se verificar a consistência dos dados geográficos e das fotografias citadas. ` +
-              `Lembramos que as decisões de mérito permanecem sob a competência exclusiva da autoridade fiscalizatória.`
+              lang === 'en'
+                ? `Based on ${allEvd.length} recorded items for inspection ${demoInsp?.id_number || 'RV-DEMO-001'}, it is recommended to review consistency between GNSS data and photographs. ` +
+                  `All merit and infraction conclusions belong exclusively to the competent environmental authority.`
+                : `Com base nas ${allEvd.length} evidências cadastradas para a fiscalização ${demoInsp?.id_number || 'RV-DEMO-001'}, recomenda-se verificar a consistência dos dados geográficos e das fotografias citadas. ` +
+                  `Lembramos que as decisões de mérito permanecem sob a competência exclusiva da autoridade fiscalizatória.`
           }
         } catch (_) {
           assistantText =
@@ -191,7 +273,10 @@ export const AssistantChat: React.FC = () => {
       {
         id: `m-${Date.now()}`,
         sender: 'assistant',
-        text: 'Nova conversa iniciada. Estou pronto para analisar os registros e documentos da fiscalização atual.',
+        text:
+          lang === 'en'
+            ? 'New conversation started. Ready to review inspection records and documents.'
+            : 'Nova conversa iniciada. Estou pronto para analisar os registros e documentos da fiscalização atual.',
         timestamp: new Date().toTimeString().slice(0, 5),
       },
     ])
