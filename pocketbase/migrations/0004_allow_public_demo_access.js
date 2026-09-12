@@ -28,7 +28,7 @@ migrate(
 
     // 2. Ensure demo user password is set to Demo@RastroVerde2026 for consistent demo login
     try {
-      const user = app.findAuthRecordByEmail('_pb_users_auth_', '1aspiraqualquer@gmail.com')
+      const user = app.findAuthRecordByEmail('_pb_users_auth_', 'demo@rastroverde.local')
       user.setPassword('Demo@RastroVerde2026')
       user.setVerified(true)
       app.save(user)

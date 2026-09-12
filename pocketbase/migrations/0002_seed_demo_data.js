@@ -4,10 +4,10 @@ migrate(
     // 1. Seed demo user (idempotent)
     const users = app.findCollectionByNameOrId('_pb_users_auth_')
     try {
-      app.findAuthRecordByEmail('_pb_users_auth_', '1aspiraqualquer@gmail.com')
+      app.findAuthRecordByEmail('_pb_users_auth_', 'demo@rastroverde.local')
     } catch (_) {
       const user = new Record(users)
-      user.setEmail('1aspiraqualquer@gmail.com')
+      user.setEmail('demo@rastroverde.local')
       user.setPassword('Skip@Pass')
       user.setVerified(true)
       user.set('name', 'Agente Demo Fiscalização')

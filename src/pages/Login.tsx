@@ -6,7 +6,7 @@ import { RastroVerdeLogo } from '@/components/RastroVerdeLogo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
-import { LogIn, Sparkles, ShieldCheck } from 'lucide-react'
+import { LogIn } from 'lucide-react'
 
 export const Login: React.FC = () => {
   const { t } = useI18n()
@@ -37,11 +37,6 @@ export const Login: React.FC = () => {
     }
   }
 
-  const handleFillDemo = () => {
-    setEmail('1aspiraqualquer@gmail.com')
-    setPassword('Demo@RastroVerde2026')
-  }
-
   return (
     <div className="max-w-md mx-auto my-8 p-6 sm:p-8 rounded-3xl border border-[#E2E8E4] bg-white shadow-xs space-y-6 animate-in fade-in duration-300">
       <div className="text-center space-y-2">
@@ -59,21 +54,6 @@ export const Login: React.FC = () => {
           {error}
         </div>
       )}
-
-      {/* Demo Credentials Quick Button */}
-      <button
-        type="button"
-        onClick={handleFillDemo}
-        className="w-full flex items-center justify-between p-3 rounded-xl border border-dashed border-[#1B5E3A]/40 bg-[#E7F2EC]/60 hover:bg-[#E7F2EC] text-xs font-semibold text-[#1B5E3A] transition-colors"
-      >
-        <span className="flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-[#1B5E3A]" />
-          <span>{t('auth.demo_hint')}</span>
-        </span>
-        <span className="font-mono text-[11px] bg-white px-2 py-0.5 rounded border border-[#1B5E3A]/30">
-          1aspiraqualquer@gmail.com
-        </span>
-      </button>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1.5">

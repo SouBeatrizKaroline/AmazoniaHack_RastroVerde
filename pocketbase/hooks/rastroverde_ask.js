@@ -6,7 +6,7 @@ routerAdd('POST', '/backend/v1/rastroverde-ask', (e) => {
 
     if (!userId) {
       try {
-        const demoUser = $app.findAuthRecordByEmail('_pb_users_auth_', '1aspiraqualquer@gmail.com')
+        const demoUser = $app.findAuthRecordByEmail('_pb_users_auth_', 'demo@rastroverde.local')
         userId = demoUser?.id
       } catch (_) {}
     }
