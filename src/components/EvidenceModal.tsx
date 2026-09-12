@@ -31,7 +31,7 @@ interface EvidenceModalProps {
   onOpenChange: (open: boolean) => void
   inspectionId: string
   evidenceToEdit?: EvidenceRecord | null
-  onSave: (data: Partial<EvidenceRecord>) => Promise<void>
+  onSave: (data: FormData | Partial<EvidenceRecord>) => Promise<void>
 }
 
 export const EvidenceModal: React.FC<EvidenceModalProps> = ({
@@ -56,6 +56,8 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
     notes: '',
     status: 'Registrada' as EvidenceRecord['status'],
   })
+  const [file, setFile] = useState<File | null>(null)
+  const [filePreview, setFilePreview] = useState<string | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
@@ -73,6 +75,8 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
         notes: evidenceToEdit.notes || '',
         status: evidenceToEdit.status || 'Registrada',
       })
+      setFile(null)
+      setFilePreview(null)
     } else {
       const codeNum = Math.floor(100 + Math.random() * 900)
       setFormData({
@@ -82,15 +86,42 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
         time: new Date().toTimeString().slice(0, 5),
         latitude: -8.0015,
         longitude: -34.0042,
-        officer: 'Agente 01 — Beatriz Silva',
+        officer: 'Agente 01 — Léo',
         description: '',
         tags: 'campo, fiscalização',
         notes: '',
         status: 'Registrada',
       })
+      setFile(null)
+      setFilePreview(null)
     }
     setErrors({})
   }, [evidenceToEdit, open])
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0]
+    if (!selected) return
+
+    // 25MB validation
+    if (selected.size > 25 * 1024 * 1024) {
+      setErrors((prev) => ({ ...prev, file: t('evidence.file_size_error') }))
+      return
+    }
+
+    setErrors((prev) => {
+      const copy = { ...prev }
+      delete copy.file
+      return copy
+    })
+    setFile(selected)
+
+    if (selected.type.startsWith('image/')) {
+      const previewUrl = URL.createObjectURL(selected)
+      setFilePreview(previewUrl)
+    } else {
+      setFilePreview(null)
+    }
+  }
 
   const validate = () => {
     const newErrors: Record<string, string> = {}
@@ -106,12 +137,29 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
 
     setLoading(true)
     try {
-      await onSave({
-        ...formData,
-        inspection: inspectionId,
-        latitude: formData.latitude !== '' ? Number(formData.latitude) : undefined,
-        longitude: formData.longitude !== '' ? Number(formData.longitude) : undefined,
-      })
+      const data = new FormData()
+      data.append('inspection', inspectionId)
+      data.append('code', formData.code)
+      data.append('type', formData.type)
+      data.append('date', formData.date)
+      data.append('time', formData.time)
+      if (formData.latitude !== '') {
+        data.append('latitude', String(formData.latitude))
+      }
+      if (formData.longitude !== '') {
+        data.append('longitude', String(formData.longitude))
+      }
+      data.append('officer', formData.officer)
+      data.append('description', formData.description)
+      data.append('tags', formData.tags)
+      data.append('notes', formData.notes)
+      data.append('status', formData.status)
+
+      if (file) {
+        data.append('file', file)
+      }
+
+      await onSave(data)
       onOpenChange(false)
     } catch (err) {
       console.error(err)
@@ -231,7 +279,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
             <Input
               value={formData.officer}
               onChange={(e) => setFormData({ ...formData, officer: e.target.value })}
-              placeholder="Ex: Agente 01 — Beatriz Silva"
+              placeholder="Ex: Agente 01 — Léo / Agente 02 — Ana / Agente 03 — Jhay"
               className="h-9 text-xs"
             />
           </div>
@@ -279,6 +327,36 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          {/* File Upload Field */}
+          <div className="space-y-1.5 p-3 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4]">
+            <label className="text-xs font-semibold text-[#143028] flex items-center gap-1.5">
+              <UploadCloud className="w-4 h-4 text-[#1B5E3A]" />
+              <span>{t('evidence.file_upload')}</span>
+            </label>
+            <Input
+              type="file"
+              onChange={handleFileChange}
+              accept="image/*,application/pdf,audio/*,video/*"
+              className="h-9 text-xs bg-white file:text-xs file:font-semibold file:text-[#1B5E3A] file:bg-[#E7F2EC] file:border-0 file:rounded-md file:mr-2 cursor-pointer"
+            />
+            <p className="text-[11px] text-[#5B6B63]">{t('evidence.file_help')}</p>
+            {errors.file && <span className="text-[11px] text-red-600 block">{errors.file}</span>}
+
+            {file && (
+              <div className="text-[11px] font-medium text-[#1B5E3A] flex items-center gap-1 mt-1">
+                <span>
+                  ✓ Anexado: {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                </span>
+              </div>
+            )}
+
+            {filePreview && (
+              <div className="mt-2 relative rounded-lg overflow-hidden border border-[#E2E8E4] max-h-36 flex items-center justify-center bg-black/5">
+                <img src={filePreview} alt="Preview" className="max-h-36 object-contain" />
+              </div>
+            )}
           </div>
 
           {/* Notes */}

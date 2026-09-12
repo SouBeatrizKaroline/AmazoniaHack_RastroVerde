@@ -73,7 +73,7 @@ export const Signup: React.FC = () => {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Beatriz Silva"
+            placeholder="Agente Léo Araújo"
             className="h-10 text-xs"
           />
         </div>

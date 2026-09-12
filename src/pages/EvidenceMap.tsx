@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useI18n } from '@/lib/i18n'
 import { MapPin, Camera, Layers, Filter, Compass, Info, Clock, User, X } from 'lucide-react'
-import { getAllEvidence, type EvidenceRecord } from '@/services/dataService'
+import { getAllEvidence, getEvidenceFileUrl, type EvidenceRecord } from '@/services/dataService'
 import { Button } from '@/components/ui/button'
 
 export const EvidenceMap: React.FC = () => {
@@ -272,14 +272,30 @@ export const EvidenceMap: React.FC = () => {
               </button>
             </div>
 
-            {/* Thumbnail */}
-            {selectedEvidence.type === 'Fotografia' && (
-              <div className="mt-2.5 h-20 rounded-lg bg-gradient-to-tr from-[#1B5E3A]/20 to-[#0F766E]/20 border border-[#E2E8E4] flex items-center justify-center">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1B5E3A]">
-                  <Camera className="w-4 h-4" />
-                  <span>Fotografia Georreferenciada</span>
-                </div>
+            {/* Thumbnail / Real File */}
+            {selectedEvidence.file ? (
+              <div className="mt-2.5 h-24 rounded-lg overflow-hidden border border-[#E2E8E4] bg-black/5 flex items-center justify-center">
+                {selectedEvidence.file.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
+                  <img
+                    src={getEvidenceFileUrl(selectedEvidence) || ''}
+                    alt={selectedEvidence.code}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-[11px] font-semibold text-[#1B5E3A]">
+                    {selectedEvidence.file}
+                  </span>
+                )}
               </div>
+            ) : (
+              selectedEvidence.type === 'Fotografia' && (
+                <div className="mt-2.5 h-20 rounded-lg bg-gradient-to-tr from-[#1B5E3A]/20 to-[#0F766E]/20 border border-[#E2E8E4] flex items-center justify-center">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1B5E3A]">
+                    <Camera className="w-4 h-4" />
+                    <span>Fotografia Georreferenciada</span>
+                  </div>
+                </div>
+              )
             )}
 
             <p className="mt-2 text-xs font-medium text-[#143028] line-clamp-2">

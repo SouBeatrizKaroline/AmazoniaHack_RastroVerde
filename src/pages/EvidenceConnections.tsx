@@ -56,7 +56,7 @@ export const EvidenceConnections: React.FC = () => {
       color: '#B45309',
       ref: 'Notificação pendente',
     },
-    { id: 'usr-01', label: 'Agente Beatriz', type: 'Pessoas', x: 560, y: 80, color: '#143028' },
+    { id: 'usr-01', label: 'Agente Léo', type: 'Pessoas', x: 560, y: 80, color: '#143028' },
     {
       id: 'usr-02',
       label: 'Trabalhador Rural',

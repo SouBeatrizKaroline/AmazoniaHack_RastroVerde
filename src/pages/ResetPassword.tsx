@@ -11,7 +11,8 @@ import { Lock } from 'lucide-react'
 export const ResetPassword: React.FC = () => {
   const { t } = useI18n()
   const [searchParams] = useSearchParams()
-  const token = searchParams.get('token') || ''
+  const queryToken = searchParams.get('token') || ''
+  const [customToken, setCustomToken] = useState(queryToken)
   const { confirmPasswordReset } = useAuth()
   const navigate = useNavigate()
   const { toast } = useToast()
@@ -35,9 +36,15 @@ export const ResetPassword: React.FC = () => {
       return
     }
 
+    const effectiveToken = customToken.trim() || queryToken.trim()
+    if (!effectiveToken) {
+      setError('Código ou token de recuperação é obrigatório.')
+      return
+    }
+
     setLoading(true)
     try {
-      await confirmPasswordReset(token, password, passwordConfirm)
+      await confirmPasswordReset(effectiveToken, password, passwordConfirm)
       toast({
         title: 'Senha redefinida com sucesso!',
         description: 'Faça login com a sua nova credencial.',
@@ -91,9 +98,22 @@ export const ResetPassword: React.FC = () => {
           />
         </div>
 
+        {/* Token input when query token is absent */}
+        {!queryToken && (
+          <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 space-y-1.5">
+            <span className="font-semibold">Código / Token de redefinição:</span>
+            <Input
+              value={customToken}
+              onChange={(e) => setCustomToken(e.target.value)}
+              placeholder="Cole o token recebido por e-mail aqui"
+              className="h-8 text-xs bg-white text-gray-900 border-amber-300"
+            />
+          </div>
+        )}
+
         <Button
           type="submit"
-          disabled={loading || !token}
+          disabled={loading || !(customToken.trim() || queryToken.trim())}
           className="w-full bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-10 rounded-xl shadow-xs"
         >
           <Lock className="w-4 h-4 mr-1.5" />

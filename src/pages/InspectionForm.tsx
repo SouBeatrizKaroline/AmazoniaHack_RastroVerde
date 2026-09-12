@@ -239,7 +239,7 @@ export const InspectionForm: React.FC = () => {
               <Input
                 value={formData.agent}
                 onChange={(e) => setFormData({ ...formData, agent: e.target.value })}
-                placeholder="Ex: Agente 01 — Beatriz Silva"
+                placeholder="Ex: Agente 01 — Léo / Agente 02 — Ana"
                 className="h-10 text-xs"
               />
               {errors.agent && <span className="text-[11px] text-red-600">{errors.agent}</span>}

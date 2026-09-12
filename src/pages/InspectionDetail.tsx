@@ -396,16 +396,28 @@ export const InspectionDetail: React.FC = () => {
                   await updateEvidence(editingEvidence.id, data)
                   toast({ title: t('evidence.update_success') || 'Evidência atualizada' })
                 } else {
-                  await createEvidence({
-                    ...data,
-                    inspection: inspection.id,
-                    code: data.code || `EVD-${Math.floor(100 + Math.random() * 900)}`,
-                  })
+                  if (data instanceof FormData) {
+                    if (!data.get('inspection')) data.set('inspection', inspection.id)
+                    if (!data.get('code')) {
+                      data.set('code', `EVD-${Math.floor(100 + Math.random() * 900)}`)
+                    }
+                    await createEvidence(data)
+                  } else {
+                    await createEvidence({
+                      ...data,
+                      inspection: inspection.id,
+                      code: data.code || `EVD-${Math.floor(100 + Math.random() * 900)}`,
+                    })
+                  }
                   toast({ title: t('evidence.create_success') || 'Evidência criada com sucesso' })
                 }
-              } catch (err) {
+              } catch (err: any) {
                 console.error(err)
-                toast({ title: 'Erro ao salvar evidência', variant: 'destructive' })
+                toast({
+                  title: 'Erro ao salvar evidência',
+                  description: err?.message,
+                  variant: 'destructive',
+                })
               }
               loadData()
             }}

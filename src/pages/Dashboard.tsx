@@ -18,13 +18,14 @@ import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/StatusBadge'
 import { getInspections, getAllEvidence, type InspectionRecord } from '@/services/dataService'
 import { useRealtime } from '@/hooks/use-realtime'
+import { useTour } from '@/components/TourProvider'
 
 export const Dashboard: React.FC = () => {
-  const { t } = useI18n()
+  const { t, language } = useI18n()
   const navigate = useNavigate()
+  const { startTour } = useTour()
 
-  const [inspections, setInspections] = useState<InspectionRecord[]>([])
-  const [evidenceList, setEvidenceList] = useState<any[]>([])
+  const [inspections, setInspections] = useState<InspectionRecord[]>([])  const [evidenceList, setEvidenceList] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   // Subscribe in real-time to updates
@@ -78,14 +79,21 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            onClick={startTour}
+            className="bg-[#0F766E] hover:bg-[#0d5f59] text-white text-xs font-semibold h-9 px-3.5 rounded-xl shadow-xs flex items-center gap-1.5"
+          >
+            <Compass className="w-4 h-4" />
+            <span>{t('tour.button_pitch')}</span>
+          </Button>
           <Link to="/inspections/new">
-            <Button className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-3.5 rounded-lg shadow-xs flex items-center gap-1.5">
-              <Plus className="w-4 h-4" />
-              <span>{t('nav.new_inspection')}</span>
+            <Button className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-xl shadow-xs">
+              <PlusCircle className="w-4 h-4 mr-1.5" />
+              <span>{t('dashboard.new_inspection')}</span>
             </Button>
           </Link>
-        </div>
-      </div>
+        </div>      </div>
 
       {/* 4 Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

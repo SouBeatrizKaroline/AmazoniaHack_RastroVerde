@@ -312,7 +312,7 @@ export const ReportGenerator: React.FC = () => {
                 </span>
                 <span>📍 Lat -8.0000, Long -34.0000</span>
                 <span>🕒 14:32</span>
-                <span>👤 Agente 01 — Beatriz Silva</span>
+                <span>👤 Agente 01 — Léo</span>
               </div>
 
               <Button
@@ -480,10 +480,10 @@ export const ReportGenerator: React.FC = () => {
         <div className="pt-10 border-t border-[#E2E8E4] grid grid-cols-1 sm:grid-cols-2 gap-8 text-center text-xs">
           <div className="space-y-1">
             <div className="w-48 mx-auto border-b border-gray-400 pb-1 font-semibold text-[#143028]">
-              Beatriz Silva
+              Agente 01 — Léo
             </div>
             <div className="text-[11px] text-[#5B6B63]">
-              Agente Fiscal Responsável • Matrícula 9821-X
+              Equipe de Fiscalização Ambiental • Matrícula 9821-X
             </div>
           </div>
 

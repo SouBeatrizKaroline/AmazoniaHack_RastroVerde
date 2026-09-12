@@ -25,8 +25,10 @@ import {
   createEvidence,
   updateEvidence,
   deleteEvidence,
+  getEvidenceFileUrl,
   type EvidenceRecord,
 } from '@/services/dataService'
+import { ExternalLink } from 'lucide-react'
 import { useRealtime } from '@/hooks/use-realtime'
 import { useToast } from '@/hooks/use-toast'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -98,23 +100,37 @@ export const EvidenceCenter: React.FC = () => {
     return matchesType && matchesSearch
   })
 
-  const handleSave = async (data: Partial<EvidenceRecord>) => {
+  const handleSave = async (data: FormData | Partial<EvidenceRecord>) => {
     try {
       if (editingEvidence) {
         await updateEvidence(editingEvidence.id, data)
         toast({ title: t('evidence.update_success') })
       } else {
-        const payload = {
-          ...data,
-          inspection: data.inspection || defaultInspectionId,
-          code: data.code || `EVD-${Math.floor(100 + Math.random() * 900)}`,
+        if (data instanceof FormData) {
+          if (!data.get('inspection')) {
+            data.set('inspection', defaultInspectionId)
+          }
+          if (!data.get('code')) {
+            data.set('code', `EVD-${Math.floor(100 + Math.random() * 900)}`)
+          }
+          await createEvidence(data)
+        } else {
+          const payload = {
+            ...data,
+            inspection: data.inspection || defaultInspectionId,
+            code: data.code || `EVD-${Math.floor(100 + Math.random() * 900)}`,
+          }
+          await createEvidence(payload)
         }
-        await createEvidence(payload)
         toast({ title: t('evidence.create_success') })
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
-      toast({ title: 'Erro ao salvar evidência', variant: 'destructive' })
+      toast({
+        title: 'Erro ao salvar evidência',
+        description: err?.message,
+        variant: 'destructive',
+      })
     }
     loadData()
   }
@@ -257,18 +273,48 @@ export const EvidenceCenter: React.FC = () => {
                 </DialogTitle>
               </DialogHeader>
 
-              {/* Simulated photo visual for photography */}
-              {detailModalEvidence.type === 'Fotografia' && (
-                <div className="relative h-48 rounded-xl overflow-hidden border border-[#E2E8E4] bg-gradient-to-tr from-[#1B5E3A]/20 via-[#0F766E]/20 to-[#B45309]/20 flex items-center justify-center">
-                  <div className="flex flex-col items-center text-xs font-semibold text-[#1B5E3A] bg-white/90 backdrop-blur-xs px-4 py-2 rounded-xl border border-[#E2E8E4] shadow-sm">
-                    <Camera className="w-5 h-5 mb-1" />
-                    <span>Registro Fotográfico Original Georreferenciado</span>
-                    <span className="text-[11px] text-[#5B6B63] font-mono">
-                      {detailModalEvidence.code} • Latitude {detailModalEvidence.latitude},
-                      Longitude {detailModalEvidence.longitude}
-                    </span>
+              {/* File Display / Preview */}
+              {detailModalEvidence.file ? (
+                <div className="relative rounded-2xl overflow-hidden border border-[#E2E8E4] bg-black/5 p-2 flex flex-col items-center justify-center">
+                  {detailModalEvidence.file.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
+                    <img
+                      src={getEvidenceFileUrl(detailModalEvidence) || ''}
+                      alt={detailModalEvidence.code}
+                      className="max-h-72 w-auto object-contain rounded-xl shadow-xs"
+                    />
+                  ) : (
+                    <div className="p-6 text-center space-y-2">
+                      <div className="text-sm font-semibold text-[#143028]">
+                        Anexo: {detailModalEvidence.file}
+                      </div>
+                      <a
+                        href={getEvidenceFileUrl(detailModalEvidence) || '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1B5E3A] text-white text-xs font-semibold hover:bg-[#14502F]"
+                      >
+                        <span>Abrir / Baixar arquivo</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                  )}
+                  <div className="mt-2 text-[11px] text-[#5B6B63] font-mono">
+                    Arquivo persistido no servidor Skip Cloud / PocketBase
                   </div>
                 </div>
+              ) : (
+                detailModalEvidence.type === 'Fotografia' && (
+                  <div className="relative h-48 rounded-xl overflow-hidden border border-[#E2E8E4] bg-gradient-to-tr from-[#1B5E3A]/20 via-[#0F766E]/20 to-[#B45309]/20 flex items-center justify-center">
+                    <div className="flex flex-col items-center text-xs font-semibold text-[#1B5E3A] bg-white/90 backdrop-blur-xs px-4 py-2 rounded-xl border border-[#E2E8E4] shadow-sm">
+                      <Camera className="w-5 h-5 mb-1" />
+                      <span>Registro Fotográfico Original Georreferenciado</span>
+                      <span className="text-[11px] text-[#5B6B63] font-mono">
+                        {detailModalEvidence.code} • Latitude {detailModalEvidence.latitude},
+                        Longitude {detailModalEvidence.longitude}
+                      </span>
+                    </div>
+                  </div>
+                )
               )}
 
               {/* Data Table */}

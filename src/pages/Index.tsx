@@ -106,10 +106,16 @@ export const Index: React.FC = () => {
         </div>
 
         <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
-          {/* Eyebrow */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/20 bg-[#E7F2EC] px-3.5 py-1 text-xs font-semibold text-[#1B5E3A]">
-            <Compass className="w-3.5 h-3.5" />
-            <span>RastroVerde • GovTech Ambiental</span>
+          {/* Eyebrows */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/20 bg-[#E7F2EC] px-3.5 py-1 text-xs font-semibold text-[#1B5E3A]">
+              <Compass className="w-3.5 h-3.5" />
+              <span>RastroVerde • GovTech Ambiental</span>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8E4] bg-white/90 backdrop-blur-xs px-3.5 py-1 text-xs font-medium text-[#5B6B63] shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E]" />
+              <span>{t('landing.amazoniahack_badge')}</span>
+            </div>
           </div>
 
           {/* Headline */}

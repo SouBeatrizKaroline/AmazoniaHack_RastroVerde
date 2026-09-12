@@ -4,6 +4,7 @@ import { useI18n } from '@/lib/i18n'
 import { useAuth } from '@/lib/auth'
 import { RastroVerdeLogo } from '@/components/RastroVerdeLogo'
 import { LanguageToggle } from '@/components/LanguageToggle'
+import { useTour } from '@/components/TourProvider'
 import {
   LayoutDashboard,
   FileCheck2,
@@ -39,6 +40,7 @@ interface LayoutProps {
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { t } = useI18n()
   const { isAuthenticated, user, logout } = useAuth()
+  const { startTour } = useTour()
   const navigate = useNavigate()
   const location = useLocation()
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
@@ -75,11 +77,17 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
           {/* Center / Right controls */}
           <div className="flex items-center gap-3 sm:gap-4">
-            {/* Demo data pill - persistent transparent badge */}
-            <div className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#E2E8E4] bg-[#F7F9F8] px-3 py-1 text-xs font-medium text-[#5B6B63]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E] animate-pulse" />
-              <span>{t('badge.demo')}</span>
-            </div>
+            {/* Tour Guiado Single Button */}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={startTour}
+              className="border-[#1B5E3A]/40 bg-[#E7F2EC] hover:bg-[#1B5E3A] text-[#1B5E3A] hover:text-white font-semibold text-xs h-8 px-3 rounded-full transition-all shadow-xs flex items-center gap-1.5"
+            >
+              <Compass className="w-3.5 h-3.5 animate-spin-slow" />
+              <span>{t('tour.button')}</span>
+            </Button>
 
             {/* Language toggle: PT | EN */}
             <LanguageToggle />

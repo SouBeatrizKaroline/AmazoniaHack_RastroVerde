@@ -19,7 +19,7 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import type { EvidenceRecord } from '@/services/dataService'
+import { getEvidenceFileUrl, type EvidenceRecord } from '@/services/dataService'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -110,32 +110,66 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
           {/* Description */}
           <p className="text-sm font-medium text-[#143028] leading-snug">{evidence.description}</p>
 
-          {/* Simulated Photo Thumbnail for Photography */}
-          {evidence.type === 'Fotografia' && (
-            <div className="relative h-28 rounded-xl overflow-hidden border border-[#E2E8E4] bg-gradient-to-tr from-[#1B5E3A]/20 via-[#0F766E]/15 to-[#B45309]/15 flex items-center justify-center group/img">
-              {/* Geometric pattern simulation */}
-              <div className="absolute inset-0 opacity-20">
-                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <pattern
-                      id={`grid-${evidence.code}`}
-                      width="20"
-                      height="20"
-                      patternUnits="userSpaceOnUse"
-                    >
-                      <rect width="20" height="20" fill="none" stroke="#1B5E3A" strokeWidth="0.5" />
-                    </pattern>
-                  </defs>
-                  <rect width="100%" height="100%" fill={`url(#grid-${evidence.code})`} />
-                </svg>
-              </div>
-
-              <div className="relative z-10 flex flex-col items-center text-xs font-semibold text-[#1B5E3A] bg-white/90 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-[#E2E8E4] shadow-xs">
-                <Camera className="w-4 h-4 mb-0.5" />
-                <span>Registro Fotográfico de Campo</span>
-                <span className="text-[10px] text-[#5B6B63] font-mono">{evidence.code}</span>
-              </div>
+          {/* File Thumbnail / Media Display */}
+          {evidence.file ? (
+            <div className="relative h-32 rounded-xl overflow-hidden border border-[#E2E8E4] bg-black/5 flex items-center justify-center">
+              {evidence.file.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? (
+                <img
+                  src={getEvidenceFileUrl(evidence) || ''}
+                  alt={evidence.code}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="flex flex-col items-center p-3 text-center">
+                  <FileText className="w-8 h-8 text-[#1B5E3A] mb-1" />
+                  <span className="text-xs font-semibold text-[#143028] max-w-[200px] truncate">
+                    {evidence.file}
+                  </span>
+                  <a
+                    href={getEvidenceFileUrl(evidence) || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-[#1B5E3A] font-bold mt-1 hover:underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <span>Abrir arquivo</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              )}
             </div>
+          ) : (
+            evidence.type === 'Fotografia' && (
+              <div className="relative h-28 rounded-xl overflow-hidden border border-[#E2E8E4] bg-gradient-to-tr from-[#1B5E3A]/20 via-[#0F766E]/15 to-[#B45309]/15 flex items-center justify-center group/img">
+                <div className="absolute inset-0 opacity-20">
+                  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <pattern
+                        id={`grid-${evidence.code}`}
+                        width="20"
+                        height="20"
+                        patternUnits="userSpaceOnUse"
+                      >
+                        <rect
+                          width="20"
+                          height="20"
+                          fill="none"
+                          stroke="#1B5E3A"
+                          strokeWidth="0.5"
+                        />
+                      </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill={`url(#grid-${evidence.code})`} />
+                  </svg>
+                </div>
+
+                <div className="relative z-10 flex flex-col items-center text-xs font-semibold text-[#1B5E3A] bg-white/90 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-[#E2E8E4] shadow-xs">
+                  <Camera className="w-4 h-4 mb-0.5" />
+                  <span>Registro Fotográfico de Campo</span>
+                  <span className="text-[10px] text-[#5B6B63] font-mono">{evidence.code}</span>
+                </div>
+              </div>
+            )
           )}
 
           {/* Metadata pill box */}

@@ -111,6 +111,11 @@ export async function updateEvidence(id: string, formData: FormData | Partial<Ev
   return await pb.collection('evidence').update<EvidenceRecord>(id, formData)
 }
 
+export function getEvidenceFileUrl(record: EvidenceRecord, thumb?: string): string | null {
+  if (!record.file) return null
+  return pb.files.getURL(record, record.file, { thumb })
+}
+
 export async function deleteEvidence(id: string) {
   return await pb.collection('evidence').delete(id)
 }

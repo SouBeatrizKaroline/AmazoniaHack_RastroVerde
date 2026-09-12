@@ -17,6 +17,36 @@ export const translations: Record<Language, Record<string, string>> = {
     'badge.demo': 'Dados demonstrativos',
     'badge.fictional_demo': 'Caso demonstrativo fictício',
     'footer.text': 'RastroVerde — Tecnologia para apoiar a fiscalização ambiental.',
+    'landing.amazoniahack_badge': 'Projeto de código aberto desenvolvido para o AmazoniaHack',
+    'about.amazoniahack_title': 'Código Aberto & AmazoniaHack',
+    'about.amazoniahack_desc':
+      'O RastroVerde é um projeto de código aberto desenvolvido no âmbito do AmazoniaHack, dedicado a fortalecer a transparência, a rastreabilidade probatória e o rigor técnico na fiscalização socioambiental da Amazônia.',
+    'tour.button': 'Tour guiado',
+    'tour.button_pitch': 'Tour guiado (Pitch)',
+    'tour.step_of': 'Passo {current} de {total}',
+    'tour.next': 'Próximo',
+    'tour.prev': 'Anterior',
+    'tour.end': 'Encerrar tour',
+    'tour.step1_title': '1. Fiscalização Demo (RV-DEMO-001)',
+    'tour.step1_desc':
+      'Início do dossiê: área de proteção ambiental com alertas de satélite e equipe em campo.',
+    'tour.step2_title': '2. Evidências Coletadas',
+    'tour.step2_desc':
+      'Centro de evidências: fotografias de campo, medições de coordenadas e notificações.',
+    'tour.step3_title': '3. Mapa Georreferenciado',
+    'tour.step3_desc': 'Visualização espacial das evidências sobre a poligonal da área protegida.',
+    'tour.step4_title': '4. Linha do Tempo Cronológica',
+    'tour.step4_desc': 'Rastreabilidade minuto a minuto das ações registradas pela equipe.',
+    'tour.step5_title': '5. Verificação de Consistência',
+    'tour.step5_desc':
+      'Detecção inteligente de possíveis discrepâncias entre horários e coordenadas.',
+    'tour.step6_title': '6. Lacunas e Pendências',
+    'tour.step6_desc': 'Checklist automático: o que ainda falta antes de emitir o relatório.',
+    'tour.step7_title': '7. Gerar Relatório Técnico',
+    'tour.step7_desc':
+      'Dossiê estruturado com rastreabilidade direta: clique em "Ver evidência de origem".',
+    'tour.step8_title': '8. Rastreabilidade Completa',
+    'tour.step8_desc': 'Do relatório de volta à evidência original! Fim da demonstração do pitch.',
     'footer.rights': '',
 
     // Navigation
@@ -157,6 +187,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'evidence.tags': 'Tags (separadas por vírgula)',
     'evidence.notes': 'Observações técnicas',
     'evidence.file_upload': 'Arquivo / Mídia anexada',
+    'evidence.file_help': 'Imagens (JPG, PNG, WebP), PDFs, áudio ou vídeo (máx. 25MB).',
+    'evidence.file_size_error': 'Arquivo muito grande. O limite máximo é de 25MB.',
     'evidence.status': 'Status da evidência',
     'evidence.empty': 'Nenhuma evidência registrada para os filtros selecionados.',
     'evidence.view_detail': 'Ver detalhes',
@@ -266,6 +298,38 @@ export const translations: Record<Language, Record<string, string>> = {
     'badge.demo': 'Demo data',
     'badge.fictional_demo': 'Fictional demo case',
     'footer.text': 'RastroVerde — Technology supporting environmental enforcement.',
+    'landing.amazoniahack_badge': 'Open-source project developed for AmazoniaHack',
+    'about.amazoniahack_title': 'Open Source & AmazoniaHack',
+    'about.amazoniahack_desc':
+      'RastroVerde is an open-source initiative developed for AmazoniaHack, committed to reinforcing transparency, evidentiary traceability, and technical integrity across Amazon socio-environmental enforcement.',
+    'tour.button': 'Guided tour',
+    'tour.button_pitch': 'Guided tour (Pitch)',
+    'tour.step_of': 'Step {current} of {total}',
+    'tour.next': 'Next',
+    'tour.prev': 'Previous',
+    'tour.end': 'End tour',
+    'tour.step1_title': '1. Demo Inspection (RV-DEMO-001)',
+    'tour.step1_desc':
+      'Dossier start: protected environmental area with satellite alert and field officers.',
+    'tour.step2_title': '2. Collected Evidence',
+    'tour.step2_desc':
+      'Evidence center: field photos, georeferenced coordinates, and formal notices.',
+    'tour.step3_title': '3. Georeferenced Map',
+    'tour.step3_desc':
+      'Spatial layout of evidence markers on top of the protected reserve polygon.',
+    'tour.step4_title': '4. Chronological Timeline',
+    'tour.step4_desc': 'Minute-by-minute traceability of all operational field activities.',
+    'tour.step5_title': '5. Consistency Verification',
+    'tour.step5_desc':
+      'Smart detection of potential discrepancies between field notes and GPS readings.',
+    'tour.step6_title': '6. Gaps & Completeness',
+    'tour.step6_desc': 'Automated checklist: identifying missing items before drafting the report.',
+    'tour.step7_title': '7. Generate Technical Report',
+    'tour.step7_desc':
+      'Structured report with direct traceability: click on "View source evidence".',
+    'tour.step8_title': '8. Full Traceability Achieved',
+    'tour.step8_desc':
+      'From the final report right back to the original field evidence! Pitch sequence completed.',
     'footer.rights': '',
 
     // Navigation
@@ -406,6 +470,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'evidence.tags': 'Tags (comma-separated)',
     'evidence.notes': 'Technical notes',
     'evidence.file_upload': 'File / Attached media',
+    'evidence.file_help': 'Images (JPG, PNG, WebP), PDFs, audio or video (max 25MB).',
+    'evidence.file_size_error': 'File too large. Maximum size is 25MB.',
     'evidence.status': 'Evidence status',
     'evidence.empty': 'No evidence found for selected filters.',
     'evidence.view_detail': 'View details',
