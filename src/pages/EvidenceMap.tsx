@@ -328,7 +328,8 @@ export const EvidenceMap: React.FC = () => {
                         getEvidenceFileUrl(selectedEvidence) ||
                         ''
                       }
-                      alt={selectedEvidence.code}
+                      alt={`Registro georreferenciado ${selectedEvidence.code}: ${selectedEvidence.description || 'Evidência no mapa'}`}
+                      loading="lazy"
                       className="w-full h-full object-cover"
                     />
                   ) : (

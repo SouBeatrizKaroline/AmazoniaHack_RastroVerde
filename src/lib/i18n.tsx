@@ -84,7 +84,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'landing.headline':
       'Da evidência de campo ao relatório de infração, com organização e rastreabilidade.',
     'landing.subheadline':
-      'Organize evidências de fiscalização, identifique lacunas e elabore relatórios de infração ambiental com cada apontamento vinculado à sua fonte probatória.',
+      'Para secretarias de meio ambiente e agentes de campo: organize evidências dispersas, saneie lacunas antes do prazo e gere minutas de relatório onde cada parágrafo aponta diretamente para sua evidência de origem.',
     'landing.start_inspection': 'Analisar ocorrência',
     'landing.view_demo': 'Ver demonstração',
     'landing.enter_demo': 'Explorar demonstração',
@@ -714,7 +714,7 @@ export const translations: Record<Language, Record<string, string>> = {
     // Landing
     'landing.headline': 'From field evidence to traceable environmental enforcement report drafts.',
     'landing.subheadline':
-      'Organize evidence, identify gaps, and produce environmental reports with every fact anchored to its source.',
+      'For municipal environmental secretariats and field officers: organize fragmented evidence, audit procedural gaps, and generate report drafts where every paragraph directly cites its ground-truth source.',
     'landing.start_inspection': 'Analyze occurrence',
     'landing.view_demo': 'View demo',
     'landing.enter_demo': 'Explore demo',

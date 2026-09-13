@@ -133,6 +133,7 @@ export const Signup: React.FC = () => {
             </label>
             <Input
               required
+              autoComplete="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ex: Agente Ana Ribeiro (Perita Ambiental)"
@@ -148,6 +149,7 @@ export const Signup: React.FC = () => {
             <Input
               type="email"
               required
+              autoComplete="username email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="agente@meioambiente.gov.br"
@@ -168,6 +170,7 @@ export const Signup: React.FC = () => {
                 type={showPassword ? 'text' : 'password'}
                 required
                 minLength={8}
+                autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
@@ -223,6 +226,7 @@ export const Signup: React.FC = () => {
               type="password"
               required
               minLength={8}
+              autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"

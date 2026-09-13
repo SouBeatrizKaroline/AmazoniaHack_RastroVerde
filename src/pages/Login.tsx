@@ -114,6 +114,7 @@ export const Login: React.FC = () => {
             <Input
               type="email"
               required
+              autoComplete="username email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="agente@meioambiente.gov.br"
@@ -138,6 +139,7 @@ export const Login: React.FC = () => {
               <Input
                 type={showPassword ? 'text' : 'password'}
                 required
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"

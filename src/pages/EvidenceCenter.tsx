@@ -401,7 +401,7 @@ export const EvidenceCenter: React.FC = () => {
                     <div className="space-y-2 text-center w-full">
                       <img
                         src={getEvidenceFileUrl(detailModalEvidence) || ''}
-                        alt={detailModalEvidence.code}
+                        alt={`Evidência fotográfica ${detailModalEvidence.code}: ${detailModalEvidence.description || 'Registro de campo'}`}
                         className="max-h-72 w-auto mx-auto object-contain rounded-xl shadow-xs border border-[#E2E8E4]"
                       />
                       <a

@@ -186,32 +186,32 @@ export const Index: React.FC = () => {
 
           {/* Action CTAs funcionais navegando para RV-DEMO-001 conforme especificação */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 max-w-xl mx-auto">
-            {/* CTA 1: Analisar ocorrência -> Direciona diretamente para a ocorrência demo RV-DEMO-001 */}
+            {/* CTA 1 Primário Inconfundível: Explorar Dossiê RV-DEMO-001 */}
             <Link to="/inspections/RV-DEMO-001" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                className="w-full sm:w-auto bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold shadow-md shadow-[#1B5E3A]/20 hover:shadow-lg hover:shadow-[#1B5E3A]/30 h-12 px-7 rounded-xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+                className="w-full sm:w-auto bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold shadow-md shadow-[#1B5E3A]/25 hover:shadow-xl hover:shadow-[#1B5E3A]/35 h-12 px-7 rounded-xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 ring-2 ring-emerald-500/20 focus-visible:ring-4 focus-visible:ring-[#1B5E3A]/40"
               >
                 <FileCheck2 className="w-4 h-4 text-emerald-200" />
                 <span className="text-sm sm:text-base">{t('landing.start_inspection')}</span>
-                <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white/20 text-white">
+                <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/25 text-white tracking-wide">
                   RV-DEMO-001
                 </span>
-                <ArrowRight className="w-4 h-4 text-emerald-200" />
+                <ArrowRight className="w-4 h-4 text-emerald-200 transition-transform group-hover:translate-x-0.5" />
               </Button>
             </Link>
 
-            {/* CTA 2: Ver demonstração -> Também navega para o caso demonstrativo RV-DEMO-001 */}
-            <Link to="/inspections/RV-DEMO-001" className="w-full sm:w-auto">
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto border-[#1B5E3A]/30 bg-white hover:bg-[#F7F9F8] text-[#143028] font-bold h-12 px-6 rounded-xl shadow-xs transition-all hover:border-[#1B5E3A] flex items-center justify-center gap-2"
-              >
-                <Eye className="w-4 h-4 text-[#1B5E3A]" />
-                <span>{t('landing.view_demo')}</span>
-              </Button>
-            </Link>
+            {/* CTA 2 Secundário Claro: Tour Guiado do Pitch ou Rolar para Demonstração */}
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              onClick={startTour}
+              className="w-full sm:w-auto border-[#1B5E3A]/35 bg-white hover:bg-[#F7F9F8] text-[#143028] font-bold h-12 px-6 rounded-xl shadow-xs transition-all hover:border-[#1B5E3A] flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-[#1B5E3A]"
+            >
+              <Compass className="w-4 h-4 text-[#1B5E3A]" />
+              <span>{t('tour.button')} (Pitch)</span>
+            </Button>
           </div>
 
           {/* Microcopy persuasivo e técnico */}
@@ -431,7 +431,7 @@ export const Index: React.FC = () => {
                   APA Setor Norte — Gleba Castanhal
                 </h3>
                 <p className="text-xs text-[#5B6B63]">
-                  Novo Progresso • PA • Fiscalização Integrada de Alerta DETER
+                  Altamira • PA • Fiscalização Integrada de Alerta DETER
                 </p>
               </div>
 

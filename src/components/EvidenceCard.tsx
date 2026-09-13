@@ -121,7 +121,8 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
                   src={
                     getEvidenceFileUrl(evidence, '400x300') || getEvidenceFileUrl(evidence) || ''
                   }
-                  alt={evidence.code}
+                  alt={`Evidência fotográfica ${evidence.code}: ${evidence.description || 'Registro de campo'}`}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                 />
               ) : evidence.file.match(/\.(mp4|webm|mov)$/i) ? (
