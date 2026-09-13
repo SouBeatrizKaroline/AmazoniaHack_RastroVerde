@@ -278,13 +278,7 @@ export const EvidenceMap: React.FC = () => {
                   style={{ transformOrigin: `${pos.x}px ${pos.y}px` }}
                 >
                   {/* Touch Target Invisível ≥44x44px para dispositivos móveis */}
-                  <rect
-                    x={pos.x - 24}
-                    y={pos.y - 24}
-                    width="48"
-                    height="48"
-                    fill="transparent"
-                  />
+                  <rect x={pos.x - 24} y={pos.y - 24} width="48" height="48" fill="transparent" />
 
                   {/* Soft pulse animation ring on selected or review */}
                   {isSelected && (

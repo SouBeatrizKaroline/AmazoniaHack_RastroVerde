@@ -100,7 +100,8 @@ export const ConsistencyVerification: React.FC = () => {
         icon: AlertTriangle,
         iconColor: 'text-[#B45309]',
         title: 'Divergência de área: Satélite (12,3 ha) vs GPS de campo (11,8 ha)',
-        message: 'Constatada diferença métrica entre estimativa orbital preliminar e caminhamento perimetral.',
+        message:
+          'Constatada diferença métrica entre estimativa orbital preliminar e caminhamento perimetral.',
         recommendation:
           'Não consolidar valor único sem despacho fundamentado. Escolha entre satélite ou GPS com justificativa expressa na minuta.',
         evidenceCode: 'EVD-003',
@@ -132,7 +133,8 @@ export const ConsistencyVerification: React.FC = () => {
         icon: AlertTriangle,
         iconColor: 'text-orange-600',
         title: 'Precisão de posicionamento com raio de incerteza elevado',
-        message: 'Registro de coordenadas coletado sob dossel denso com margem de tolerância de ±18 metros.',
+        message:
+          'Registro de coordenadas coletado sob dossel denso com margem de tolerância de ±18 metros.',
         recommendation:
           'Sinalizar na minuta a margem de erro instrumental do GPS portátil e cruzar com o marco físico.',
         evidenceCode: secondEvd ? secondEvd.code : 'EVD-002',
@@ -163,7 +165,8 @@ export const ConsistencyVerification: React.FC = () => {
           icon: AlertOctagon,
           iconColor: 'text-[#B3261E]',
           title: 'Verificação do enquadramento normativo do dano ambiental',
-          message: 'Necessária confirmação humana do dispositivo legal aplicável antes de lavrar o auto.',
+          message:
+            'Necessária confirmação humana do dispositivo legal aplicável antes de lavrar o auto.',
           recommendation:
             'Revisar a indicação do Art. 50 do Decreto Federal 6.514/2008 à luz das amostras botânicas.',
           evidenceCode: 'EVD-014',
@@ -267,9 +270,7 @@ export const ConsistencyVerification: React.FC = () => {
 
       {/* Category Pills Strip - Interativo com alvos ≥44px e as 5 categorias padronizadas */}
       <div className="flex flex-wrap items-center gap-2.5 p-3.5 sm:p-4 rounded-2xl border border-[#E2E8E4] bg-white text-xs shadow-2xs">
-        <span className="font-bold text-[#5B6B63] mr-1">
-          Filtrar por classificação:
-        </span>
+        <span className="font-bold text-[#5B6B63] mr-1">Filtrar por classificação:</span>
         <button
           type="button"
           onClick={() => setSelectedCategory('ALL')}
@@ -421,56 +422,56 @@ export const ConsistencyVerification: React.FC = () => {
                   key={item.id}
                   className={`rounded-3xl border p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 bg-white transition-all duration-200 hover:shadow-md ${borderStyle}`}
                 >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={`inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border ${badgeBg}`}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border ${badgeBg}`}
+                      >
+                        {item.badge}
+                      </span>
+                      <span className="font-mono text-[11px] font-semibold text-[#5B6B63] bg-[#F7F9F8] px-2 py-0.5 rounded-md border border-[#E2E8E4]">
+                        {item.id}
+                      </span>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-xl bg-[#F9FCFA] border border-[#E2E8E4] shrink-0 mt-0.5">
+                        <Icon className={`w-4 h-4 ${item.iconColor}`} />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="font-bold text-sm sm:text-base text-[#143028] leading-tight">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs font-medium text-[#5B6B63] mt-1 leading-relaxed">
+                          "{item.message}"
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-3.5 rounded-2xl bg-[#F9FCFA] border border-[#E2E8E4] text-xs text-[#5B6B63] space-y-1">
+                      <span className="font-bold text-[#143028] block">
+                        {t('verification.rec_title')}
+                      </span>
+                      <p className="leading-relaxed">{item.recommendation}</p>
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-[#E2E8E4] flex items-center justify-between">
+                    <span className="text-xs font-mono font-semibold text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-0.5 rounded-md border border-[#1B5E3A]/15">
+                      {t('verification.ref_prefix')} {item.evidenceCode}
+                    </span>
+
+                    <Link
+                      to={`/evidence?source=${item.evidenceCode}`}
+                      className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#1B5E3A] hover:bg-[#E7F2EC] transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A] group"
                     >
-                      {item.badge}
-                    </span>
-                    <span className="font-mono text-[11px] font-semibold text-[#5B6B63] bg-[#F7F9F8] px-2 py-0.5 rounded-md border border-[#E2E8E4]">
-                      {item.id}
-                    </span>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-[#F9FCFA] border border-[#E2E8E4] shrink-0 mt-0.5">
-                      <Icon className={`w-4 h-4 ${item.iconColor}`} />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-sm sm:text-base text-[#143028] leading-tight">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs font-medium text-[#5B6B63] mt-1 leading-relaxed">
-                        "{item.message}"
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#F9FCFA] border border-[#E2E8E4] text-xs text-[#5B6B63] space-y-1">
-                    <span className="font-bold text-[#143028] block">
-                      {t('verification.rec_title')}
-                    </span>
-                    <p className="leading-relaxed">{item.recommendation}</p>
+                      <span>{t('verification.go_to_evidence')}</span>
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </Link>
                   </div>
                 </div>
-
-                <div className="pt-3 border-t border-[#E2E8E4] flex items-center justify-between">
-                  <span className="text-xs font-mono font-semibold text-[#1B5E3A] bg-[#E7F2EC] px-2.5 py-0.5 rounded-md border border-[#1B5E3A]/15">
-                    {t('verification.ref_prefix')} {item.evidenceCode}
-                  </span>
-
-                  <Link
-                    to={`/evidence?source=${item.evidenceCode}`}
-                    className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#1B5E3A] hover:bg-[#E7F2EC] transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A] group"
-                  >
-                    <span>{t('verification.go_to_evidence')}</span>
-                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </Link>
-                </div>
-              </div>
-            )
-          })}
+              )
+            })}
         </div>
       )}
     </div>
