@@ -85,35 +85,35 @@ export const translations: Record<Language, Record<string, string>> = {
       'Da evidência de campo ao relatório de infração, com organização e rastreabilidade.',
     'landing.subheadline':
       'Organize evidências de fiscalização, identifique lacunas e elabore relatórios de infração ambiental com cada apontamento vinculado à sua fonte probatória.',
-    'landing.start_inspection': 'Cadastrar fiscalização',
+    'landing.start_inspection': 'Analisar ocorrência',
     'landing.view_demo': 'Ver demonstração',
     'landing.enter_demo': 'Explorar demonstração',
     'landing.btn_demo': 'Explorar caso de demonstração',
     'landing.how_it_works_title': 'Como o RastroVerde funciona',
-    'landing.step1_title': '1. Fiscalização & Ocorrência',
+    'landing.step1_title': '1. Ocorrência',
     'landing.step1_desc':
-      'Registro de dados institucionais, localização, agente responsável e caracterização da ocorrência.',
+      'Registro dos dados institucionais, local da ocorrência e abertura formal da fiscalização.',
     'landing.step1_highlight': 'Registro Inicial',
-    'landing.step2_title': '2. Inserção de Evidências',
+    'landing.step2_title': '2. Evidências',
     'landing.step2_desc':
-      'Fotografias georreferenciadas, áudios, depoimentos, documentos e notas de campo vinculadas.',
-    'landing.step2_highlight': 'Evidências Vinculadas',
-    'landing.step3_title': '3. Extrai os fatos',
+      'Fotografias com metadados, gravações, notas de campo e documentos vinculados à ocorrência.',
+    'landing.step2_highlight': 'Organização Probatória',
+    'landing.step3_title': '3. Extração',
     'landing.step3_desc':
-      'Identificação, área, coordenadas, infração e instrumentos extraídos com fontes rastreáveis.',
+      'Extração de fatos técnicos, coordenadas, áreas afetadas e qualificação dos envolvidos.',
     'landing.step3_highlight': 'Fatos Estruturados',
-    'landing.step4_title': '4. Verifica & Audita',
+    'landing.step4_title': '4. Verificação',
     'landing.step4_desc':
-      'Triagem em Confirmado, Divergência, Ausente, Baixa confiança e Requer revisão humana.',
-    'landing.step4_highlight': 'Detecção Cautelosa',
-    'landing.step5_title': '5. Gera a minuta',
+      'Cruzamento prudente de dados, identificação de divergências e lacunas documentais.',
+    'landing.step4_highlight': 'Triagem Cautelosa',
+    'landing.step5_title': '5. Minuta',
     'landing.step5_desc':
-      'Minuta estruturada em 10 seções padronizadas adaptadas ao template do município.',
-    'landing.step5_highlight': 'Minuta Rastreável',
-    'landing.step6_title': '6. Humano revisa',
+      'Minuta do relatório de infração em 10 seções padronizadas adaptadas ao perfil do município.',
+    'landing.step5_highlight': 'Relatório Estruturado',
+    'landing.step6_title': '6. Revisão humana',
     'landing.step6_desc':
-      'Nenhum documento é finalizado sem validação humana expressa pelo agente competente.',
-    'landing.step6_highlight': 'Homologação Técnica',
+      'A decisão é sempre do fiscal: revisão, homologação expressa e emissão com rastreabilidade.',
+    'landing.step6_highlight': 'Validação do Agente',
     'landing.folder_badge': 'A evidência não deve terminar numa pasta.',
     'landing.folder_headline': 'A evidência não deve terminar esquecida numa pasta de arquivos.',
     'landing.folder_desc':
@@ -125,13 +125,13 @@ export const translations: Record<Language, Record<string, string>> = {
     'landing.flow_report': 'Relatório de infração rastreável',
     'landing.flow_title': 'Jornada Lógica da Fiscalização Ambiental',
     'landing.flow_subtitle':
-      'Fiscalização → Ocorrência → Evidências → Organização das informações → Relatório de infração → Revisão/Exportação',
+      'Ocorrência → Evidências → Extração → Verificação → Minuta → Revisão humana',
     'landing.problem_title': 'O desafio real da fiscalização em campo',
     'landing.problem_desc':
       'Em operações ambientais, dados críticos ficam dispersos em múltiplos suportes físicos e digitais, gerando fragilidade processual e retrabalho técnico.',
     'landing.problem_sources':
       'Fotos no celular, cadernetas em papel, coordenadas avulsas de GPS, documentos dominiais, autos físicos e relatos verbais desvinculados.',
-    'landing.problem_sources_subtitle': 'Fontes fragmentadas e sem amarra de custódia',
+    'landing.problem_sources_subtitle': 'Fontes fragmentadas e sem vínculo direto',
     'landing.problem_risks_title': 'Riscos da compilação manual',
     'landing.problem_risks_subtitle':
       'A falta de conexão imediata entre fatos e evidências compromete a validade dos autos',
@@ -146,7 +146,7 @@ export const translations: Record<Language, Record<string, string>> = {
       'O RastroVerde estabelece um elo auditável entre cada elemento coletado em campo e o relatório final.',
     'landing.proposal_highlight': 'Do relatório de volta à evidência original.',
     'landing.proposal_explanation':
-      'Rastreabilidade bidirecional: peritos, fiscais e tribunais podem clicar em qualquer apontamento do relatório para inspecionar imediatamente a coordenada, a foto bruta e a assinatura funcional.',
+      'Rastreabilidade bidirecional: peritos, fiscais e tribunais podem clicar em qualquer apontamento do relatório para verificar imediatamente a coordenada, a foto bruta e a identificação do agente.',
     'landing.demo_card_title': 'Caso Demonstrativo Interativo: APA Setor Norte (RV-DEMO-001)',
     'landing.demo_card_desc':
       'Navegue por uma fiscalização simulada com alertas DETER, marcas de maquinário, checagem automatizada de consistência e 3 falhas propositais para testar a ferramenta.',
@@ -342,7 +342,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'verification.subtitle': 'Varredura automática e cruzamento de registros com postura de apoio.',
     'verification.posture_title': 'Postura Técnica e Cautelosa da Plataforma',
     'verification.cautious_detail':
-      'Termos como "Possível inconsistência", "Recomenda-se verificar" e "Informação não localizada" garantem a segurança jurídica do procedimento.',
+      'Termos como "Possível inconsistência", "Recomenda-se verificar" e "Informação não localizada" apoiam a prudência técnica do procedimento.',
     'verification.rec_title': 'Recomendação técnica:',
     'verification.ref_prefix': 'Ref:',
     'verification.rerun': 'Reexecutar verificação',
@@ -415,7 +415,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'about.diff_2':
       'Verificação inteligente de consistência de horários e coordenadas com linguagem prudente.',
     'about.diff_3':
-      'Checklist automático de lacunas que impede relatórios incompletos ou vulneráveis juridicamente.',
+      'Checklist automático de lacunas que sinaliza pendências antes da finalização do relatório.',
     'about.privacy_link': 'Política de Privacidade e Conformidade LGPD',
 
     // LGPD & Privacy
@@ -532,8 +532,7 @@ export const translations: Record<Language, Record<string, string>> = {
       'Não foi possível redefinir a senha. O token pode estar incorreto ou expirado. Solicite um novo link.',
     'auth.have_account': 'Já possui cadastro? Entrar',
     'auth.no_account': 'Não tem conta? Solicitar cadastro',
-    'auth.security_notice':
-      'Acesso monitorado e protegido para integridade da cadeia de custódia socioambiental.',
+    'auth.security_notice': 'Acesso institucional com registro organizado e rastreável das ações.',
     'auth.back_to_home': 'Voltar à página inicial',
     'auth.back_to_login': 'Voltar ao login',
     'auth.demo_entry_prompt': 'Quer apenas conhecer a ferramenta?',
@@ -621,48 +620,48 @@ export const translations: Record<Language, Record<string, string>> = {
     'landing.enter_demo': 'Explore demo',
     'landing.btn_demo': 'Explore interactive demo case',
     'landing.how_it_works_title': 'How RastroVerde Works',
-    'landing.step1_title': '1. Receives occurrence',
+    'landing.step1_title': '1. Occurrence',
     'landing.step1_desc':
-      'Photos with metadata, audio notes with timestamps, documents, field notes, and coordinates.',
-    'landing.step1_highlight': 'Multi-format Input',
-    'landing.step2_title': '2. Organizes evidence',
+      'Recording institutional data, occurrence location, and initiation of enforcement dossier.',
+    'landing.step1_highlight': 'Initial Record',
+    'landing.step2_title': '2. Evidence',
     'landing.step2_desc':
-      'Categorizes records, generates integrity indicators, and binds media to the inspection.',
+      'Photos with metadata, audio notes, field notebooks, and attachments linked to the occurrence.',
     'landing.step2_highlight': 'Evidentiary Organization',
-    'landing.step3_title': '3. Extracts facts',
+    'landing.step3_title': '3. Extraction',
     'landing.step3_desc':
-      'Identification, area, coordinates, infractions, and instruments extracted with traceable sources.',
+      'Extraction of factual findings, coordinates, affected areas, and cited parties.',
     'landing.step3_highlight': 'Structured Facts',
-    'landing.step4_title': '4. Verifies & audits',
+    'landing.step4_title': '4. Verification',
     'landing.step4_desc':
-      'Triage into Confirmed, Divergence, Missing, Low confidence, and Human review required.',
-    'landing.step4_highlight': 'Cautious Triage',
-    'landing.step5_title': '5. Generates draft',
+      'Cautious cross-checking of field records, flagging potential discrepancies and gaps.',
+    'landing.step4_highlight': 'Prudent Triage',
+    'landing.step5_title': '5. Draft Report',
     'landing.step5_desc':
-      'Structured draft in 10 standardized sections configured to municipal templates.',
-    'landing.step5_highlight': 'Traceable Draft',
-    'landing.step6_title': '6. Human reviews',
+      'Violation report draft structured into 10 standardized sections tailored to municipality.',
+    'landing.step5_highlight': 'Structured Draft',
+    'landing.step6_title': '6. Human review',
     'landing.step6_desc':
-      'No document is finalized without explicit validation and sign-off by the authorized officer.',
+      'Final decisions remain strictly with the officer: review, sign-off, and traceable release.',
     'landing.step6_highlight': 'Officer Sign-Off',
     'landing.folder_badge': 'Evidence must not end in a folder.',
     'landing.folder_headline': 'Evidence must not end forgotten inside an archive folder.',
     'landing.folder_desc':
       'Evidence returns from the field in disconnected formats: phone photos, audio notes, paper clipboards, and scattered coordinates. RastroVerde binds each fact to its source and answers: can we produce a legally defensible report draft demonstrating exactly what evidence supports each statement?',
     'landing.flow_field': 'Field inspection',
-    'landing.flow_evidence': 'Evidence custody',
+    'landing.flow_evidence': 'Evidence organization',
     'landing.flow_verification': 'Consistency check',
     'landing.flow_gaps': 'Gaps audit',
     'landing.flow_report': 'Traceable report',
     'landing.flow_title': 'End-to-End Operational Workflow',
     'landing.flow_subtitle':
-      'Occurrence → Evidence → Extraction/Analysis → Verification → Gaps → Traceable Draft → Related Instruments',
+      'Occurrence → Evidence → Extraction → Verification → Draft Report → Human review',
     'landing.problem_title': 'The actual challenge in field enforcement',
     'landing.problem_desc':
       'During environmental operations, critical data is scattered across disconnected mediums, creating administrative vulnerability and expert rework.',
     'landing.problem_sources':
       'Phone photos, paper clipboards, isolated GPS waypoints, land title registries, physical notices, and detached witness statements.',
-    'landing.problem_sources_subtitle': 'Fragmented field sources lacking custodial linkage',
+    'landing.problem_sources_subtitle': 'Fragmented field sources lacking direct linkage',
     'landing.problem_risks_title': 'Risks of manual consolidation',
     'landing.problem_risks_subtitle':
       'The disconnect between facts and evidence weakens administrative enforcement',
@@ -684,7 +683,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'landing.demo_card_desc':
       'Experience a simulated operation featuring DETER alerts, heavy machinery tracks, automated consistency checks, and 3 deliberate gaps to test verification.',
     'landing.demo_step1': 'Conservation unit dossier with georeferenced coordinates and field crew',
-    'landing.demo_step2': 'Custodial repository of raw photographs, audio notes, and attachments',
+    'landing.demo_step2': 'Organized repository of raw photographs, audio notes, and attachments',
     'landing.demo_step3': 'Automated cross-check validating timestamps against GNSS coordinates',
     'landing.demo_step4':
       'Structured technical report generation with direct anchors to ground sources',
@@ -692,7 +691,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'landing.access_block_title': 'Institutional Portal for Oversight Agencies',
     'landing.access_block_desc':
       'Secure environment for socio-environmental enforcement squads, forensic experts, and inspectors.',
-    'landing.access_benefit_1': 'Tamper-evident digital chain of custody for field observations',
+    'landing.access_benefit_1': 'Organized and traceable records for field evidence',
     'landing.access_benefit_2':
       'Cautious cross-checking of timestamps and coordinates prior to release',
     'landing.access_benefit_3': 'Standardized technical reports with direct source traceability',
@@ -874,7 +873,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'verification.subtitle': 'Automated cross-check of field records with supportive posture.',
     'verification.posture_title': 'Platform Supportive and Cautious Posture',
     'verification.cautious_detail':
-      'Phrasings like "Potential inconsistency", "Recommended to verify" and "Information not located" ensure due diligence and procedural fairness.',
+      'Phrasings like "Potential inconsistency", "Recommended to verify" and "Information not located" support technical prudence.',
     'verification.rec_title': 'Technical recommendation:',
     'verification.ref_prefix': 'Ref:',
     'verification.rerun': 'Re-run verification',
@@ -945,7 +944,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'about.diff_2':
       'Smart time and coordinate consistency checks with strictly supportive language.',
     'about.diff_3':
-      'Automated gaps checklist that prevents legally vulnerable or incomplete reports.',
+      'Automated gaps checklist that flags pending requirements before finalizing the report.',
     'about.privacy_link': 'Privacy Policy & LGPD Compliance',
 
     // LGPD & Privacy
@@ -1061,8 +1060,7 @@ export const translations: Record<Language, Record<string, string>> = {
       'Could not reset password. The token may be incorrect or expired. Please request a new link.',
     'auth.have_account': 'Already registered? Sign in',
     'auth.no_account': 'Need an account? Request access',
-    'auth.security_notice':
-      'Monitored and protected access ensuring socio-environmental chain of custody integrity.',
+    'auth.security_notice': 'Institutional access with organized and traceable action logs.',
     'auth.back_to_home': 'Back to home',
     'auth.back_to_login': 'Back to sign in',
     'auth.demo_entry_prompt': 'Just exploring the platform?',

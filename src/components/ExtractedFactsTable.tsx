@@ -237,7 +237,7 @@ export const ExtractedFactsTable: React.FC<ExtractedFactsTableProps> = ({
       {/* Modal de Detalhes da Evidência Original */}
       {activeModalRef && (
         <Dialog open={!!activeModalRef} onOpenChange={() => setActiveModalRef(null)}>
-          <DialogContent className="max-w-md rounded-2xl">
+          <DialogContent className="max-w-md w-[calc(100%-2rem)] max-h-[85vh] overflow-y-auto rounded-2xl p-5 sm:p-6">
             <DialogHeader>
               <DialogTitle className="text-base font-bold text-[#143028] flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-600" />

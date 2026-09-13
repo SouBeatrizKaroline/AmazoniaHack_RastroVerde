@@ -180,7 +180,7 @@ export const DEMO_FIELD_NOTES: FieldNoteItem = {
   author: 'Agente 03 — Jhay',
   // Preserva erros de digitação e termos de campo exatamente como anotados
   originalText:
-    'Vistoria talhao 2 APA setor Norte. Encontrado clareira com moto-serra toco fresco de castanheira. area estimada nas notas: 12,3 ha. Trator esteira passou faz uns 2 dias. Trablhador na porteira falou q veio de fora ma nao sabe o nome do patrão. Coordenada gps marco entradada: -8.0015, -34.0042.',
+    'Fiscalização talhao 2 APA setor Norte. Encontrado clareira com moto-serra toco fresco de castanheira. area estimada nas notas: 12,3 ha. Trator esteira passou faz uns 2 dias. Trablhador na porteira falou q veio de fora ma nao sabe o nome do patrão. Coordenada gps marco entradada: -8.0015, -34.0042.',
   structuredInterpretation:
     'Supressão recente de espécimes protegidos (Castanheira) por uso de motosserra. Área estimada preliminarmente em 12,3 ha pelo agente nas anotações de prancheta. Vestígio de trator de esteira. Ausência de identificação do mandante. Coordenada de entrada registrada: Lat -8.0015, Long -34.0042.',
 }
@@ -199,7 +199,7 @@ export const DEMO_EXTRACTED_FACTS: ExtractedFact[] = [
         evidenceCode: 'field-notes.md',
         evidenceType: 'Anotação',
         locationWithinEvidence: 'Linha 1',
-        derivedSnippet: 'Vistoria talhao 2 APA setor Norte',
+        derivedSnippet: 'Fiscalização talhao 2 APA setor Norte',
         confidence: 'Alta',
         capturedAt: '12/09/2026 15:20',
         recordedBy: 'Agente 03 — Jhay',
@@ -557,7 +557,8 @@ export const DEMO_MISSING_INFO: MissingInformationItem[] = [
   {
     id: 'missing-01',
     title: 'Número do Cadastro Ambiental Rural (CAR) não localizado',
-    description: 'Nenhum recibo de CAR foi apresentado durante a vistoria ou anexado pela equipe.',
+    description:
+      'Nenhum recibo de CAR foi apresentado durante a fiscalização ou anexado pela equipe.',
     category: 'crítico',
     impactOnReport:
       'Impede a verificação de sobreposição com terras públicas e a individualização dominial.',
@@ -722,7 +723,7 @@ export const DEMO_DRAFT_SECTIONS: DraftSection[] = [
     title: '1. Identificação da Fiscalização e da Operação',
     subtitle: 'Origem, equipe e número de controle',
     content:
-      'A presente minuta de relatório de fiscalização ambiental refere-se à vistoria de campo realizada em 12/09/2026 na Área de Proteção Ambiental — Gleba Castanhal, comarca de Altamira/PA, sob coordenação da Equipe Tática Ambiental (Agentes Léo, Ana e Jhay), em atendimento a alerta de supressão florestal.',
+      'A presente minuta de relatório de infração ambiental refere-se à fiscalização de campo realizada em 12/09/2026 na Área de Proteção Ambiental — Gleba Castanhal, comarca de Altamira/PA, sob coordenação da Equipe Tática Ambiental (Agentes Léo, Ana e Jhay), em atendimento a alerta de supressão florestal.',
     references: [
       {
         evidenceCode: 'field-notes.md',
@@ -743,7 +744,7 @@ export const DEMO_DRAFT_SECTIONS: DraftSection[] = [
     title: '2. Identificação do Imóvel e das Partes',
     subtitle: 'Qualificação dominial e responsáveis apurados',
     content:
-      'O imóvel inspecionado localiza-se na APA Setor Norte (Gleba Castanhal). O número do Cadastro Ambiental Rural (CAR): [INFORMAÇÃO NÃO LOCALIZADA NAS EVIDÊNCIAS FORNECIDAS]. O nome e qualificação do responsável/infrator: [INFORMAÇÃO NÃO LOCALIZADA NAS EVIDÊNCIAS FORNECIDAS]. Foi identificada apenas a presença de trabalhador rural temporário na entrada da área, sem poderes de representação formal.',
+      'O imóvel fiscalizado localiza-se na APA Setor Norte (Gleba Castanhal). O número do Cadastro Ambiental Rural (CAR): [INFORMAÇÃO NÃO LOCALIZADA NAS EVIDÊNCIAS FORNECIDAS]. O nome e qualificação do responsável/infrator: [INFORMAÇÃO NÃO LOCALIZADA NAS EVIDÊNCIAS FORNECIDAS]. Foi identificada apenas a presença de trabalhador rural temporário na entrada da área, sem poderes de representação formal.',
     references: [
       {
         evidenceCode: 'EVD-017 (DOC-003)',
@@ -765,7 +766,7 @@ export const DEMO_DRAFT_SECTIONS: DraftSection[] = [
     title: '3. Contexto da Fiscalização e Motivação',
     subtitle: 'Alertas espaciais e motivação da incursão',
     content:
-      'A equipe deslocou-se para a coordenada de referência após identificação de polígono de alerta satelital indicativo de corte raso recente. A vistoria terrestre iniciou-se às 08:30 no marco de entrada georreferenciado.',
+      'A equipe deslocou-se para a coordenada de referência após identificação de polígono de alerta indicativo de corte raso recente. A fiscalização terrestre iniciou-se às 08:30 no marco de entrada georreferenciado.',
     references: [
       {
         evidenceCode: 'EVD-020',
@@ -841,7 +842,7 @@ export const DEMO_DRAFT_SECTIONS: DraftSection[] = [
   {
     id: 6,
     title: '6. Evidências Coletadas em Campo',
-    subtitle: 'Custódia de fotografias, áudios, vídeos e registros',
+    subtitle: 'Organização de fotografias, áudios, vídeos e registros',
     content:
       'Foram catalogadas 14 evidências, incluindo: 5 fotografias digitais com indicadores de integridade de arquivo, 1 gravação de áudio de campo (audio_campo_03.mp3 com transcrição e minutagem), 1 gravação em vídeo de leito assoreado, 1 caderneta de campo original preservada, 2 notificações e autos, e 4 marcos de coordenadas georreferenciadas.',
     references: [

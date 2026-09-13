@@ -51,7 +51,7 @@ export const Index: React.FC = () => {
       icon: Camera,
       label: t('landing.flow_evidence'),
       desc: 'Fotos com metadados, gravações, notas técnicas e arquivos comprobatórios.',
-      highlight: 'Cadeia de Custódia',
+      highlight: 'Organização Probatória',
     },
     {
       step: '03',
@@ -81,7 +81,7 @@ export const Index: React.FC = () => {
     { name: 'Anotações manuais em prancheta de campo', type: 'Vulnerável a perda' },
     { name: 'Waypoints dispersos em receptores GPS', type: 'Sem vínculo ao auto' },
     { name: 'Certidões dominiais e recibos de CAR', type: 'Desconectados do laudo' },
-    { name: 'Relatos e depoimentos verbais de terceiros', type: 'Sem custódia formal' },
+    { name: 'Relatos e depoimentos verbais de terceiros', type: 'Sem registro estruturado' },
     { name: 'Autos de embargo e notificações preliminares', type: 'Dispersão de autos' },
     { name: 'Alertas DETER e imagens de satélite', type: 'Formatos não integrados' },
   ]
@@ -112,7 +112,7 @@ export const Index: React.FC = () => {
     },
     {
       title: t('landing.demo_step4'),
-      badge: 'Rastreável 100%',
+      badge: 'Rastreável',
       icon: FileText,
     },
   ]
@@ -166,26 +166,34 @@ export const Index: React.FC = () => {
             </div>
           </div>
 
-          {/* Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#143028] leading-[1.12]">
-            {t('landing.headline')}
-          </h1>
+          {/* Hero Title & Subtitle com foco no Desafio 1 */}
+          <div className="space-y-3">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#1B5E3A] bg-[#E7F2EC] px-3 py-1 rounded-full border border-[#1B5E3A]/20">
+              Desafio 1 • RastroVerde
+            </span>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#143028] leading-[1.12]">
+              RastroVerde
+            </h1>
+            <p className="text-base sm:text-xl font-medium text-[#1B5E3A] max-w-2xl mx-auto">
+              Da evidência de campo ao relatório de infração, com organização e rastreabilidade.
+            </p>
+          </div>
 
-          {/* Subheadline */}
-          <p className="text-sm sm:text-base lg:text-lg text-[#5B6B63] max-w-2xl mx-auto leading-relaxed">
+          {/* Subheadline detalhada */}
+          <p className="text-xs sm:text-sm lg:text-base text-[#5B6B63] max-w-2xl mx-auto leading-relaxed">
             {t('landing.subheadline')}
           </p>
 
-          {/* Action CTAs: Hierarquia refinada com hover states modernos */}
+          {/* Action CTAs funcionais navegando para RV-DEMO-001 conforme especificação */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 max-w-xl mx-auto">
-            {/* CTA 1: Demonstração Interativa (Foco principal imediato para avaliação) */}
+            {/* CTA 1: Analisar ocorrência -> Direciona diretamente para a ocorrência demo RV-DEMO-001 */}
             <Link to="/inspections/RV-DEMO-001" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 className="w-full sm:w-auto bg-[#1B5E3A] hover:bg-[#14502F] text-white font-bold shadow-md shadow-[#1B5E3A]/20 hover:shadow-lg hover:shadow-[#1B5E3A]/30 h-12 px-7 rounded-xl flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
               >
-                <Compass className="w-4 h-4 text-emerald-200" />
-                <span className="text-sm sm:text-base">{t('landing.enter_demo')}</span>
+                <FileCheck2 className="w-4 h-4 text-emerald-200" />
+                <span className="text-sm sm:text-base">{t('landing.start_inspection')}</span>
                 <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white/20 text-white">
                   RV-DEMO-001
                 </span>
@@ -193,15 +201,15 @@ export const Index: React.FC = () => {
               </Button>
             </Link>
 
-            {/* CTA 2: Iniciar fiscalização (leva para new inspection se logado, ou login se visitante) */}
-            <Link to={isAuthenticated ? '/inspections/new' : '/login'} className="w-full sm:w-auto">
+            {/* CTA 2: Ver demonstração -> Também navega para o caso demonstrativo RV-DEMO-001 */}
+            <Link to="/inspections/RV-DEMO-001" className="w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="lg"
                 className="w-full sm:w-auto border-[#1B5E3A]/30 bg-white hover:bg-[#F7F9F8] text-[#143028] font-bold h-12 px-6 rounded-xl shadow-xs transition-all hover:border-[#1B5E3A] flex items-center justify-center gap-2"
               >
-                <FileCheck2 className="w-4 h-4 text-[#1B5E3A]" />
-                <span>{t('landing.start_inspection')}</span>
+                <Eye className="w-4 h-4 text-[#1B5E3A]" />
+                <span>{t('landing.view_demo')}</span>
               </Button>
             </Link>
           </div>
@@ -218,7 +226,7 @@ export const Index: React.FC = () => {
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#1B5E3A]" />
-              <span>Cadeia de custódia auditável ponta a ponta</span>
+              <span>Registro organizado e rastreável de ponta a ponta</span>
             </span>
           </div>
         </div>
@@ -423,7 +431,7 @@ export const Index: React.FC = () => {
                   APA Setor Norte — Gleba Castanhal
                 </h3>
                 <p className="text-xs text-[#5B6B63]">
-                  Novo Progresso • PA • Vistoria Integrada de Alerta DETER
+                  Novo Progresso • PA • Fiscalização Integrada de Alerta DETER
                 </p>
               </div>
 
@@ -495,7 +503,7 @@ export const Index: React.FC = () => {
               <div>
                 <span className="block leading-tight">{t('landing.problem_sources_subtitle')}</span>
                 <span className="text-xs font-normal text-[#5B6B63]">
-                  Fontes dispersas sem padrão de custódia
+                  Fontes dispersas sem organização unificada
                 </span>
               </div>
             </div>

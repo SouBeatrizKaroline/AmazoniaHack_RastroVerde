@@ -154,6 +154,14 @@ export const App: React.FC = () => {
                   }
                 />
                 <Route
+                  path="/reports/:id"
+                  element={
+                    <ProtectedRoute>
+                      <ReportGenerator />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/history"
                   element={
                     <ProtectedRoute>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   FileText,
   AlertTriangle,
@@ -200,7 +201,6 @@ export const DraftReportViewer: React.FC<DraftReportViewerProps> = ({
                     </button>
                   </div>
                 </div>
-
                 {/* Section Content with Highlighted Warnings if Missing or Divergence */}
                 <div className="text-xs sm:text-sm text-[#143028] leading-relaxed whitespace-pre-wrap font-sans">
                   {sec.content.split(/(\[.*?\])/g).map((part, pIdx) => {
@@ -233,19 +233,22 @@ export const DraftReportViewer: React.FC<DraftReportViewerProps> = ({
                     return <span key={pIdx}>{part}</span>
                   })}
                 </div>
-
                 {/* Bottom Source Citations Ribbon */}
                 <div className="pt-2 border-t border-[#E2E8E4] flex flex-wrap items-center gap-2 text-[11px] text-[#5B6B63]">
                   <span className="font-semibold text-[#143028]">Evidências vinculadas:</span>
                   {sec.references.map((r, rIdx) => (
-                    <span
+                    <Link
                       key={rIdx}
-                      className="font-mono text-[10px] bg-[#F7F9F8] border border-[#E2E8E4] px-2 py-0.5 rounded-md text-[#1B5E3A]"
+                      to={`/evidence?source=${encodeURIComponent(r.evidenceCode)}`}
+                      className="font-mono text-[10px] bg-[#F7F9F8] hover:bg-[#E7F2EC] border border-[#E2E8E4] hover:border-[#1B5E3A]/40 px-2 py-0.5 rounded-md text-[#1B5E3A] transition-colors flex items-center gap-1 cursor-pointer"
+                      title={`Ir para a evidência ${r.evidenceCode}`}
                     >
-                      {r.evidenceCode} ({r.locationWithinEvidence})
-                    </span>
+                      <span>{r.evidenceCode}</span>
+                      <span className="text-[#5B6B63]">({r.locationWithinEvidence})</span>
+                      <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                    </Link>
                   ))}
-                </div>
+                </div>{' '}
               </div>
             )
           })}
@@ -308,7 +311,7 @@ export const DraftReportViewer: React.FC<DraftReportViewerProps> = ({
           open={!!activeModalEvidenceList}
           onOpenChange={() => setActiveModalEvidenceList(null)}
         >
-          <DialogContent className="max-w-lg rounded-3xl">
+          <DialogContent className="max-w-lg w-[calc(100%-2rem)] max-h-[85vh] overflow-y-auto rounded-3xl p-5 sm:p-6">
             <DialogHeader>
               <DialogTitle className="text-base font-bold text-[#143028] flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-600" />
@@ -347,6 +350,15 @@ export const DraftReportViewer: React.FC<DraftReportViewerProps> = ({
                       Confiança: <strong className="text-emerald-700">{ref.confidence}</strong>
                     </span>
                     <span>Status: Confirmado em campo</span>
+                  </div>
+                  <div className="pt-1">
+                    <Link
+                      to={`/evidence?source=${encodeURIComponent(ref.evidenceCode)}`}
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1B5E3A] hover:underline"
+                    >
+                      <span>Abrir na Central de Evidências</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </Link>
                   </div>
                 </div>
               ))}

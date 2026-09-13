@@ -112,7 +112,7 @@ export const GapsChecklist: React.FC = () => {
       if (demoInsp && demoInsp.date) {
         computed.push({
           id: 'gap-date',
-          title: 'Data e horário de vistoria',
+          title: 'Data e horário da fiscalização',
           category: 'completed',
           status: '✅',
           description: `Realizada em ${demoInsp.date} às ${demoInsp.time || '08:30'}.`,

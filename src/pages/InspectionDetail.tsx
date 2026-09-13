@@ -660,7 +660,7 @@ export const InspectionDetail: React.FC = () => {
           {/* Mosaico de Fotografias, Documentos e Marcos Georreferenciados */}
           <div className="space-y-3 pt-2">
             <h3 className="text-sm font-bold text-[#143028] flex items-center justify-between">
-              <span>Fotografias e Registros Documentais da Vistoria</span>
+              <span>Fotografias e Registros Documentais da Fiscalização</span>
               <span className="text-xs font-normal text-[#5B6B63]">
                 {evidenceList.length} arquivos catalogados
               </span>
@@ -930,7 +930,7 @@ export const InspectionDetail: React.FC = () => {
               <h2 className="text-base sm:text-lg font-bold text-[#143028]">{t('report.title')}</h2>
               <p className="text-xs text-[#5B6B63] mt-0.5">{t('report.draft_notice')}</p>
             </div>
-            <Link to="/reports">
+            <Link to={`/reports/${inspection.id_number || inspection.id}`}>
               <Button
                 size="sm"
                 className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-9 px-4 rounded-xl shadow-2xs"

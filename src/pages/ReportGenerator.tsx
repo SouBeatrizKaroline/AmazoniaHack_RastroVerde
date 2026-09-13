@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useI18n } from '@/lib/i18n'
 import {
   FileText,
@@ -34,6 +34,7 @@ export const ReportGenerator: React.FC = () => {
   const { t } = useI18n()
   const navigate = useNavigate()
   const { toast } = useToast()
+  const { id: routeId } = useParams<{ id: string }>()
 
   const [inspection, setInspection] = useState<InspectionRecord | null>(null)
   const [evidenceList, setEvidenceList] = useState<EvidenceRecord[]>([])
@@ -69,15 +70,23 @@ export const ReportGenerator: React.FC = () => {
 
     const fetchPromise = (async () => {
       let insp: InspectionRecord
+      const targetIdentifier = routeId || 'RV-DEMO-001'
+
       try {
-        insp = await getInspectionByNumber('RV-DEMO-001')
+        insp = await getInspectionByNumber(targetIdentifier)
       } catch {
         try {
-          insp = await getInspectionById('9ykaitbzexx3fy5')
+          insp = await getInspectionById(targetIdentifier)
         } catch {
           const list = await getInspections()
           insp =
-            list.find((i) => i.id_number === 'RV-DEMO-001' || i.id === '9ykaitbzexx3fy5') || list[0]
+            list.find(
+              (i) =>
+                i.id_number === targetIdentifier ||
+                i.id === targetIdentifier ||
+                i.id_number === 'RV-DEMO-001' ||
+                i.id === '9ykaitbzexx3fy5',
+            ) || list[0]
         }
       }
 
@@ -108,7 +117,7 @@ export const ReportGenerator: React.FC = () => {
       const missingOfficerEvds = evds.filter((e) => !e.officer || e.officer.trim() === '')
 
       setSections({
-        sec1: `Auto de Fiscalização ${insp.id_number} — Vistoria de Constatação Técnica Ambiental. Processo de Referência: SIS-AMB-2026/0912.`,
+        sec1: `Auto de Fiscalização ${insp.id_number} — Relatório de Fiscalização e Ocorrência Ambiental. Processo de Referência: SIS-AMB-2026/0912.`,
         sec2: `Realizada em ${insp.date || '12/09/2026'} às ${insp.time || '08:30'} na localidade ${insp.location}, Município de ${insp.municipality || 'Rio Claro'} - ${insp.state || 'PA'}.`,
         sec3: `Equipe Tática Ambiental Composta por: ${insp.agent || 'Agente Responsável'}${insp.team ? ` (${insp.team})` : ''}.`,
         sec4: `Operação desencadeada em decorrência de ocorrência de ${insp.occurrence_type}: ${insp.description || 'supressão vegetal constatada em campo'}.`,
@@ -158,7 +167,7 @@ export const ReportGenerator: React.FC = () => {
 
   useEffect(() => {
     loadData()
-  }, [])
+  }, [routeId])
 
   const handlePrint = () => {
     window.print()
@@ -270,12 +279,12 @@ export const ReportGenerator: React.FC = () => {
         />
       </div>
 
-      {/* Documento Legado / Histórico da Vistoria Técnica */}
+      {/* Documento Legado / Histórico da Fiscalização Técnica */}
       <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between pb-2 border-b border-[#E2E8E4]">
           <div>
             <h3 className="text-sm font-bold text-[#143028]">
-              Dossiê Complementar de Registros da Vistoria
+              Dossiê Complementar de Registros da Fiscalização
             </h3>
             <p className="text-xs text-[#5B6B63]">
               Exibição detalhada de campos livres anotados pelos agentes e cronologia detalhada.
@@ -301,7 +310,7 @@ export const ReportGenerator: React.FC = () => {
                   Governo do Estado • Órgão de Fiscalização Ambiental
                 </span>
                 <h2 className="text-xl sm:text-2xl font-bold text-[#143028] mt-0.5">
-                  RELATÓRIO TÉCNICO DE VISTORIA AMBIENTAL
+                  RELATÓRIO TÉCNICO DE FISCALIZAÇÃO AMBIENTAL
                 </h2>
               </div>
               <div className="sm:text-right font-mono text-xs font-bold text-[#143028]">

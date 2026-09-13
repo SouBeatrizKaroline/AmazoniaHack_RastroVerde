@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useI18n } from '@/lib/i18n'
 import {
   Camera,
@@ -245,6 +246,21 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
             >
               <Eye className="w-3.5 h-3.5 mr-1.5 text-[#1B5E3A]" />
               <span>{t('evidence.view_detail')}</span>
+            </Button>
+          )}
+
+          {evidence.inspection && (
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="h-8.5 px-2.5 text-xs font-semibold text-[#1B5E3A] hover:bg-[#E7F2EC] rounded-xl transition-all"
+              title="Ver minuta de relatório vinculada"
+            >
+              <Link to={`/reports/${evidence.inspection}`}>
+                <FileText className="w-3.5 h-3.5 mr-1 text-[#1B5E3A]" />
+                <span>Ver na Minuta</span>
+              </Link>
             </Button>
           )}
 

@@ -236,7 +236,7 @@ export const InspectionForm: React.FC = () => {
         <div className="border-b border-[#E2E8E4] pb-4 mb-6">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#1B5E3A] mb-1">
             <FilePlus2 className="w-4 h-4" />
-            <span>Formulário de Vistoria de Campo</span>
+            <span>Formulário de Fiscalização de Campo</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold text-[#143028]">
             {isEditing ? 'Editar Fiscalização' : t('inspections.new')}

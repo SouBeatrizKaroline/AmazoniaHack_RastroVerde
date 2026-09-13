@@ -113,7 +113,8 @@ export const InspectionsList: React.FC = () => {
             {t('inspections.title')}
           </h1>
           <p className="text-xs text-[#5B6B63] mt-1">
-            Gerencie todas as vistorias, organize evidências e acompanhe o status de cada processo.
+            Gerencie todas as fiscalizações, organize evidências e acompanhe o status de cada
+            processo.
           </p>
         </div>
 
