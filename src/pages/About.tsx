@@ -17,7 +17,12 @@ import { RastroVerdeLogo } from '@/components/RastroVerdeLogo'
 export const About: React.FC = () => {
   const { t } = useI18n()
 
-  const team = ['Beatriz Karoline Cordeiro da Silva', 'Léo Matias Araújo', 'Sonia Janara S. Barros']
+  const team = [
+    'Ana Karolina Cordeiro da Silva',
+    'Beatriz Karoline Cordeiro da Silva',
+    'Léo Matias Araújo',
+    'Sonia Janara S. Barros',
+  ]
 
   const differentials = [t('about.diff_1'), t('about.diff_2'), t('about.diff_3')]
 
@@ -112,7 +117,7 @@ export const About: React.FC = () => {
           <span>{t('about.team_title')}</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
           {team.map((member) => (
             <div
               key={member}
