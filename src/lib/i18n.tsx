@@ -538,6 +538,106 @@ export const translations: Record<Language, Record<string, string>> = {
     'auth.demo_entry_prompt': 'Quer apenas conhecer a ferramenta?',
     'auth.demo_entry_btn': 'Ver Demonstração sem cadastro',
     'auth.password_min_length': 'Mínimo de 8 caracteres recomendando letras e números',
+
+    // Cartão de Bolso do Pitch (Uso interno da equipe / AmazoniaHack)
+    'pitch.internal_banner_badge': 'USO INTERNO DA EQUIPE',
+    'pitch.internal_banner_text':
+      'Material interno da equipe — não é parte da demonstração do produto.',
+    'pitch.title': 'Cartão de Bolso — Pitch & Júri',
+    'pitch.subtitle':
+      'Guia rápido de bolso para o pitch e banca examinadora do AmazoniaHack. Consulta rápida otimizada para celular.',
+    'pitch.tab_script_2min': 'Roteiro 2 min',
+    'pitch.tab_script_1min': 'Pitch 1 min',
+    'pitch.tab_jury': 'Perguntas do Júri',
+    'pitch.tab_all': 'Visão Completa',
+    'pitch.copy_all': 'Copiar roteiro',
+    'pitch.copied': 'Copiado para a área de transferência!',
+    'pitch.mode_pocket': 'Modo Bolso',
+    'pitch.mode_expanded': 'Expandir Tudo',
+
+    // Roteiro 2 minutos
+    'pitch.2min_title': 'Roteiro de 2 Minutos — RastroVerde',
+    'pitch.2min_badge': '2 MINUTOS',
+    'pitch.2min_step1_time': '0:00–0:20',
+    'pitch.2min_step1_label': 'Landing — O problema',
+    'pitch.2min_step1_text':
+      'Toda fiscalização ambiental gera o mesmo caos: fotos, áudios, coordenadas, notas de campo e documentos voltam de campo espalhados. Dias depois, alguém precisa reconstruir o que aconteceu — e transformar isso num relatório defensável. Às vezes a área está só num áudio. Às vezes só na fotografia. Às vezes duas fontes divergem. E nenhuma delas pode ser inventada.',
+
+    'pitch.2min_step2_time': '0:20–0:35',
+    'pitch.2min_step2_label': 'Proposta de valor',
+    'pitch.2min_step2_text':
+      'O RastroVerde organiza as evidências, extrai os fatos, verifica consistências e gera uma minuta de relatório onde cada afirmação está ligada à evidência que a sustenta. Ele não decide sozinho — sinaliza divergências e lacunas para validação humana.',
+
+    'pitch.2min_step3_time': '0:35–0:55',
+    'pitch.2min_step3_label': 'Demo — Evidências',
+    'pitch.2min_step3_text':
+      'Este é um caso fictício, marcado como dado de demonstração. Aqui estão as evidências separadas por tipo: o áudio de campo com o trecho aos 01:24 — de onde sai a única menção à área de 12,4 hectares — a fotografia cujo arquivo carrega a coordenada que o formulário não tem, e a caderneta, preservada exatamente como foi escrita.',
+
+    'pitch.2min_step4_time': '0:55–1:20',
+    'pitch.2min_step4_label': 'Divergência e lacunas',
+    'pitch.2min_step4_text':
+      'Quando duas fontes não batem — 12,3 hectares na caderneta contra 11,8 no levantamento — o sistema não escolhe por você: apresenta as duas, exige uma decisão com justificativa, e registra a origem dessa decisão na minuta. E quando algo não existe nas evidências, ele escreve "informação não localizada" — nunca preenche o vazio.',
+
+    'pitch.2min_step5_time': '1:20–1:40',
+    'pitch.2min_step5_label': 'Minuta rastreável',
+    'pitch.2min_step5_text':
+      'A minuta segue a estrutura normativa do município — cada secretaria pode ter o seu modelo. Repare nos chips de fontes: clicando em "3 fontes", vejo exatamente quais fotos, áudios e notas sustentam esta frase. O caminho afirmação → evidência fica visível o tempo todo.',
+
+    'pitch.2min_step6_time': '1:40–1:55',
+    'pitch.2min_step6_label': 'Revisão humana + encerramento',
+    'pitch.2min_step6_text':
+      'Nada é finalizado sem que uma pessoa revise: pendências, divergências e trechos de baixa confiança aparecem antes da aprovação. RastroVerde — da evidência de campo à minuta de fiscalização rastreável.',
+
+    'pitch.2min_tip_label': 'Dica de apresentação',
+    'pitch.2min_tip_text':
+      'O momento mais forte é a divergência (0:55–1:20) — não acelerar ali. Se o tempo apertar, cortar a seção de Instrumentos, não a rastreabilidade.',
+
+    // Pitch Relâmpago 1 minuto
+    'pitch.1min_title': 'Pitch Relâmpago — 1 Minuto',
+    'pitch.1min_badge': '1 MINUTO',
+    'pitch.1min_step1_time': '0:00–0:15',
+    'pitch.1min_step1_label': 'O problema',
+    'pitch.1min_step1_text':
+      'A evidência volta do campo em vários formatos: fotos, áudios, coordenadas, notas. Dias depois, alguém precisa reconstruir o que aconteceu e virar isso num relatório defensável. A área pode estar só num áudio. A coordenada, só na fotografia. E quando duas fontes divergem, nada pode ser inventado.',
+
+    'pitch.1min_step2_time': '0:15–0:30',
+    'pitch.1min_step2_label': 'A proposta',
+    'pitch.1min_step2_text':
+      'O RastroVerde transforma esse conjunto disperso numa minuta de fiscalização rastreável — onde cada afirmação está ligada à evidência que a sustenta, com um clique.',
+
+    'pitch.1min_step3_time': '0:30–0:50',
+    'pitch.1min_step3_label': 'Demo',
+    'pitch.1min_step3_text':
+      'Nesta minuta, clicando em "3 fontes", vejo exatamente quais fotos, áudios e notas sustentam esta frase. E aqui — o momento crítico: duas fontes, 12,3 contra 11,8 hectares. O sistema não escolhe: exige decisão humana com justificativa, registrada na minuta.',
+
+    'pitch.1min_step4_time': '0:50–1:00',
+    'pitch.1min_step4_label': 'Encerramento',
+    'pitch.1min_step4_text':
+      'E o que não existe nas evidências, ele escreve: "informação não localizada" — nunca preenche o vazio. RastroVerde: da evidência de campo à minuta rastreável. Humano revisa, sistema rastreia.',
+
+    'pitch.1min_tip_label': 'Dica prática',
+    'pitch.1min_tip_text':
+      'Em vez de navegar ao vivo, deixar a aba Minuta já aberta numa segunda aba preparada — os 20 segundos centrais ganham o dobro de impacto.',
+
+    // Respostas para o Júri
+    'pitch.jury_title': 'Respostas para o Júri (Banca Examinadora)',
+    'pitch.jury_badge': '3 PERGUNTAS-CHAVE',
+    'pitch.jury_q1': 'Como vocês garantem a segurança e a integridade das evidências?',
+    'pitch.jury_a1':
+      'Não prometemos o que não entregamos: não usamos blockchain nem afirmamos cadeia de custódia formal. O que o RastroVerde faz hoje é três coisas concretas: cada arquivo recebe um indicador de integridade (SHA-256) que sinaliza se foi alterado; toda ação fica registrada na trilha de auditoria com autoria, data e hora; e o acesso é controlado por autenticação. A responsabilidade final é sempre do agente fiscal — o sistema organiza e rastreia, nunca decide.',
+
+    'pitch.jury_q2':
+      'Quanto custa processar uma ocorrência? Isso escala para um município pequeno?',
+    'pitch.jury_a2':
+      'Sendo honestos: ainda não medimos custo em produção — e preferimos dizer isso a inventar números. A arquitetura já registra método, tempo de processamento e quantidade de evidências por ocorrência, então a medição está preparada. E o design é leve de propósito: a extração roda por ocorrência, não em tempo real, então um município pequeno processa seus casos conforme a demanda, sem infraestrutura contínua pesada.',
+
+    'pitch.jury_q3': 'Cada prefeitura faz o relatório de um jeito. Como vocês lidam com isso?',
+    'pitch.jury_a3':
+      'Foi por isso que a minuta não é fixa: existe uma arquitetura de modelos configuráveis por município — já entregamos perfis de exemplo para Altamira, Paragominas, Tailândia e Ulianópolis, cada um com sua estrutura. A secretaria adapta as seções ao seu padrão sem mexer no código. E como cada informação da minuta carrega a fonte de onde veio, a adaptação do modelo não quebra a rastreabilidade.',
+
+    'pitch.jury_strategy_label': 'Nota de estratégia',
+    'pitch.jury_strategy_text':
+      'As três respostas seguem a mesma estratégia: admitir o limite com honestidade e mostrar imediatamente o que o sistema realmente faz. Júris de hackathon valorizam mais isso do que promessa grande.',
   },
   en: {
     // Brand & header
@@ -1066,6 +1166,105 @@ export const translations: Record<Language, Record<string, string>> = {
     'auth.demo_entry_prompt': 'Just exploring the platform?',
     'auth.demo_entry_btn': 'View Demo without signing up',
     'auth.password_min_length': 'Minimum 8 characters with letters and numbers recommended',
+
+    // Pitch Pocket Card (Internal Team / AmazoniaHack)
+    'pitch.internal_banner_badge': 'INTERNAL TEAM USE ONLY',
+    'pitch.internal_banner_text': 'Internal team material — not part of the product demonstration.',
+    'pitch.title': 'Pocket Card — Pitch & Jury Q&A',
+    'pitch.subtitle':
+      'Quick pocket reference guide for the AmazoniaHack pitch and judging panel. Mobile-optimized for quick backstage consultation.',
+    'pitch.tab_script_2min': '2-Min Script',
+    'pitch.tab_script_1min': '1-Min Pitch',
+    'pitch.tab_jury': 'Jury Q&A',
+    'pitch.tab_all': 'Full View',
+    'pitch.copy_all': 'Copy script',
+    'pitch.copied': 'Copied to clipboard!',
+    'pitch.mode_pocket': 'Pocket Mode',
+    'pitch.mode_expanded': 'Expand All',
+
+    // 2-Minute Script
+    'pitch.2min_title': '2-Minute Script — RastroVerde',
+    'pitch.2min_badge': '2 MINUTES',
+    'pitch.2min_step1_time': '0:00–0:20',
+    'pitch.2min_step1_label': 'Landing — The Problem',
+    'pitch.2min_step1_text':
+      'Every environmental inspection generates the same chaos: photos, audio notes, coordinates, field notebooks, and paper documents come back scattered. Days later, someone has to reconstruct what happened — and turn it into a legally defensible report. Sometimes the area measurement exists only in an audio clip. Sometimes only in a photo. Sometimes two sources conflict. And none of them can ever be fabricated.',
+
+    'pitch.2min_step2_time': '0:20–0:35',
+    'pitch.2min_step2_label': 'Value Proposition',
+    'pitch.2min_step2_text':
+      'RastroVerde organizes the evidence, extracts the facts, checks consistency, and generates a draft report where every statement is directly linked to the evidence supporting it. It never decides on its own — it highlights divergences and evidentiary gaps for human sign-off.',
+
+    'pitch.2min_step3_time': '0:35–0:55',
+    'pitch.2min_step3_label': 'Demo — Evidence',
+    'pitch.2min_step3_text':
+      'This is a fictional case, flagged as synthetic demonstration data. Here is the evidence organized by type: the field audio recording at 01:24 — the sole reference to the 12.4-hectare affected area — the field photograph whose metadata carries the coordinate missing from the paper form, and the field notebook, preserved exactly as written.',
+
+    'pitch.2min_step4_time': '0:55–1:20',
+    'pitch.2min_step4_label': 'Divergence & Gaps',
+    'pitch.2min_step4_text':
+      'When two sources conflict — 12.3 hectares in the notebook versus 11.8 in the survey — the system never chooses for you: it displays both, mandates an officer decision with reasoning, and records that decision origin directly in the report draft. And whenever an item is absent from the evidence, it writes "information not located" — it never fills in the blanks.',
+
+    'pitch.2min_step5_time': '1:20–1:40',
+    'pitch.2min_step5_label': 'Traceable Draft Report',
+    'pitch.2min_step5_text':
+      'The draft adheres to the municipal regulatory template — each environmental department can configure its own standard. Notice the source chips: clicking "3 sources" reveals exactly which photos, audio clips, and field notes substantiate this statement. The statement → evidence path stays visible at all times.',
+
+    'pitch.2min_step6_time': '1:40–1:55',
+    'pitch.2min_step6_label': 'Human Review & Closing',
+    'pitch.2min_step6_text':
+      'Nothing is finalized without human review: outstanding items, conflicting data, and low-confidence passages are surfaced before final approval. RastroVerde — from field evidence to traceable inspection reports.',
+
+    'pitch.2min_tip_label': 'Delivery tip',
+    'pitch.2min_tip_text':
+      'The strongest moment is the divergence (0:55–1:20) — do not rush there. If running out of time, cut the Instruments section, never the traceability.',
+
+    // 1-Minute Lightning Pitch
+    'pitch.1min_title': 'Lightning Pitch — 1 Minute',
+    'pitch.1min_badge': '1 MINUTE',
+    'pitch.1min_step1_time': '0:00–0:15',
+    'pitch.1min_step1_label': 'The Problem',
+    'pitch.1min_step1_text':
+      'Evidence returns from the field in disconnected formats: photos, audio notes, coordinates, clipboards. Days later, someone has to reconstruct what happened and turn it into a defensible report. The area may only be in an audio note. The coordinate, only in a photograph. And when two sources diverge, nothing can be made up.',
+
+    'pitch.1min_step2_time': '0:15–0:30',
+    'pitch.1min_step2_label': 'The Proposal',
+    'pitch.1min_step2_text':
+      'RastroVerde turns that scattered pile into a traceable inspection draft — where every statement is anchored to the evidence supporting it, in just one click.',
+
+    'pitch.1min_step3_time': '0:30–0:50',
+    'pitch.1min_step3_label': 'Demo',
+    'pitch.1min_step3_text':
+      'In this draft report, clicking "3 sources" shows exactly which photos, audios, and notes back up this sentence. And here — the critical moment: two sources, 12.3 vs 11.8 hectares. The system does not choose: it demands a human decision with reasoning, recorded in the draft.',
+
+    'pitch.1min_step4_time': '0:50–1:00',
+    'pitch.1min_step4_label': 'Closing',
+    'pitch.1min_step4_text':
+      'And for whatever is missing in the evidence, it writes: "information not located" — never inventing data. RastroVerde: from field evidence to traceable report draft. Human reviews, system traces.',
+
+    'pitch.1min_tip_label': 'Practical tip',
+    'pitch.1min_tip_text':
+      'Instead of live menu clicking, keep the Draft Report tab already loaded in a prepared second browser tab — the 20 middle seconds will carry twice the impact.',
+
+    // Jury Answers
+    'pitch.jury_title': 'Answers for the Jury (Judges Panel)',
+    'pitch.jury_badge': '3 KEY QUESTIONS',
+    'pitch.jury_q1': 'How do you ensure the security and integrity of the evidence?',
+    'pitch.jury_a1':
+      'We do not promise what we do not deliver: we do not use blockchain nor claim a formal custody chain. What RastroVerde does today consists of three concrete pillars: each file receives an integrity hash (SHA-256) flagging whether it was modified; every action is recorded in the audit trail with officer attribution, date, and timestamp; and access is controlled via authentication. Ultimate responsibility always rests with the enforcement officer — the system organizes and traces, never decides.',
+
+    'pitch.jury_q2':
+      'How much does it cost to process an occurrence? Does this scale for a small municipality?',
+    'pitch.jury_a2':
+      'Being honest: we have not yet measured production costs — and we prefer saying that over inventing figures. The architecture already logs method, processing time, and evidence volume per occurrence, so measurement is built in. And the design is intentionally lightweight: extraction runs per occurrence on demand, not in real time, so a small municipality processes cases as they happen, without heavy continuous infrastructure.',
+
+    'pitch.jury_q3': 'Every city council structures reports differently. How do you handle that?',
+    'pitch.jury_a3':
+      'That is precisely why the report draft is not hardcoded: there is a configurable municipality template architecture — we already provide sample profiles for Altamira, Paragominas, Tailândia, and Ulianópolis, each with its own structure. The local secretariat adapts sections to its standard without code changes. And because every draft item carries the origin source it came from, tailoring the template never breaks traceability.',
+
+    'pitch.jury_strategy_label': 'Strategy note',
+    'pitch.jury_strategy_text':
+      'All three answers share the exact same strategy: acknowledge the boundary honestly and immediately showcase what the system actually does. Hackathon judges value that far more than overpromising.',
   },
 }
 

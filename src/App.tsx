@@ -23,6 +23,7 @@ import ReportGenerator from '@/pages/ReportGenerator'
 import HistoryLog from '@/pages/HistoryLog'
 import About from '@/pages/About'
 import Privacy from '@/pages/Privacy'
+import PitchCard from '@/pages/PitchCard'
 
 // Auth Pages
 import Login from '@/pages/Login'
@@ -45,6 +46,7 @@ export const App: React.FC = () => {
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/privacy" element={<Privacy />} />
+                <Route path="/pitch-card" element={<PitchCard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
