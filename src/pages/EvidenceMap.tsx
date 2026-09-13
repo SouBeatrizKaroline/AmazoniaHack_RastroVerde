@@ -103,28 +103,48 @@ export const EvidenceMap: React.FC = () => {
         </div>
       </div>
 
-      {/* Filter Chips Bar */}
-      <div className="flex flex-wrap items-center gap-2 p-3 rounded-2xl border border-[#E2E8E4] bg-white shadow-xs">
-        <span className="text-xs font-bold text-[#5B6B63] mr-2 flex items-center gap-1">
-          <Filter className="w-3.5 h-3.5" />
-          <span>Filtro de Camadas:</span>
-        </span>
-        {['Fotografia', 'Documento', 'Anotação', 'Localização', 'Depoimento'].map((type) => {
-          const isActive = activeTypes.includes(type)
-          return (
-            <button
-              key={type}
-              onClick={() => toggleType(type)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                isActive
-                  ? 'bg-[#1B5E3A] text-white shadow-xs'
-                  : 'bg-[#F7F9F8] text-[#5B6B63] border border-[#E2E8E4] opacity-60'
-              }`}
-            >
-              {type}
-            </button>
-          )
-        })}
+      {/* Filter Chips Bar e Controles de Acessibilidade */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl border border-[#E2E8E4] bg-white shadow-xs">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-bold text-[#5B6B63] mr-1 flex items-center gap-1.5">
+            <Filter className="w-3.5 h-3.5 text-[#1B5E3A]" />
+            <span>Camadas no mapa:</span>
+          </span>
+          {['Fotografia', 'Documento', 'Anotação', 'Localização', 'Depoimento'].map((type) => {
+            const isActive = activeTypes.includes(type)
+            const count = evidenceList.filter((e) => e.type === type).length
+            return (
+              <button
+                key={type}
+                type="button"
+                onClick={() => toggleType(type)}
+                aria-pressed={isActive}
+                aria-label={`Filtrar camada ${type} (${count} itens)`}
+                className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A] focus-visible:ring-offset-2 flex items-center gap-1.5 ${
+                  isActive
+                    ? 'bg-[#1B5E3A] text-white shadow-2xs hover:bg-[#14502F]'
+                    : 'bg-[#F7F9F8] text-[#5B6B63] border border-[#E2E8E4] hover:border-[#1B5E3A]/40 hover:text-[#143028]'
+                }`}
+              >
+                <span>{type}</span>
+                <span
+                  className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                    isActive ? 'bg-white/20 text-white' : 'bg-gray-200/80 text-gray-700'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="text-xs text-[#5B6B63] font-medium flex items-center gap-2">
+          <span className="hidden sm:inline">Exibindo:</span>
+          <span className="font-bold text-[#143028]">
+            {visibleEvidence.length} de {evidenceList.length} pontos
+          </span>
+        </div>
       </div>
 
       {/* Loading state for Map */}
@@ -237,7 +257,7 @@ export const EvidenceMap: React.FC = () => {
             </text>
 
             {/* Markers */}
-            {visibleEvidence.map((evd, idx) => {
+            {visibleEvidence.map((evd) => {
               const pos = getCoordinatesPosition(evd.latitude, evd.longitude)
               const isSelected = selectedEvidence?.id === evd.id
 
@@ -245,9 +265,27 @@ export const EvidenceMap: React.FC = () => {
                 <g
                   key={evd.id}
                   onClick={() => setSelectedEvidence(evd)}
-                  className="cursor-pointer transition-transform"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      setSelectedEvidence(evd)
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Ponto georreferenciado ${evd.code}, tipo ${evd.type}, ${evd.description || ''}`}
+                  className="cursor-pointer transition-transform focus:outline-none"
                   style={{ transformOrigin: `${pos.x}px ${pos.y}px` }}
                 >
+                  {/* Touch Target Invisível ≥44x44px para dispositivos móveis */}
+                  <rect
+                    x={pos.x - 24}
+                    y={pos.y - 24}
+                    width="48"
+                    height="48"
+                    fill="transparent"
+                  />
+
                   {/* Soft pulse animation ring on selected or review */}
                   {isSelected && (
                     <circle
@@ -255,7 +293,7 @@ export const EvidenceMap: React.FC = () => {
                       cy={pos.y}
                       r="18"
                       fill="#1B5E3A"
-                      fillOpacity="0.2"
+                      fillOpacity="0.25"
                       className="animate-ping"
                     />
                   )}
@@ -268,25 +306,25 @@ export const EvidenceMap: React.FC = () => {
                     fill={isSelected ? '#1B5E3A' : '#0F766E'}
                     stroke="#FFFFFF"
                     strokeWidth="2"
-                    className="shadow-md transition-all hover:scale-125"
+                    className="shadow-md transition-all hover:scale-125 focus-visible:scale-125"
                   />
 
                   {/* Marker code label tag */}
                   <rect
-                    x={pos.x - 22}
-                    y={pos.y - 24}
-                    width="44"
-                    height="14"
+                    x={pos.x - 24}
+                    y={pos.y - 25}
+                    width="48"
+                    height="15"
                     rx="4"
                     fill="#143028"
-                    fillOpacity="0.85"
+                    fillOpacity="0.9"
                   />
                   <text
                     x={pos.x}
                     y={pos.y - 14}
                     textAnchor="middle"
                     fill="#FFFFFF"
-                    fontSize="8"
+                    fontSize="8.5"
                     fontWeight="bold"
                     fontFamily="monospace"
                   >
@@ -312,7 +350,8 @@ export const EvidenceMap: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedEvidence(null)}
-                  className="text-gray-400 hover:text-gray-600 p-1"
+                  aria-label="Fechar detalhes do ponto selecionado"
+                  className="text-gray-500 hover:text-[#143028] min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]"
                 >
                   <X className="w-4 h-4" />
                 </button>

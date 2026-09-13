@@ -21,9 +21,17 @@ import {
 import { DivergenceBlock } from '@/components/DivergenceBlock'
 import { InstrumentConsistencyViewer } from '@/components/InstrumentConsistencyViewer'
 
+export type VerificationFilterCategory =
+  | 'ALL'
+  | 'Confirmado'
+  | 'Divergência'
+  | 'Ausente'
+  | 'Baixa confiança'
+  | 'Requer revisão humana'
+
 interface VerificationResult {
   id: string
-  category: 'consistent' | 'review' | 'conflict' | 'missing'
+  category: 'Confirmado' | 'Divergência' | 'Ausente' | 'Baixa confiança' | 'Requer revisão humana'
   badge: string
   color: string
   icon: any
@@ -39,6 +47,7 @@ export const ConsistencyVerification: React.FC = () => {
   const { toast } = useToast()
   const [recalculating, setRecalculating] = useState(false)
   const [items, setItems] = useState<VerificationResult[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<VerificationFilterCategory>('ALL')
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
 
@@ -65,72 +74,99 @@ export const ConsistencyVerification: React.FC = () => {
       const demoInsp = inspections.find((i) => i.id_number === 'RV-DEMO-001') || inspections[0]
       const results: VerificationResult[] = []
 
-      // 1. Photographic temporal compatibility
+      // 1. Confirmado (Verde) - Compatibilidade temporal e metadados
       const photos = evidenceList.filter((e) => e.type === 'Fotografia')
       const firstPhoto = photos[0] || evidenceList[0]
       results.push({
         id: 'VER-001',
-        category: 'consistent',
-        badge: '🟢 Consistente',
-        color: 'border-emerald-200 bg-emerald-50/40 text-emerald-900',
+        category: 'Confirmado',
+        badge: '🟢 Confirmado',
+        color: 'border-emerald-200 bg-emerald-50/40 text-emerald-950',
         icon: CheckCircle2,
-        iconColor: 'text-[#2F9E5F]',
+        iconColor: 'text-[#1B5E3A]',
         title: 'Compatibilidade temporal das fotografias',
         message: 'Data registrada nas fotografias coincide com a data da fiscalização.',
         recommendation:
-          'Registros cronológicos e metadados encontram-se em perfeita conformidade com o cronograma da operação.',
+          'Registros cronológicos e metadados encontram-se em conformidade com o cronograma da operação.',
         evidenceCode: firstPhoto ? firstPhoto.code : 'EVD-001',
       })
 
-      // 2. Proximity check or multiple locations
-      const secondEvd = evidenceList[1] || firstPhoto
+      // 2. Divergência (Amarelo) - Divergência de área 12,3 vs 11,8 ha
       results.push({
         id: 'VER-002',
-        category: 'review',
-        badge: '🟡 Verificar',
-        color: 'border-amber-200 bg-amber-50/40 text-amber-900',
+        category: 'Divergência',
+        badge: '🟡 Divergência',
+        color: 'border-amber-300 bg-amber-50/50 text-amber-950',
         icon: AlertTriangle,
-        iconColor: 'text-[#D97706]',
-        title: 'Possível proximidade temporal com locais distintos',
-        message: 'Duas evidências apresentam horários próximos no setor da APA.',
+        iconColor: 'text-[#B45309]',
+        title: 'Divergência de área: Satélite (12,3 ha) vs GPS de campo (11,8 ha)',
+        message: 'Constatada diferença métrica entre estimativa orbital preliminar e caminhamento perimetral.',
         recommendation:
-          'Recomenda-se verificar com a equipe se houve deslocamento rápido por viatura ou divisão de tarefas em campo.',
+          'Não consolidar valor único sem despacho fundamentado. Escolha entre satélite ou GPS com justificativa expressa na minuta.',
+        evidenceCode: 'EVD-003',
+      })
+
+      // 3. Ausente (Cinza / Vermelho suave) - Documento ou agente não informado
+      const missingOfficer = evidenceList.find((e) => !e.officer || e.officer.trim() === '')
+      results.push({
+        id: 'VER-003',
+        category: 'Ausente',
+        badge: '⚪ Ausente',
+        color: 'border-slate-300 bg-slate-50/60 text-slate-900',
+        icon: HelpCircle,
+        iconColor: 'text-slate-600',
+        title: 'Certidão dominial / Inscrição do CAR não anexada',
+        message: 'Constatada autuação em campo sem o protocolo dominial correspondente nos autos.',
+        recommendation:
+          'Notificação formal emitida com assinalamento de prazo para apresentação do recibo do CAR ou matrícula.',
+        evidenceCode: missingOfficer ? missingOfficer.code : 'EVD-004',
+      })
+
+      // 4. Baixa confiança (Amarelo / Laranja) - Metadados incompletos ou sinal fraco
+      const secondEvd = evidenceList[1] || firstPhoto
+      results.push({
+        id: 'VER-004',
+        category: 'Baixa confiança',
+        badge: '🟠 Baixa confiança',
+        color: 'border-orange-200 bg-orange-50/40 text-orange-950',
+        icon: AlertTriangle,
+        iconColor: 'text-orange-600',
+        title: 'Precisão de posicionamento com raio de incerteza elevado',
+        message: 'Registro de coordenadas coletado sob dossel denso com margem de tolerância de ±18 metros.',
+        recommendation:
+          'Sinalizar na minuta a margem de erro instrumental do GPS portátil e cruzar com o marco físico.',
         evidenceCode: secondEvd ? secondEvd.code : 'EVD-002',
       })
 
-      // 3. Officer check
-      const missingOfficer = evidenceList.find((e) => !e.officer || e.officer.trim() === '')
-      if (missingOfficer) {
-        results.push({
-          id: 'VER-003',
-          category: 'missing',
-          badge: '🔵 Informação ausente',
-          color: 'border-blue-200 bg-blue-50/40 text-blue-900',
-          icon: HelpCircle,
-          iconColor: 'text-[#2563EB]',
-          title: 'Ausência de qualificação do agente no registro',
-          message: `Não há identificação do responsável pelo registro da evidência ${missingOfficer.code}.`,
-          recommendation:
-            'Informação não localizada. Confirme com o líder da equipe quem realizou a constatação deste registro.',
-          evidenceCode: missingOfficer.code,
-        })
-      }
-
-      // 4. In review status check
+      // 5. Requer revisão humana (Vermelho) - Conflito de depoimento / pendência técnica
       const inReview = evidenceList.find((e) => e.status === 'Em revisão')
       if (inReview) {
         results.push({
-          id: 'VER-004',
-          category: 'conflict',
-          badge: '🔴 Conflito',
-          color: 'border-red-200 bg-red-50/40 text-red-900',
+          id: 'VER-005',
+          category: 'Requer revisão humana',
+          badge: '🔴 Requer revisão humana',
+          color: 'border-rose-300 bg-rose-50/50 text-rose-950',
           icon: AlertOctagon,
           iconColor: 'text-[#B3261E]',
-          title: 'Registro com pendência técnica em revisão',
-          message: `Evidência ${inReview.code} (${inReview.description}) sinalizada para revisão técnica de campo.`,
+          title: 'Depoimento de posse conflitante com registro de satélite anterior',
+          message: `Evidência ${inReview.code} (${inReview.description}) sinalizada para deliberação do fiscal responsável.`,
           recommendation:
-            'Recomenda-se aferição dos parâmetros e validação no Centro de Evidências antes de fechar o dossiê.',
+            'A decisão sobre qualificar reincidência ou ocupação prévia compete exclusivamente à autoridade fiscal.',
           evidenceCode: inReview.code,
+        })
+      } else {
+        results.push({
+          id: 'VER-005',
+          category: 'Requer revisão humana',
+          badge: '🔴 Requer revisão humana',
+          color: 'border-rose-300 bg-rose-50/50 text-rose-950',
+          icon: AlertOctagon,
+          iconColor: 'text-[#B3261E]',
+          title: 'Verificação do enquadramento normativo do dano ambiental',
+          message: 'Necessária confirmação humana do dispositivo legal aplicável antes de lavrar o auto.',
+          recommendation:
+            'Revisar a indicação do Art. 50 do Decreto Federal 6.514/2008 à luz das amostras botânicas.',
+          evidenceCode: 'EVD-014',
         })
       }
 
@@ -229,23 +265,103 @@ export const ConsistencyVerification: React.FC = () => {
         />
       </div>
 
-      {/* Category Pills Strip */}
-      <div className="flex flex-wrap items-center gap-2 p-3 sm:p-4 rounded-2xl border border-[#E2E8E4] bg-white text-xs shadow-2xs">
+      {/* Category Pills Strip - Interativo com alvos ≥44px e as 5 categorias padronizadas */}
+      <div className="flex flex-wrap items-center gap-2.5 p-3.5 sm:p-4 rounded-2xl border border-[#E2E8E4] bg-white text-xs shadow-2xs">
         <span className="font-bold text-[#5B6B63] mr-1">
-          {t('workspace.category_filter_title')}
+          Filtrar por classificação:
         </span>
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 text-emerald-900 font-semibold border border-emerald-200/80">
-          🟢 {t('verification.consistent')}
-        </span>
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-50 text-amber-900 font-semibold border border-amber-200/80">
-          🟡 {t('verification.review')}
-        </span>
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-50 text-rose-900 font-semibold border border-rose-200/80">
-          🔴 {t('verification.conflict')}
-        </span>
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-sky-50 text-sky-900 font-semibold border border-sky-200/80">
-          🔵 {t('verification.missing')}
-        </span>
+        <button
+          type="button"
+          onClick={() => setSelectedCategory('ALL')}
+          aria-pressed={selectedCategory === 'ALL'}
+          className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A] ${
+            selectedCategory === 'ALL'
+              ? 'bg-[#143028] text-white shadow-2xs'
+              : 'bg-[#F7F9F8] text-[#5B6B63] border border-[#E2E8E4] hover:border-[#143028]/40'
+          }`}
+        >
+          Todas ({items.length})
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setSelectedCategory('Confirmado')}
+          aria-pressed={selectedCategory === 'Confirmado'}
+          className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-emerald-700 flex items-center gap-1.5 ${
+            selectedCategory === 'Confirmado'
+              ? 'bg-[#1B5E3A] text-white shadow-2xs'
+              : 'bg-emerald-50 text-emerald-950 border border-emerald-200/80 hover:bg-emerald-100/70'
+          }`}
+        >
+          <span>🟢 Confirmado</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-white/30 text-current">
+            {items.filter((i) => i.category === 'Confirmado').length}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setSelectedCategory('Divergência')}
+          aria-pressed={selectedCategory === 'Divergência'}
+          className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-600 flex items-center gap-1.5 ${
+            selectedCategory === 'Divergência'
+              ? 'bg-[#B45309] text-white shadow-2xs'
+              : 'bg-amber-50 text-amber-950 border border-amber-300 hover:bg-amber-100/70'
+          }`}
+        >
+          <span>🟡 Divergência</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-white/30 text-current">
+            {items.filter((i) => i.category === 'Divergência').length}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setSelectedCategory('Ausente')}
+          aria-pressed={selectedCategory === 'Ausente'}
+          className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-600 flex items-center gap-1.5 ${
+            selectedCategory === 'Ausente'
+              ? 'bg-slate-700 text-white shadow-2xs'
+              : 'bg-slate-100 text-slate-900 border border-slate-300 hover:bg-slate-200/70'
+          }`}
+        >
+          <span>⚪ Ausente</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-white/30 text-current">
+            {items.filter((i) => i.category === 'Ausente').length}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setSelectedCategory('Baixa confiança')}
+          aria-pressed={selectedCategory === 'Baixa confiança'}
+          className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-orange-600 flex items-center gap-1.5 ${
+            selectedCategory === 'Baixa confiança'
+              ? 'bg-orange-700 text-white shadow-2xs'
+              : 'bg-orange-50 text-orange-950 border border-orange-200 hover:bg-orange-100/70'
+          }`}
+        >
+          <span>🟠 Baixa confiança</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-white/30 text-current">
+            {items.filter((i) => i.category === 'Baixa confiança').length}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setSelectedCategory('Requer revisão humana')}
+          aria-pressed={selectedCategory === 'Requer revisão humana'}
+          className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-rose-600 flex items-center gap-1.5 ${
+            selectedCategory === 'Requer revisão humana'
+              ? 'bg-[#B3261E] text-white shadow-2xs'
+              : 'bg-rose-50 text-rose-950 border border-rose-300 hover:bg-rose-100/70'
+          }`}
+        >
+          <span>🔴 Requer revisão humana</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-white/30 text-current">
+            {items.filter((i) => i.category === 'Requer revisão humana').length}
+          </span>
+        </button>
       </div>
 
       {/* Loading & Error States */}
@@ -272,33 +388,39 @@ export const ConsistencyVerification: React.FC = () => {
       {/* Result Cards Grid com design elegante, sem cores gritantes */}
       {!loading && !loadError && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {items.map((item) => {
-            const Icon = item.icon
+          {items
+            .filter((item) => selectedCategory === 'ALL' || item.category === selectedCategory)
+            .map((item) => {
+              const Icon = item.icon
 
-            // Estilo de borda e fundo sutis conforme cada categoria
-            const borderStyle =
-              item.category === 'consistent'
-                ? 'border-emerald-200/90 hover:border-emerald-400'
-                : item.category === 'review'
-                  ? 'border-amber-200/90 hover:border-amber-400'
-                  : item.category === 'conflict'
-                    ? 'border-rose-200/90 hover:border-rose-400'
-                    : 'border-sky-200/90 hover:border-sky-400'
+              // Estilo de borda e fundo conforme as 5 categorias padronizadas
+              const borderStyle =
+                item.category === 'Confirmado'
+                  ? 'border-emerald-200/90 hover:border-emerald-400'
+                  : item.category === 'Divergência'
+                    ? 'border-amber-300/90 hover:border-amber-400'
+                    : item.category === 'Ausente'
+                      ? 'border-slate-300/90 hover:border-slate-400'
+                      : item.category === 'Baixa confiança'
+                        ? 'border-orange-200/90 hover:border-orange-400'
+                        : 'border-rose-300/90 hover:border-rose-400'
 
-            const badgeBg =
-              item.category === 'consistent'
-                ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
-                : item.category === 'review'
-                  ? 'bg-amber-50 text-amber-900 border-amber-200'
-                  : item.category === 'conflict'
-                    ? 'bg-rose-50 text-rose-900 border-rose-200'
-                    : 'bg-sky-50 text-sky-900 border-sky-200'
+              const badgeBg =
+                item.category === 'Confirmado'
+                  ? 'bg-emerald-50 text-emerald-950 border-emerald-200'
+                  : item.category === 'Divergência'
+                    ? 'bg-amber-50 text-amber-950 border-amber-300'
+                    : item.category === 'Ausente'
+                      ? 'bg-slate-100 text-slate-900 border-slate-300'
+                      : item.category === 'Baixa confiança'
+                        ? 'bg-orange-50 text-orange-950 border-orange-200'
+                        : 'bg-rose-50 text-rose-950 border-rose-300'
 
-            return (
-              <div
-                key={item.id}
-                className={`rounded-3xl border p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 bg-white transition-all duration-200 hover:shadow-md ${borderStyle}`}
-              >
+              return (
+                <div
+                  key={item.id}
+                  className={`rounded-3xl border p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 bg-white transition-all duration-200 hover:shadow-md ${borderStyle}`}
+                >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span
@@ -340,7 +462,7 @@ export const ConsistencyVerification: React.FC = () => {
 
                   <Link
                     to={`/evidence?source=${item.evidenceCode}`}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#1B5E3A] hover:underline group"
+                    className="min-h-[44px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#1B5E3A] hover:bg-[#E7F2EC] transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A] group"
                   >
                     <span>{t('verification.go_to_evidence')}</span>
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
