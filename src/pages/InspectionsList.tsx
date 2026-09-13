@@ -119,7 +119,7 @@ export const InspectionsList: React.FC = () => {
         </div>
 
         <Link to="/inspections/new">
-          <Button className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-lg shadow-xs flex items-center gap-1.5">
+          <Button className="min-h-[44px] bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold px-4 rounded-xl shadow-xs flex items-center gap-1.5 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]">
             <Plus className="w-4 h-4" />
             <span>{t('inspections.new')}</span>
           </Button>
@@ -145,10 +145,11 @@ export const InspectionsList: React.FC = () => {
             <button
               key={s.key}
               onClick={() => setSelectedStatus(s.key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+              aria-pressed={selectedStatus === s.key}
+              className={`min-h-[44px] px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A] ${
                 selectedStatus === s.key
-                  ? 'bg-[#1B5E3A] text-white shadow-xs'
-                  : 'bg-[#F7F9F8] text-[#5B6B63] hover:text-[#143028] hover:bg-[#E2E8E4]/50'
+                  ? 'bg-[#1B5E3A] text-white shadow-2xs hover:bg-[#14502F]'
+                  : 'bg-[#F7F9F8] text-[#5B6B63] border border-[#E2E8E4] hover:text-[#143028] hover:bg-[#E2E8E4]/50'
               }`}
             >
               {s.label}
@@ -212,9 +213,9 @@ export const InspectionsList: React.FC = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-8 px-2.5 text-xs text-[#5B6B63] hover:text-[#143028]"
+                    className="min-h-[44px] px-3 text-xs font-bold text-[#5B6B63] hover:text-[#143028] rounded-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]"
                   >
-                    <Edit2 className="w-3.5 h-3.5 mr-1" />
+                    <Edit2 className="w-4 h-4 mr-1.5" />
                     <span>{t('inspections.edit')}</span>
                   </Button>
                 </Link>
@@ -222,10 +223,10 @@ export const InspectionsList: React.FC = () => {
                 <Link to={`/inspections/${insp.id_number}`}>
                   <Button
                     size="sm"
-                    className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-8 px-3 rounded-lg shadow-xs flex items-center gap-1.5"
+                    className="min-h-[44px] bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold px-3.5 rounded-xl shadow-xs flex items-center gap-1.5 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]"
                   >
                     <span>{t('dashboard.open_inspection')}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
               </div>

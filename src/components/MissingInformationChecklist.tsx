@@ -23,6 +23,7 @@ export const MissingInformationChecklist: React.FC<MissingInformationChecklistPr
   onToggleItem,
   onGenerateChecklist,
 }) => {
+  const [highContrastMode, setHighContrastMode] = React.useState(false)
   const criticalItems = items.filter((i) => i.category === 'crítico')
   const importantItems = items.filter((i) => i.category === 'importante')
 
@@ -32,32 +33,51 @@ export const MissingInformationChecklist: React.FC<MissingInformationChecklistPr
 
   return (
     <div className="space-y-6">
-      {/* Alert Header Banner */}
-      <div className="rounded-3xl border-2 border-amber-300 bg-amber-50/50 p-6 shadow-xs space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0">
-              <AlertTriangle className="w-5 h-5" />
+      {/* Alert Header Banner com controles móveis de alto contraste para sol forte */}
+      <div
+        className={`rounded-3xl border-2 transition-colors p-5 sm:p-6 shadow-xs space-y-4 ${
+          highContrastMode
+            ? 'bg-amber-100 border-amber-500 text-black'
+            : 'border-amber-300 bg-amber-50/50 text-[#143028]'
+        }`}
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-amber-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
+              <AlertTriangle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#143028]">
+              <h3 className="text-base sm:text-lg font-extrabold text-[#143028] tracking-tight">
                 O que falta para fechar o caso com defensabilidade técnica?
               </h3>
-              <p className="text-xs text-amber-950/80 mt-0.5">
-                Orientação operacional: se a equipe ainda estiver em campo, estes dados podem ser
-                coletados antes do encerramento da ocorrência.
+              <p className="text-xs sm:text-sm text-amber-950 font-medium mt-0.5">
+                Orientação operacional em campo: dados recomendados para coleta antes de desmobilizar a equipe da poligonal.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto">
+          <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+            {/* Botão de Modo Sol Forte / Alto Contraste para Celular */}
+            <button
+              type="button"
+              onClick={() => setHighContrastMode(!highContrastMode)}
+              aria-pressed={highContrastMode}
+              className={`min-h-[44px] px-3 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A] ${
+                highContrastMode
+                  ? 'bg-black text-yellow-300 border-black shadow-md'
+                  : 'bg-white text-[#143028] border-amber-300 hover:bg-amber-100/50'
+              }`}
+            >
+              <span>{highContrastMode ? '☀️ Modo Sol: Ativo' : '☀️ Modo Luz Solar'}</span>
+            </button>
+
             <Button
               size="sm"
               onClick={handlePrint}
-              className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-9 px-4 rounded-xl shadow-xs flex items-center gap-1.5"
+              className="min-h-[44px] bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold px-4 rounded-xl shadow-xs flex items-center gap-1.5"
             >
               <Smartphone className="w-4 h-4" />
-              <span>Gerar checklist de pendências (Mobile / PDF)</span>
+              <span>Imprimir / PDF de Campo</span>
             </Button>
           </div>
         </div>
@@ -79,36 +99,52 @@ export const MissingInformationChecklist: React.FC<MissingInformationChecklistPr
           {criticalItems.map((item) => (
             <div
               key={item.id}
-              className="p-4 rounded-2xl border border-red-200 bg-red-50/30 space-y-2 hover:border-red-300 transition-all"
+              className={`p-4 sm:p-5 rounded-2xl border space-y-3 transition-all ${
+                highContrastMode
+                  ? 'border-red-600 bg-red-100 text-black'
+                  : 'border-red-200 bg-red-50/30 hover:border-red-300 text-[#143028]'
+              }`}
             >
-              <div className="flex items-start justify-between gap-3">
+              <label
+                htmlFor={`crit-check-${item.id}`}
+                className="flex items-start justify-between gap-3 cursor-pointer min-h-[44px]"
+              >
                 <div className="space-y-1">
-                  <div className="font-bold text-xs sm:text-sm text-[#143028] flex items-center gap-1.5">
-                    <span className="text-red-600 font-bold">⚠</span>
-                    <span>{item.title}</span>
+                  <div className="font-bold text-sm sm:text-base flex items-center gap-2">
+                    <span className="text-red-700 font-black text-base">⚠</span>
+                    <span className={item.resolved ? 'line-through opacity-70' : ''}>
+                      {item.title}
+                    </span>
                   </div>
-                  <p className="text-xs text-[#5B6B63]">{item.description}</p>
+                  <p className="text-xs sm:text-sm font-medium text-[#4B5563] leading-relaxed">
+                    {item.description}
+                  </p>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={item.resolved}
-                  onChange={() => onToggleItem?.(item.id)}
-                  className="w-4 h-4 rounded text-[#1B5E3A] focus:ring-[#1B5E3A] accent-[#1B5E3A] mt-1 shrink-0"
-                />
-              </div>
+                {/* Alvo de toque de 44x44px em volta do checkbox para uso com luvas e campo */}
+                <div className="min-w-[44px] min-h-[44px] flex items-center justify-center shrink-0">
+                  <input
+                    id={`crit-check-${item.id}`}
+                    type="checkbox"
+                    checked={item.resolved}
+                    onChange={() => onToggleItem?.(item.id)}
+                    aria-label={`Marcar ${item.title} como resolvido`}
+                    className="w-5 h-5 rounded-md text-[#1B5E3A] focus:ring-[#1B5E3A] accent-[#1B5E3A] cursor-pointer"
+                  />
+                </div>
+              </label>
 
-              <div className="pt-2 border-t border-red-200/60 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                <div className="p-2 rounded-xl bg-white border border-red-100">
-                  <span className="font-bold text-red-800 text-[11px] block">
+              <div className="pt-2.5 border-t border-red-200/80 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div className="p-2.5 rounded-xl bg-white border border-red-100/80 shadow-2xs">
+                  <span className="font-bold text-red-900 text-xs block mb-0.5">
                     Impacto no Relatório:
                   </span>
-                  <span className="text-[#5B6B63] text-[11px]">{item.impactOnReport}</span>
+                  <span className="text-[#374151] font-medium leading-relaxed">{item.impactOnReport}</span>
                 </div>
-                <div className="p-2 rounded-xl bg-emerald-50/50 border border-emerald-200/50">
-                  <span className="font-bold text-[#1B5E3A] text-[11px] block">
+                <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 shadow-2xs">
+                  <span className="font-bold text-[#1B5E3A] text-xs block mb-0.5">
                     Ação Recomendada em Campo:
                   </span>
-                  <span className="text-[#143028] text-[11px]">{item.fieldGuidance}</span>
+                  <span className="text-[#143028] font-medium leading-relaxed">{item.fieldGuidance}</span>
                 </div>
               </div>
             </div>
@@ -132,36 +168,52 @@ export const MissingInformationChecklist: React.FC<MissingInformationChecklistPr
           {importantItems.map((item) => (
             <div
               key={item.id}
-              className="p-4 rounded-2xl border border-amber-200 bg-amber-50/20 space-y-2 hover:border-amber-300 transition-all"
+              className={`p-4 sm:p-5 rounded-2xl border space-y-3 transition-all ${
+                highContrastMode
+                  ? 'border-amber-600 bg-amber-100 text-black'
+                  : 'border-amber-200 bg-amber-50/20 hover:border-amber-300 text-[#143028]'
+              }`}
             >
-              <div className="flex items-start justify-between gap-3">
+              <label
+                htmlFor={`imp-check-${item.id}`}
+                className="flex items-start justify-between gap-3 cursor-pointer min-h-[44px]"
+              >
                 <div className="space-y-1">
-                  <div className="font-bold text-xs sm:text-sm text-[#143028] flex items-center gap-1.5">
-                    <span className="text-amber-600 font-bold">⚠</span>
-                    <span>{item.title}</span>
+                  <div className="font-bold text-sm sm:text-base flex items-center gap-2">
+                    <span className="text-amber-700 font-black text-base">⚠</span>
+                    <span className={item.resolved ? 'line-through opacity-70' : ''}>
+                      {item.title}
+                    </span>
                   </div>
-                  <p className="text-xs text-[#5B6B63]">{item.description}</p>
+                  <p className="text-xs sm:text-sm font-medium text-[#4B5563] leading-relaxed">
+                    {item.description}
+                  </p>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={item.resolved}
-                  onChange={() => onToggleItem?.(item.id)}
-                  className="w-4 h-4 rounded text-[#1B5E3A] focus:ring-[#1B5E3A] accent-[#1B5E3A] mt-1 shrink-0"
-                />
-              </div>
+                {/* Alvo de toque de 44x44px em volta do checkbox para uso com luvas e campo */}
+                <div className="min-w-[44px] min-h-[44px] flex items-center justify-center shrink-0">
+                  <input
+                    id={`imp-check-${item.id}`}
+                    type="checkbox"
+                    checked={item.resolved}
+                    onChange={() => onToggleItem?.(item.id)}
+                    aria-label={`Marcar ${item.title} como resolvido`}
+                    className="w-5 h-5 rounded-md text-[#1B5E3A] focus:ring-[#1B5E3A] accent-[#1B5E3A] cursor-pointer"
+                  />
+                </div>
+              </label>
 
-              <div className="pt-2 border-t border-amber-200/60 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                <div className="p-2 rounded-xl bg-white border border-amber-100">
-                  <span className="font-bold text-amber-800 text-[11px] block">
+              <div className="pt-2.5 border-t border-amber-200/80 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div className="p-2.5 rounded-xl bg-white border border-amber-100/80 shadow-2xs">
+                  <span className="font-bold text-amber-900 text-xs block mb-0.5">
                     Impacto na Minuta:
                   </span>
-                  <span className="text-[#5B6B63] text-[11px]">{item.impactOnReport}</span>
+                  <span className="text-[#374151] font-medium leading-relaxed">{item.impactOnReport}</span>
                 </div>
-                <div className="p-2 rounded-xl bg-emerald-50/50 border border-emerald-200/50">
-                  <span className="font-bold text-[#1B5E3A] text-[11px] block">
+                <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 shadow-2xs">
+                  <span className="font-bold text-[#1B5E3A] text-xs block mb-0.5">
                     Ação Operacional:
                   </span>
-                  <span className="text-[#143028] text-[11px]">{item.fieldGuidance}</span>
+                  <span className="text-[#143028] font-medium leading-relaxed">{item.fieldGuidance}</span>
                 </div>
               </div>
             </div>

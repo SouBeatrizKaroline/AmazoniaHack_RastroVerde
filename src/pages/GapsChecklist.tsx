@@ -236,7 +236,7 @@ export const GapsChecklist: React.FC = () => {
           </div>
 
           <Link to="/reports">
-            <Button className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-10 px-4.5 rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 self-start sm:self-auto">
+            <Button className="min-h-[44px] bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold px-4.5 rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 self-start sm:self-auto">
               <FileText className="w-4 h-4 text-emerald-200" />
               <span>{t('gaps.go_to_report')}</span>
             </Button>
@@ -372,9 +372,9 @@ export const GapsChecklist: React.FC = () => {
                       <Button
                         size="sm"
                         onClick={() => handleResolveAction(item.route || null)}
-                        className="self-end sm:self-center bg-[#B45309] hover:bg-amber-800 text-white text-xs font-bold h-9 px-3.5 rounded-xl shadow-2xs shrink-0"
+                        className="min-h-[44px] self-end sm:self-center bg-[#B45309] hover:bg-amber-800 text-white text-xs font-bold px-4 rounded-xl shadow-2xs shrink-0 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-600"
                       >
-                        <Plus className="w-3.5 h-3.5 mr-1" />
+                        <Plus className="w-4 h-4 mr-1.5" />
                         <span>{item.action || t('gaps.action_add')}</span>
                       </Button>
                     )}
@@ -411,9 +411,9 @@ export const GapsChecklist: React.FC = () => {
                     <Button
                       size="sm"
                       onClick={() => handleResolveAction(item.route)}
-                      className="self-end sm:self-center bg-[#B3261E] hover:bg-red-800 text-white text-xs font-bold h-9 px-3.5 rounded-xl shadow-2xs shrink-0"
+                      className="min-h-[44px] self-end sm:self-center bg-[#B3261E] hover:bg-red-800 text-white text-xs font-bold px-4 rounded-xl shadow-2xs shrink-0 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-rose-600"
                     >
-                      <Plus className="w-3.5 h-3.5 mr-1" />
+                      <Plus className="w-4 h-4 mr-1.5" />
                       <span>{item.action || t('gaps.action_add')}</span>
                     </Button>
                   </div>

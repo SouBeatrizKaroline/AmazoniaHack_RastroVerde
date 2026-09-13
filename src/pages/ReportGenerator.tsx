@@ -246,24 +246,24 @@ export const ReportGenerator: React.FC = () => {
           <p className="text-xs text-[#5B6B63]">{t('report.draft_notice')}</p>
         </div>
 
-        {/* Action Toolbar */}
-        <div className="flex flex-wrap items-center gap-2">
+        {/* Action Toolbar com alvos ≥44px */}
+        <div className="flex flex-wrap items-center gap-2.5">
           <Button
             variant="outline"
             size="sm"
             onClick={handleExportJSON}
-            className="h-9 text-xs border-[#E2E8E4]"
+            className="min-h-[44px] text-xs font-bold border-[#E2E8E4] px-3.5 rounded-xl hover:bg-gray-50 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]"
           >
-            <Download className="w-3.5 h-3.5 mr-1.5" />
+            <Download className="w-4 h-4 mr-1.5 text-[#1B5E3A]" />
             <span>{t('report.export_json')}</span>
           </Button>
 
           <Button
             size="sm"
             onClick={handlePrint}
-            className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-lg shadow-xs flex items-center gap-1.5"
+            className="min-h-[44px] bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold px-4 rounded-xl shadow-xs flex items-center gap-2 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]"
           >
-            <Printer className="w-3.5 h-3.5" />
+            <Printer className="w-4 h-4" />
             <span>Visualizar versão para impressão</span>
           </Button>
         </div>
@@ -420,10 +420,10 @@ export const ReportGenerator: React.FC = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleNavigateToSource('EVD-014')}
-                  className="h-7 text-[11px] font-bold text-[#1B5E3A] hover:bg-[#E7F2EC] print:hidden self-end sm:self-center"
+                  className="min-h-[44px] text-xs font-bold text-[#1B5E3A] hover:bg-[#E7F2EC] rounded-xl px-3 print:hidden self-end sm:self-center focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]"
                 >
                   <span>{t('report.view_source_evidence')}</span>
-                  <ArrowRight className="w-3 h-3 ml-1" />
+                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </Button>
               </div>
             </div>
@@ -458,7 +458,8 @@ export const ReportGenerator: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleNavigateToSource(evd.code)}
-                      className="font-bold text-[#0F766E] hover:underline shrink-0 ml-2"
+                      aria-label={`Rastrear evidência de origem ${evd.code}`}
+                      className="min-h-[44px] px-2.5 py-1.5 font-bold text-[#0F766E] hover:text-[#1B5E3A] hover:underline shrink-0 ml-2 rounded-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]"
                     >
                       Ver origem →
                     </button>

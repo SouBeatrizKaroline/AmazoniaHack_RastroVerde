@@ -125,14 +125,16 @@ export const HistoryLog: React.FC = () => {
 
                 <div className="p-3.5 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] hover:border-[#1B5E3A] transition-all space-y-1">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-mono font-bold text-[#1B5E3A]">{act.timestamp}</span>
-                    <span className="flex items-center gap-1 text-[11px] text-[#5B6B63]">
-                      <User className="w-3 h-3" />
+                    <span className="font-mono font-bold text-[#1B5E3A] bg-white px-2 py-0.5 rounded border border-[#E2E8E4]">
+                      {act.timestamp}
+                    </span>
+                    <span className="flex items-center gap-1 text-xs text-[#143028] font-semibold bg-[#E7F2EC] px-2 py-0.5 rounded">
+                      <User className="w-3.5 h-3.5 text-[#1B5E3A]" />
                       <span>{act.actor}</span>
                     </span>
                   </div>
 
-                  <p className="text-xs font-medium text-[#143028]">{act.description}</p>
+                  <p className="text-xs sm:text-sm font-medium text-[#143028] pt-1">{act.description}</p>
                 </div>
               </div>
             ))}
