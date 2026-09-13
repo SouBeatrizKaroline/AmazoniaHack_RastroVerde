@@ -1,4 +1,6 @@
 /// <reference path="../pb_data/types.d.ts" />
+
+// Hook de consulta ao agente de IA do RastroVerde
 routerAdd('POST', '/backend/v1/rastroverde-ask', (e) => {
   try {
     const body = e.requestInfo().body || {}
