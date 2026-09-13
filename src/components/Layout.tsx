@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/auth'
 import { RastroVerdeLogo } from '@/components/RastroVerdeLogo'
 import { LanguageToggle } from '@/components/LanguageToggle'
 import { useTour } from '@/components/TourProvider'
+import { CookieBanner } from '@/components/CookieBanner'
 import {
   LayoutDashboard,
   FileCheck2,
@@ -267,12 +268,26 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         </nav>
       )}
 
+      {/* Cookie / LGPD Banner */}
+      <CookieBanner />
+
       {/* Footer */}
       <footer className="w-full border-t border-[#E2E8E4] bg-white py-6 mt-auto">
         <div className="mx-auto flex max-w-7xl flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 text-center sm:text-left">
-          <div className="flex items-center justify-center sm:justify-start gap-2.5 w-full">
-            <RastroVerdeLogo size="sm" showText={false} />
-            <p className="text-xs font-medium text-[#143028]">{t('footer.text')}</p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 w-full">
+            <div className="flex items-center justify-center sm:justify-start gap-2.5">
+              <RastroVerdeLogo size="sm" showText={false} />
+              <p className="text-xs font-medium text-[#143028]">{t('footer.text')}</p>
+            </div>
+            <div className="flex items-center gap-4 text-xs font-semibold text-[#5B6B63]">
+              <Link to="/about" className="hover:text-[#1B5E3A] transition-colors">
+                {t('nav.about')}
+              </Link>
+              <span className="text-[#E2E8E4]">•</span>
+              <Link to="/privacy" className="hover:text-[#1B5E3A] transition-colors">
+                {t('about.privacy_link')}
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

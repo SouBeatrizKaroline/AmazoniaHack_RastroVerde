@@ -8,6 +8,7 @@ import {
   UserCheck,
   ShieldAlert,
 } from 'lucide-react'
+import { useI18n } from '@/lib/i18n'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import type { DivergenceItem } from '@/services/draftReportTypes'
@@ -22,6 +23,7 @@ interface DivergenceBlockProps {
 }
 
 export const DivergenceBlock: React.FC<DivergenceBlockProps> = ({ divergences, onResolve }) => {
+  const { t } = useI18n()
   const [resolutions, setResolutions] = useState<
     Record<string, { choice: 'sourceA' | 'sourceB' | 'custom'; explanation: string }>
   >({})
@@ -178,6 +180,12 @@ export const DivergenceBlock: React.FC<DivergenceBlockProps> = ({ divergences, o
 
             {/* Resolution Justification Box */}
             <div className="p-4 rounded-2xl bg-white border border-amber-200 space-y-2.5">
+              {/* LGPD & Fiscal Responsibility Notice */}
+              <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-950 flex items-start gap-2">
+                <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                <p className="font-medium leading-relaxed">{t('decision.responsibility_notice')}</p>
+              </div>
+
               <label className="text-xs font-bold text-[#143028] flex items-center gap-1.5">
                 <UserCheck className="w-4 h-4 text-[#1B5E3A]" />
                 <span>

@@ -414,6 +414,84 @@ export const translations: Record<Language, Record<string, string>> = {
       'Verificação inteligente de consistência de horários e coordenadas com linguagem prudente.',
     'about.diff_3':
       'Checklist automático de lacunas que impede relatórios incompletos ou vulneráveis juridicamente.',
+    'about.privacy_link': 'Política de Privacidade e Conformidade LGPD',
+
+    // LGPD & Privacy
+    'privacy.title': 'Privacidade e Proteção de Dados (LGPD)',
+    'privacy.subtitle':
+      'Compromisso com a Lei Geral de Proteção de Dados (Lei Federal nº 13.709/2018) na fiscalização ambiental.',
+    'privacy.fictional_demo_notice_title':
+      'Ambiente de Demonstração — Dados Estritamente Fictícios',
+    'privacy.fictional_demo_notice_desc':
+      'Para fins do AmazoniaHack e demonstração pública (caso RV-DEMO-001), todos os nomes de agentes, pessoas citadas, coordenadas geográficas, números de processos e documentos são sintéticos e concebidos exclusivamente para demonstração de capacidade técnica.',
+    'privacy.section1_title': '1. Quais Dados o Sistema Trata',
+    'privacy.section1_desc':
+      'O RastroVerde opera no âmbito da instrução técnica e probatória da fiscalização ambiental municipal e estadual. O tratamento compreende:',
+    'privacy.section1_item1':
+      'Dados funcionais dos agentes públicos: nome completo, e-mail institucional, cargo e identificador funcional de registro;',
+    'privacy.section1_item2':
+      'Dados das ocorrências ambientais: nomes de autuados, representantes ou ocupantes quando qualificados formalmente;',
+    'privacy.section1_item3':
+      'Documentos de identificação fiscal (CPF/CNPJ) e cadastros rurais (número de CAR), estritamente quando existentes e anexados aos autos;',
+    'privacy.section1_item4':
+      'Evidências de campo georreferenciadas: fotografias técnicas, gravações de áudio com minutagem, vídeos de constatação, anotações de caderneta de campo e coordenadas GNSS (SIRGAS 2000).',
+    'privacy.section2_title': '2. Base Legal de Tratamento (Arts. 7º e 23 da LGPD)',
+    'privacy.section2_desc':
+      'O tratamento de dados pessoais no RastroVerde é fundamentado nos estritos termos da Lei nº 13.709/2018:',
+    'privacy.section2_item1':
+      'Execução de Políticas Públicas (art. 7º, III e art. 23): atendimento da finalidade pública na persecução e instrução de processos administrativos de fiscalização ambiental;',
+    'privacy.section2_item2':
+      'Exercício Regular de Competências Legais: cumprimento do dever legal e regulamentar conferido aos órgãos de fiscalização do SISNAMA;',
+    'privacy.section2_item3':
+      'Contas de Usuários Voluntárias (art. 7º, I): para criação de contas de agentes institucionais e navegação, fundamentado no consentimento e termo de uso funcional.',
+    'privacy.section3_title': '3. Papel do Sistema: Estrito Apoio à Decisão Humana',
+    'privacy.section3_desc':
+      'Em total alinhamento com o art. 20 da LGPD e os princípios de governança pública responsável:',
+    'privacy.section3_highlight':
+      'Não há decisão automatizada que afete o titular. O RastroVerde atua única e exclusivamente como suporte técnico à organização probatória.',
+    'privacy.section3_subdesc':
+      'Toda sugestão de enquadramento, identificação de divergência ou minuta de relatório requer revisão humana, homologação expressa e assinatura pelo agente fiscal ou autoridade competente antes de produzir qualquer efeito jurídico.',
+    'privacy.section4_title': '4. Direitos do Titular de Dados (Art. 18 da LGPD)',
+    'privacy.section4_desc':
+      'Os titulares de dados pessoais podem exercer seus direitos previstos no art. 18 da LGPD em linguagem simples e transparente:',
+    'privacy.section4_right1':
+      'Confirmação e Acesso: confirmar a existência de tratamento e acessar os dados tratados;',
+    'privacy.section4_right2':
+      'Correção: solicitar a retificação de dados incompletos, inexatos ou desatualizados;',
+    'privacy.section4_right3':
+      'Anonimização, Bloqueio ou Eliminação: para dados desnecessários, excessivos ou tratados em desconformidade com a lei;',
+    'privacy.section4_right4':
+      'Portabilidade e Informação: receber informações claras sobre o compartilhamento de dados com entidades públicas;',
+    'privacy.section4_right5':
+      'Revogação do Consentimento: para hipóteses voluntárias de cadastro, respeitados os prazos legais de guarda administrativa.',
+    'privacy.section5_title': '5. Retenção e Minimização de Dados',
+    'privacy.section5_desc':
+      'O sistema aplica o princípio da necessidade (art. 6º, III): são tratados unicamente os dados indispensáveis à instrução do processo administrativo ambiental. Os registros são mantidos pelo tempo estritamente exigido pela legislação ambiental e pelas tabelas de temporalidade de documentos públicos.',
+    'privacy.section6_title': '6. Segurança da Informação e Integridade de Arquivos',
+    'privacy.section6_desc':
+      'A plataforma emprega medidas técnicas e administrativas aptas a proteger os dados contra acessos não autorizados:',
+    'privacy.section6_item1':
+      'Controle de Acesso Autenticado com perfis restritos a agentes públicos competentes;',
+    'privacy.section6_item2':
+      'Trilha de Auditoria detalhada que registra autoria, horário e modificações;',
+    'privacy.section6_item3':
+      'Indicadores de Integridade do Arquivo (hashes criptográficos SHA-256) calculados para cada mídia ou documento — sem pretensão de substituir uma cadeia de custódia formal, mas fornecendo confiabilidade técnica e auditabilidade.',
+    'privacy.contact_title': 'Canal de Atendimento do Encarregado (DPO)',
+    'privacy.contact_desc':
+      'Para dúvidas, solicitações de direitos de titular ou notificações sobre proteção de dados, utilize o canal institucional do RastroVerde.',
+    'privacy.contact_btn': 'Voltar à Fiscalização',
+
+    // Cookie Banner
+    'cookie.banner_text':
+      'O RastroVerde utiliza armazenamento local (localStorage) exclusivamente para suas preferências (idioma, sessão e tour guiado). No modo de demonstração, todos os dados são fictícios e aderentes à LGPD.',
+    'cookie.accept': 'Entendi',
+    'cookie.learn_more': 'Saiba mais sobre LGPD',
+
+    // Responsibility notice in decision flow
+    'decision.responsibility_notice':
+      'A decisão registrada é de responsabilidade do agente fiscal. O sistema apenas organiza e rastreia as informações.',
+    'audit.trail_label': 'Trilha de Auditoria',
+    'audit.trail_desc': 'Registro auditável de ações com autoria funcional e registro temporal.',
     'demo.nav_badge': 'Modo Demonstração (RV-DEMO-001)',
     'demo.read_only_tip':
       'Você está visualizando a demonstração fictícia com dados de campo reais.',
@@ -866,6 +944,84 @@ export const translations: Record<Language, Record<string, string>> = {
       'Smart time and coordinate consistency checks with strictly supportive language.',
     'about.diff_3':
       'Automated gaps checklist that prevents legally vulnerable or incomplete reports.',
+    'about.privacy_link': 'Privacy Policy & LGPD Compliance',
+
+    // LGPD & Privacy
+    'privacy.title': 'Privacy & Data Protection (LGPD)',
+    'privacy.subtitle':
+      'Commitment to the Brazilian General Data Protection Law (Federal Law No. 13,709/2018) in environmental enforcement.',
+    'privacy.fictional_demo_notice_title': 'Demonstration Environment — Strictly Fictional Data',
+    'privacy.fictional_demo_notice_desc':
+      'For the purposes of AmazoniaHack and public demonstration (case RV-DEMO-001), all officer names, cited individuals, geographical coordinates, case numbers, and files are synthetic and designed exclusively for technical demonstration.',
+    'privacy.section1_title': '1. Which Data the System Processes',
+    'privacy.section1_desc':
+      'RastroVerde operates within the evidentiary instruction of municipal and state environmental enforcement. Processing includes:',
+    'privacy.section1_item1':
+      'Official records of public officers: full name, institutional email, rank, and official badge identifier;',
+    'privacy.section1_item2':
+      'Environmental occurrence data: names of cited parties, representatives, or occupants when formally recorded;',
+    'privacy.section1_item3':
+      'Tax identification documents (CPF/CNPJ) and rural registry codes (CAR number), strictly when existing and attached to the proceedings;',
+    'privacy.section1_item4':
+      'Georeferenced field evidence: technical photographs, timestamped audio notes, inspection videos, field clipboard records, and GNSS coordinates (SIRGAS 2000).',
+    'privacy.section2_title': '2. Legal Basis for Processing (Arts. 7 and 23 of LGPD)',
+    'privacy.section2_desc':
+      'Personal data processing within RastroVerde is strictly grounded in Brazilian Law No. 13,709/2018:',
+    'privacy.section2_item1':
+      'Public Policy Execution (Art. 7, III and Art. 23): pursuing the public interest in conducting administrative environmental proceedings;',
+    'privacy.section2_item2':
+      'Regular Exercise of Statutory Powers: fulfilling legal and regulatory duties assigned to SISNAMA enforcement bodies;',
+    'privacy.section2_item3':
+      'Voluntary User Accounts (Art. 7, I): for institutional officer sign-ups and browsing preferences, based on explicit consent and terms of service.',
+    'privacy.section3_title': '3. System Role: Strict Human Decision Support',
+    'privacy.section3_desc':
+      'In full compliance with Article 20 of the LGPD and responsible public governance principles:',
+    'privacy.section3_highlight':
+      'There is no automated decision-making affecting data subjects. RastroVerde functions solely and strictly as technical assistance for evidentiary structuring.',
+    'privacy.section3_subdesc':
+      'Every draft qualification, divergence alert, and report draft requires mandatory human review, validation, and sign-off by the authorized enforcement officer before producing any legal consequence.',
+    'privacy.section4_title': '4. Data Subject Rights (Art. 18 of LGPD)',
+    'privacy.section4_desc':
+      'Data subjects can exercise their rights under Article 18 of the LGPD in clear and transparent language:',
+    'privacy.section4_right1':
+      'Confirmation and Access: confirm data processing existence and access personal records;',
+    'privacy.section4_right2':
+      'Correction: request correction of incomplete, inaccurate, or outdated data;',
+    'privacy.section4_right3':
+      'Anonymization, Blocking, or Deletion: for unnecessary, excessive, or unlawfully processed data;',
+    'privacy.section4_right4':
+      'Portability and Information: obtain clear disclosure regarding public entities with whom data is shared;',
+    'privacy.section4_right5':
+      'Consent Revocation: applicable to voluntary registrations, respecting statutory records retention periods.',
+    'privacy.section5_title': '5. Retention and Data Minimization',
+    'privacy.section5_desc':
+      'The platform applies the necessity principle (Art. 6, III): only data essential to environmental administrative proceedings is processed. Records are retained strictly for the duration established by public archives and environmental legislation.',
+    'privacy.section6_title': '6. Information Security and File Integrity',
+    'privacy.section6_desc':
+      'The platform implements technical and administrative safeguards to protect data from unauthorized access:',
+    'privacy.section6_item1':
+      'Authenticated Access Control with strict role-based permissions for authorized public officers;',
+    'privacy.section6_item2':
+      'Detailed Audit Trail recording author, timestamp, and modification events;',
+    'privacy.section6_item3':
+      'File Integrity Indicators (SHA-256 cryptographic hashes) computed for each media item or document — not claiming to be a formal custody chain, but providing technical auditability.',
+    'privacy.contact_title': 'Data Protection Officer (DPO) Contact',
+    'privacy.contact_desc':
+      'For inquiries, data subject right requests, or data protection notices, reach out through the institutional RastroVerde channel.',
+    'privacy.contact_btn': 'Return to Inspection',
+
+    // Cookie Banner
+    'cookie.banner_text':
+      'RastroVerde uses local storage (localStorage) exclusively for your preferences (language, session, and guided tour). In demo mode, all data is fictional and fully LGPD-compliant.',
+    'cookie.accept': 'Understood',
+    'cookie.learn_more': 'Learn more about LGPD',
+
+    // Responsibility notice in decision flow
+    'decision.responsibility_notice':
+      'The recorded decision is the enforcement officer’s responsibility. The system only organizes and traces information.',
+    'audit.trail_label': 'Audit Trail',
+    'audit.trail_desc':
+      'Auditable log of actions with officer attribution and chronological timestamp.',
     'demo.nav_badge': 'Demo Mode (RV-DEMO-001)',
     'demo.read_only_tip': 'You are viewing the fictional demonstration with realistic field data.',
     'demo.login_prompt': 'Full Access',

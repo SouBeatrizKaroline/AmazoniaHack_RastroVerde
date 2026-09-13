@@ -22,6 +22,7 @@ import AssistantChat from '@/pages/AssistantChat'
 import ReportGenerator from '@/pages/ReportGenerator'
 import HistoryLog from '@/pages/HistoryLog'
 import About from '@/pages/About'
+import Privacy from '@/pages/Privacy'
 
 // Auth Pages
 import Login from '@/pages/Login'
@@ -40,9 +41,10 @@ export const App: React.FC = () => {
           <TourProvider>
             <Layout>
               <Routes>
-                {/* Public Routes: Landing, Sobre, Autenticação */}
+                {/* Public Routes: Landing, Sobre, Autenticação, Privacidade */}
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/privacy" element={<Privacy />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />

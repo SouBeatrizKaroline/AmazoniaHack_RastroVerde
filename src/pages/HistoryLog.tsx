@@ -73,22 +73,27 @@ export const HistoryLog: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-300 max-w-4xl mx-auto">
       {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1B5E3A] mb-1">
-          <HistoryIcon className="w-3.5 h-3.5" />
-          <span>Trilha de Auditoria e Conformidade</span>
+      <div className="space-y-2">
+        <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1B5E3A] px-3 py-1 rounded-full bg-[#E7F2EC] border border-[#1B5E3A]/20">
+          <Shield className="w-3.5 h-3.5" />
+          <span>{t('audit.trail_label')}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-[#143028]">{t('history.title')}</h1>
-        <p className="text-xs text-[#5B6B63] mt-1">{t('history.subtitle')}</p>
+        <p className="text-xs text-[#5B6B63]">{t('audit.trail_desc')}</p>
       </div>
 
       {/* Activity Log List */}
       <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
         <div className="flex items-center justify-between pb-4 border-b border-[#E2E8E4]">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#5B6B63]">
-            Eventos Registrados ({activities.length})
+          <span className="text-xs font-bold uppercase tracking-wider text-[#5B6B63] flex items-center gap-1.5">
+            <HistoryIcon className="w-3.5 h-3.5 text-[#1B5E3A]" />
+            <span>
+              {t('audit.trail_label')} ({activities.length})
+            </span>
           </span>
-          <span className="text-xs text-[#0F766E] font-semibold">Caso: RV-DEMO-001</span>
+          <span className="text-xs text-[#0F766E] font-semibold">
+            Caso: RV-DEMO-001 ({t('badge.demo')})
+          </span>
         </div>
 
         {loading && (

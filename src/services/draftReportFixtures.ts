@@ -135,6 +135,7 @@ export const MUNICIPALITY_TEMPLATES: Record<string, MunicipalityTemplate> = {
  * (B) Coordenada encontrada APENAS na fotografia foto_07.jpg (Exif) - formulário sem coordenada
  * (C) Duas fontes divergem na área: notas de campo indicam 12,3 ha; medição posterior indica 11,8 ha -> bloco "Divergência encontrada"
  * (D) Informação não existente (CPF/CNPJ do responsável, número do CAR formal) -> "Informação não localizada nas evidências fornecidas."
+ * Todos os dados apresentados em modo de demonstração são fictícios e aderentes à LGPD.
  */
 
 export const DEMO_AUDIO_EVIDENCE: AudioEvidenceItem = {
@@ -258,8 +259,8 @@ export const DEMO_EXTRACTED_FACTS: ExtractedFact[] = [
     id: 'fact-id-04',
     category: 'Identificação',
     fieldKey: 'autuado',
-    label: 'Pessoa Autuada / Responsável Identificado',
-    value: 'Informação não localizada nas evidências fornecidas.',
+    label: 'Pessoa Autuada / Responsável Identificado (Dado Pessoal / LGPD)',
+    value: 'Informação não localizada nas evidências fornecidas (Dados fictícios de demonstração).',
     references: [
       {
         evidenceCode: 'EVD-021 (Depoimento)',
@@ -272,7 +273,8 @@ export const DEMO_EXTRACTED_FACTS: ExtractedFact[] = [
     ],
     confidence: 'Baixa',
     status: 'Ausente',
-    notes: 'Nenhum CPF/CNPJ ou titular nominado foi comprovado em campo até o momento.',
+    notes:
+      'Nenhum CPF/CNPJ ou titular nominado foi comprovado em campo até o momento (Proteção LGPD / minimização de dados).',
   },
   {
     id: 'fact-id-05',

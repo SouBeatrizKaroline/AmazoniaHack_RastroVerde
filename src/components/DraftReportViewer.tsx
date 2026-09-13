@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
+import { useI18n } from '@/lib/i18n'
 import type {
   DraftSection,
   EvidenceReference,
@@ -48,6 +49,7 @@ export const DraftReportViewer: React.FC<DraftReportViewerProps> = ({
   onMunicipalityChange,
   onApprove,
 }) => {
+  const { t } = useI18n()
   const { toast } = useToast()
   const [municipalityKey, setMunicipalityKey] = useState<string>(selectedMunicipality)
   const [activeModalEvidenceList, setActiveModalEvidenceList] = useState<{
@@ -257,10 +259,17 @@ export const DraftReportViewer: React.FC<DraftReportViewerProps> = ({
               Validação e Responsabilidade Técnica do Fiscal
             </h4>
           </div>
+
+          {/* LGPD & Technical Responsibility Notice */}
+          <div className="p-3.5 rounded-2xl bg-[#E7F2EC]/60 border border-[#1B5E3A]/25 text-xs text-[#143028] flex items-start gap-2.5">
+            <ShieldCheck className="w-4 h-4 text-[#1B5E3A] shrink-0 mt-0.5" />
+            <p className="font-semibold leading-relaxed">{t('decision.responsibility_notice')}</p>
+          </div>
+
           <p className="text-xs text-[#5B6B63] leading-relaxed">
-            Nenhum documento é finalizado sem validação humana expressa. O RastroVerde apoia e
-            organiza as evidências, mas cabe ao fiscal ou autoridade ambiental atestar a
-            fidedignidade da peça instrutória.
+            Nenhum documento é finalizado sem validação humana expressa (LGPD art. 20). O
+            RastroVerde apoia e organiza as evidências, mas cabe ao fiscal ou autoridade ambiental
+            atestar a fidedignidade da peça instrutória.
           </p>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
