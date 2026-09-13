@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useI18n } from '@/lib/i18n'
-import { CheckCircle2, AlertTriangle, XCircle, Plus, ShieldCheck, FileText } from 'lucide-react'
+import {
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+  Plus,
+  ShieldCheck,
+  FileText,
+  Smartphone,
+  Printer,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { getAllEvidence, getInspections } from '@/services/dataService'
+import { DEMO_MISSING_INFO } from '@/services/draftReportFixtures'
+import { MissingInformationChecklist } from '@/components/MissingInformationChecklist'
 
 interface GapItem {
   id: string
@@ -285,6 +296,14 @@ export const GapsChecklist: React.FC = () => {
           </Button>
         </div>
       )}
+
+      {/* Novo Módulo Interativo de Lacunas e Pendências de Campo para Dispositivos Móveis (Item 5 e 9) */}
+      <MissingInformationChecklist
+        items={DEMO_MISSING_INFO}
+        onToggleItem={(id) => {
+          toast({ title: 'Status da pendência atualizado!' })
+        }}
+      />
 
       {/* Checklist Sections com cards arredondados e bordas sutis */}
       {!loading && !loadError && (

@@ -14,8 +14,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'brand.name': 'RastroVerde',
     'brand.tagline':
       'Da evidência de campo ao relatório ambiental, com rastreabilidade e confiança.',
-    'badge.demo': 'Dados demonstrativos',
-    'badge.fictional_demo': 'Caso demonstrativo fictício',
+    'badge.demo': 'Dados fictícios de demonstração',
+    'badge.fictional_demo': 'Dados sintéticos de demonstração',
     'footer.text': 'RastroVerde — Tecnologia para apoiar a fiscalização ambiental.',
     'landing.amazoniahack_badge': 'Projeto de código aberto desenvolvido para o AmazoniaHack',
     'about.amazoniahack_title': 'Código Aberto & AmazoniaHack',
@@ -81,20 +81,50 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.quick_new_evd': 'Nova Evidência',
 
     // Landing
-    'landing.headline': 'Da evidência de campo ao relatório ambiental.',
+    'landing.headline': 'Da evidência de campo à minuta de fiscalização rastreável.',
     'landing.subheadline':
-      'Organize registros de campo, amarre evidências georreferenciadas e detecte lacunas probatórias antes de emitir o relatório pericial.',
-    'landing.start_inspection': 'Iniciar fiscalização',
+      'Organize evidências, identifique lacunas e produza relatórios ambientais com cada informação ligada à sua fonte.',
+    'landing.start_inspection': 'Analisar ocorrência',
     'landing.view_demo': 'Ver demonstração',
-    'landing.enter_demo': 'Acessar demonstração interativa',
+    'landing.enter_demo': 'Explorar demonstração',
+    'landing.btn_demo': 'Explorar caso de demonstração',
+    'landing.how_it_works_title': 'Como o RastroVerde funciona',
+    'landing.step1_title': '1. Recebe a ocorrência',
+    'landing.step1_desc':
+      'Fotografias com metadados, áudios com minutagem, documentos, notas de campo e coordenadas.',
+    'landing.step1_highlight': 'Entrada Multi-formato',
+    'landing.step2_title': '2. Organiza a evidência',
+    'landing.step2_desc':
+      'Classifica registros, calcula indicadores de integridade e associa cada mídia à vistoria.',
+    'landing.step2_highlight': 'Organização Probatória',
+    'landing.step3_title': '3. Extrai os fatos',
+    'landing.step3_desc':
+      'Identificação, área, coordenadas, infração e instrumentos extraídos com fontes rastreáveis.',
+    'landing.step3_highlight': 'Fatos Estruturados',
+    'landing.step4_title': '4. Verifica & Audita',
+    'landing.step4_desc':
+      'Triagem em Confirmado, Divergência, Ausente, Baixa confiança e Requer revisão humana.',
+    'landing.step4_highlight': 'Detecção Cautelosa',
+    'landing.step5_title': '5. Gera a minuta',
+    'landing.step5_desc':
+      'Minuta estruturada em 10 seções padronizadas adaptadas ao template do município.',
+    'landing.step5_highlight': 'Minuta Rastreável',
+    'landing.step6_title': '6. Humano revisa',
+    'landing.step6_desc':
+      'Nenhum documento é finalizado sem validação humana expressa pelo agente competente.',
+    'landing.step6_highlight': 'Homologação Técnica',
+    'landing.folder_badge': 'A evidência não deve terminar numa pasta.',
+    'landing.folder_headline': 'A evidência não deve terminar esquecida numa pasta de arquivos.',
+    'landing.folder_desc':
+      'Evidências voltam do campo em múltiplos formatos: fotos no celular, áudio gravado, anotações de prancheta e coordenadas esparsas. O RastroVerde conecta cada fato à sua evidência de origem e responde: conseguimos produzir uma minuta defensável mostrando exatamente qual evidência sustenta cada afirmação?',
     'landing.flow_field': 'Vistoria em campo',
     'landing.flow_evidence': 'Custódia de evidências',
     'landing.flow_verification': 'Checagem de consistência',
     'landing.flow_gaps': 'Auditoria de lacunas',
     'landing.flow_report': 'Relatório rastreável',
-    'landing.flow_title': 'Trilha Contínua de Rastreabilidade',
+    'landing.flow_title': 'Fluxo Operacional de Ponta a Ponta',
     'landing.flow_subtitle':
-      'Cadeia de custódia digital do primeiro ponto de GPS até a conclusão técnica',
+      'Ocorrência → Evidências → Extração/Análise → Verificação → Lacunas → Minuta rastreável → Instrumentos relacionados',
     'landing.problem_title': 'O desafio real da fiscalização em campo',
     'landing.problem_desc':
       'Em operações ambientais, dados críticos ficam dispersos em múltiplos suportes físicos e digitais, gerando fragilidade processual e retrabalho técnico.',
@@ -136,8 +166,14 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Dashboard
     'dashboard.title': 'Visão Geral da Fiscalização',
-    'dashboard.stat_inspections': 'Fiscalizações',
+    'dashboard.stat_inspections': 'Ocorrências',
     'dashboard.stat_inspections_desc': 'Operações registradas em base',
+    'dashboard.stat_ready_for_report': 'Prontas para relatório',
+    'dashboard.stat_ready_desc': 'Evidências suficientes e validadas',
+    'dashboard.stat_missing_info': 'Com informações faltantes',
+    'dashboard.stat_missing_desc': 'Lacunas requerendo complementação',
+    'dashboard.stat_divergences': 'Com divergências',
+    'dashboard.stat_divergences_desc': 'Conflito entre fontes de campo',
     'dashboard.stat_in_progress': 'Em andamento',
     'dashboard.stat_in_progress_desc': 'Coleta em campo ou análise técnica',
     'dashboard.stat_evidence': 'Evidências',
@@ -162,11 +198,13 @@ export const translations: Record<Language, Record<string, string>> = {
     'dashboard.pipeline_step5': '5. Relatório',
 
     // Statuses
-    'status.em_coleta': 'Em coleta',
+    'status.em_coleta': 'Evidências recebidas',
     'status.em_analise': 'Em análise',
-    'status.com_pendencias': 'Com pendências',
-    'status.pronta_relatorio': 'Pronta para relatório',
-    'status.finalizada': 'Finalizada',
+    'status.com_pendencias': 'Requer complementação',
+    'status.requer_validacao': 'Requer validação',
+    'status.pronta_relatorio': 'Pronto para minuta',
+    'status.minuta_gerada': 'Minuta gerada',
+    'status.finalizada': 'Revisado',
 
     // Evidence types
     'evd_type.fotografia': 'Fotografia',
@@ -217,10 +255,12 @@ export const translations: Record<Language, Record<string, string>> = {
     // Workspace / Detail
     'workspace.tabs.overview': 'Visão geral',
     'workspace.tabs.evidence': 'Evidências',
+    'workspace.tabs.extraction': 'Informações extraídas',
     'workspace.tabs.timeline': 'Linha do tempo',
     'workspace.tabs.verification': 'Verificação',
-    'workspace.tabs.gaps': 'Lacunas',
-    'workspace.tabs.report': 'Relatório',
+    'workspace.tabs.gaps': 'Pendências e Lacunas',
+    'workspace.tabs.report': 'Minuta do Relatório',
+    'workspace.tabs.instruments': 'Instrumentos Relacionados',
     'workspace.completeness_title': 'Completude da fiscalização',
     'workspace.completeness_advice': 'Antes de finalizar, revise os itens pendentes.',
     'workspace.generate_report': 'Gerar Relatório',
@@ -366,7 +406,7 @@ export const translations: Record<Language, Record<string, string>> = {
     // About
     'about.title': 'Sobre o RastroVerde',
     'about.text':
-      'O RastroVerde nasceu como uma solução para apoiar a organização de informações durante processos de fiscalização ambiental. A plataforma conecta evidências, registros de campo, localização e documentação em uma única trilha rastreável, ajudando agentes a identificar lacunas e inconsistências antes da elaboração do relatório.',
+      'RastroVerde é uma ferramenta de apoio à elaboração de relatórios de fiscalização ambiental que organiza evidências de campo, identifica lacunas e mantém cada informação da minuta ligada à evidência que a sustenta.',
     'about.team_title': 'Equipe de Desenvolvimento',
     'about.differentials_title': 'Diferenciais da Plataforma',
     'about.diff_1': 'Rastreabilidade integral da evidência bruta até cada linha do relatório.',
@@ -425,8 +465,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'brand.name': 'RastroVerde',
     'brand.tagline':
       'From field evidence to environmental reports, with traceability and confidence.',
-    'badge.demo': 'Demo data',
-    'badge.fictional_demo': 'Fictional demo case',
+    'badge.demo': 'Synthetic demo data',
+    'badge.fictional_demo': 'Synthetic demonstration data',
     'footer.text': 'RastroVerde — Technology supporting environmental enforcement.',
     'landing.amazoniahack_badge': 'Open-source project developed for AmazoniaHack',
     'about.amazoniahack_title': 'Open Source & AmazoniaHack',
@@ -493,20 +533,50 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.quick_new_evd': 'New Evidence',
 
     // Landing
-    'landing.headline': 'From field evidence to environmental reports.',
+    'landing.headline': 'From field evidence to traceable environmental enforcement report drafts.',
     'landing.subheadline':
-      'Organize field records, bind georeferenced evidence, and detect evidentiary gaps before issuing the forensic report.',
-    'landing.start_inspection': 'Start inspection',
+      'Organize evidence, identify gaps, and produce environmental reports with every fact anchored to its source.',
+    'landing.start_inspection': 'Analyze occurrence',
     'landing.view_demo': 'View demo',
-    'landing.enter_demo': 'Explore interactive demo',
+    'landing.enter_demo': 'Explore demo',
+    'landing.btn_demo': 'Explore interactive demo case',
+    'landing.how_it_works_title': 'How RastroVerde Works',
+    'landing.step1_title': '1. Receives occurrence',
+    'landing.step1_desc':
+      'Photos with metadata, audio notes with timestamps, documents, field notes, and coordinates.',
+    'landing.step1_highlight': 'Multi-format Input',
+    'landing.step2_title': '2. Organizes evidence',
+    'landing.step2_desc':
+      'Categorizes records, generates integrity indicators, and binds media to the inspection.',
+    'landing.step2_highlight': 'Evidentiary Organization',
+    'landing.step3_title': '3. Extracts facts',
+    'landing.step3_desc':
+      'Identification, area, coordinates, infractions, and instruments extracted with traceable sources.',
+    'landing.step3_highlight': 'Structured Facts',
+    'landing.step4_title': '4. Verifies & audits',
+    'landing.step4_desc':
+      'Triage into Confirmed, Divergence, Missing, Low confidence, and Human review required.',
+    'landing.step4_highlight': 'Cautious Triage',
+    'landing.step5_title': '5. Generates draft',
+    'landing.step5_desc':
+      'Structured draft in 10 standardized sections configured to municipal templates.',
+    'landing.step5_highlight': 'Traceable Draft',
+    'landing.step6_title': '6. Human reviews',
+    'landing.step6_desc':
+      'No document is finalized without explicit validation and sign-off by the authorized officer.',
+    'landing.step6_highlight': 'Officer Sign-Off',
+    'landing.folder_badge': 'Evidence must not end in a folder.',
+    'landing.folder_headline': 'Evidence must not end forgotten inside an archive folder.',
+    'landing.folder_desc':
+      'Evidence returns from the field in disconnected formats: phone photos, audio notes, paper clipboards, and scattered coordinates. RastroVerde binds each fact to its source and answers: can we produce a legally defensible report draft demonstrating exactly what evidence supports each statement?',
     'landing.flow_field': 'Field inspection',
     'landing.flow_evidence': 'Evidence custody',
     'landing.flow_verification': 'Consistency check',
     'landing.flow_gaps': 'Gaps audit',
     'landing.flow_report': 'Traceable report',
-    'landing.flow_title': 'Continuous Traceability Pipeline',
+    'landing.flow_title': 'End-to-End Operational Workflow',
     'landing.flow_subtitle':
-      'A digital chain of custody from the first GPS coordinate to the final technical conclusion',
+      'Occurrence → Evidence → Extraction/Analysis → Verification → Gaps → Traceable Draft → Related Instruments',
     'landing.problem_title': 'The actual challenge in field enforcement',
     'landing.problem_desc':
       'During environmental operations, critical data is scattered across disconnected mediums, creating administrative vulnerability and expert rework.',
@@ -551,8 +621,14 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Dashboard
     'dashboard.title': 'Enforcement Overview',
-    'dashboard.stat_inspections': 'Inspections',
+    'dashboard.stat_inspections': 'Occurrences',
     'dashboard.stat_inspections_desc': 'Operations recorded in database',
+    'dashboard.stat_ready_for_report': 'Ready for report',
+    'dashboard.stat_ready_desc': 'Sufficient and validated evidence',
+    'dashboard.stat_missing_info': 'With missing info',
+    'dashboard.stat_missing_desc': 'Gaps requiring complementation',
+    'dashboard.stat_divergences': 'With divergences',
+    'dashboard.stat_divergences_desc': 'Discrepancy across field sources',
     'dashboard.stat_in_progress': 'In progress',
     'dashboard.stat_in_progress_desc': 'Field collection or technical analysis',
     'dashboard.stat_evidence': 'Evidence',
@@ -577,11 +653,13 @@ export const translations: Record<Language, Record<string, string>> = {
     'dashboard.pipeline_step5': '5. Report',
 
     // Statuses
-    'status.em_coleta': 'Collecting',
+    'status.em_coleta': 'Evidence received',
     'status.em_analise': 'Under analysis',
-    'status.com_pendencias': 'With gaps',
-    'status.pronta_relatorio': 'Ready for report',
-    'status.finalizada': 'Finalized',
+    'status.com_pendencias': 'Complementation required',
+    'status.requer_validacao': 'Validation required',
+    'status.pronta_relatorio': 'Ready for draft',
+    'status.minuta_gerada': 'Draft generated',
+    'status.finalizada': 'Reviewed',
 
     // Evidence types
     'evd_type.fotografia': 'Photography',
@@ -632,10 +710,12 @@ export const translations: Record<Language, Record<string, string>> = {
     // Workspace / Detail
     'workspace.tabs.overview': 'Overview',
     'workspace.tabs.evidence': 'Evidence',
+    'workspace.tabs.extraction': 'Extracted facts',
     'workspace.tabs.timeline': 'Timeline',
     'workspace.tabs.verification': 'Verification',
-    'workspace.tabs.gaps': 'Gaps',
-    'workspace.tabs.report': 'Report',
+    'workspace.tabs.gaps': 'Gaps & Missing Items',
+    'workspace.tabs.report': 'Draft Report',
+    'workspace.tabs.instruments': 'Related Instruments',
     'workspace.completeness_title': 'Inspection completeness',
     'workspace.completeness_advice': 'Before finalizing, review pending items.',
     'workspace.generate_report': 'Generate Report',
@@ -778,7 +858,7 @@ export const translations: Record<Language, Record<string, string>> = {
     // About
     'about.title': 'About RastroVerde',
     'about.text':
-      'RastroVerde was born as a solution to support information organization during environmental enforcement processes. The platform connects evidence, field records, location and documentation into a single traceable path, helping officers identify gaps and inconsistencies before drafting the report.',
+      'RastroVerde is a tool supporting the drafting of environmental inspection reports that organizes field evidence, identifies gaps, and keeps every statement in the draft report anchored to the evidence that supports it.',
     'about.team_title': 'Development Team',
     'about.differentials_title': 'Platform Differentials',
     'about.diff_1': 'End-to-end traceability from raw field evidence to each line of the report.',

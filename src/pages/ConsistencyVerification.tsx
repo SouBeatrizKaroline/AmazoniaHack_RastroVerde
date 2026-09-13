@@ -13,6 +13,13 @@ import {
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { getAllEvidence, getInspections } from '@/services/dataService'
+import {
+  DEMO_DIVERGENCES,
+  DEMO_DOCUMENT_INSTRUMENTS,
+  DEMO_INSTRUMENT_CONSISTENCY_CHECKS,
+} from '@/services/draftReportFixtures'
+import { DivergenceBlock } from '@/components/DivergenceBlock'
+import { InstrumentConsistencyViewer } from '@/components/InstrumentConsistencyViewer'
 
 interface VerificationResult {
   id: string
@@ -191,6 +198,35 @@ export const ConsistencyVerification: React.FC = () => {
             {t('verification.cautious_notice')} {t('verification.cautious_detail')}
           </p>
         </div>
+      </div>
+
+      {/* Divergências em Aberto — Requisito 6 e Princípio Central de Confiança */}
+      <div className="space-y-3">
+        <h2 className="text-base font-bold text-[#143028] flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 text-amber-600" />
+          <span>Divergências Probatórias Detectadas (Não resolvidas silenciosamente)</span>
+        </h2>
+        <DivergenceBlock
+          divergences={DEMO_DIVERGENCES}
+          onResolve={(id, source, note) => {
+            toast({
+              title: 'Divergência resolvida tecnicamente',
+              description: `Opção ${source} adotada com registro fundamentado.`,
+            })
+          }}
+        />
+      </div>
+
+      {/* Cadeia e Consistência entre Instrumentos do Processo — Requisito 10 */}
+      <div className="space-y-3 pt-4">
+        <h2 className="text-base font-bold text-[#143028] flex items-center gap-2">
+          <CheckCircle2 className="w-5 h-5 text-[#1B5E3A]" />
+          <span>Consistência do Processo entre Instrumentos</span>
+        </h2>
+        <InstrumentConsistencyViewer
+          instruments={DEMO_DOCUMENT_INSTRUMENTS}
+          checks={DEMO_INSTRUMENT_CONSISTENCY_CHECKS}
+        />
       </div>
 
       {/* Category Pills Strip */}

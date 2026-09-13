@@ -19,6 +19,7 @@ import {
   Info,
   ChevronRight,
   Compass,
+  FileSearch,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/StatusBadge'
@@ -35,8 +36,35 @@ import {
   type EvidenceRecord,
   type ActivityRecord,
 } from '@/services/dataService'
+import {
+  DEMO_AUDIO_EVIDENCE,
+  DEMO_FIELD_NOTES,
+  DEMO_EXTRACTED_FACTS,
+  DEMO_DIVERGENCES,
+  DEMO_MISSING_INFO,
+  DEMO_DOCUMENT_INSTRUMENTS,
+  DEMO_INSTRUMENT_CONSISTENCY_CHECKS,
+  DEMO_COST_METRICS,
+  DEMO_DRAFT_SECTIONS,
+  MUNICIPALITY_TEMPLATES,
+} from '@/services/draftReportFixtures'
+import type {
+  ExtractedFact,
+  DivergenceItem,
+  MissingInformationItem,
+  FieldNoteItem,
+  AudioEvidenceItem,
+  DocumentInstrument,
+} from '@/services/draftReportTypes'
 import { EvidenceCard } from '@/components/EvidenceCard'
 import { EvidenceModal } from '@/components/EvidenceModal'
+import { AudioEvidenceCard } from '@/components/AudioEvidenceCard'
+import { FieldNoteViewer } from '@/components/FieldNoteViewer'
+import { ExtractedFactsTable } from '@/components/ExtractedFactsTable'
+import { DivergenceBlock } from '@/components/DivergenceBlock'
+import { DraftReportViewer } from '@/components/DraftReportViewer'
+import { InstrumentConsistencyViewer } from '@/components/InstrumentConsistencyViewer'
+import { MissingInformationChecklist } from '@/components/MissingInformationChecklist'
 import { useRealtime } from '@/hooks/use-realtime'
 import { useToast } from '@/hooks/use-toast'
 import {
@@ -61,7 +89,14 @@ export const InspectionDetail: React.FC = () => {
   const [evidenceList, setEvidenceList] = useState<EvidenceRecord[]>([])
   const [activitiesList, setActivitiesList] = useState<ActivityRecord[]>([])
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'evidence' | 'timeline' | 'verification' | 'gaps' | 'report'
+    | 'overview'
+    | 'evidence'
+    | 'extraction'
+    | 'verification'
+    | 'gaps'
+    | 'report'
+    | 'instruments'
+    | 'timeline'
   >('overview')
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
@@ -455,7 +490,7 @@ export const InspectionDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Tab Navigation (Pitch Flow: Fiscalização -> Evidências -> Linha do tempo -> Verificação -> Lacunas -> Relatório) */}
+        {/* Tab Navigation (Ocorrência → Evidências → Extração/Análise → Verificação → Lacunas/Pendências → Minuta Rastreável → Instrumentos Relacionados) */}
         <div className="border-t border-[#E2E8E4] pt-3 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
           {[
             { key: 'overview', label: t('workspace.tabs.overview'), icon: Layers },
@@ -464,10 +499,12 @@ export const InspectionDetail: React.FC = () => {
               label: `${t('workspace.tabs.evidence')} (${evidenceList.length})`,
               icon: Camera,
             },
-            { key: 'timeline', label: t('workspace.tabs.timeline'), icon: Clock },
+            { key: 'extraction', label: t('workspace.tabs.extraction'), icon: FileSearch },
             { key: 'verification', label: t('workspace.tabs.verification'), icon: SearchCheck },
             { key: 'gaps', label: t('workspace.tabs.gaps'), icon: CheckSquare },
             { key: 'report', label: t('workspace.tabs.report'), icon: FileText },
+            { key: 'instruments', label: t('workspace.tabs.instruments'), icon: FileCheck2 },
+            { key: 'timeline', label: t('workspace.tabs.timeline'), icon: Clock },
           ].map((tab) => {
             const Icon = tab.icon
             const isActive = activeTab === tab.key
@@ -588,15 +625,18 @@ export const InspectionDetail: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 2: Evidence Center for this Inspection */}
+      {/* Tab 2: Evidence Center for this Inspection (Organizada por Tipo: Áudio com Player, Caderneta Original/Estruturada, Fotos e Docs) */}
       {activeTab === 'evidence' && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="text-base sm:text-lg font-bold text-[#143028]">
                 {t('workspace.field_evidence_title')} ({evidenceList.length})
               </h2>
-              <p className="text-xs text-[#5B6B63] mt-0.5">{t('evidence.file_help')}</p>
+              <p className="text-xs text-[#5B6B63] mt-0.5">
+                Organização por tipos probatórios: Fotografias com metadados EXIF, Gravações de
+                áudio com minutagem, Caderneta de campo original preservada e Documentos.
+              </p>
             </div>
             <Button
               size="sm"
@@ -611,18 +651,34 @@ export const InspectionDetail: React.FC = () => {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {evidenceList.map((evd) => (
-              <EvidenceCard
-                key={evd.id}
-                evidence={evd}
-                onSelect={(item) => navigate(`/evidence?source=${item.code}`)}
-                onEdit={(item) => {
-                  setEditingEvidence(item)
-                  setModalOpen(true)
-                }}
-              />
-            ))}
+          {/* Destaque Cenário A: Player de Áudio com Transcrição e Trecho 01:24 (12,4 ha) */}
+          <AudioEvidenceCard audio={DEMO_AUDIO_EVIDENCE} />
+
+          {/* Caderneta de Campo: Alternância Texto Original (preserva erros) vs Interpretação Estruturada */}
+          <FieldNoteViewer note={DEMO_FIELD_NOTES} />
+
+          {/* Mosaico de Fotografias, Documentos e Marcos Georreferenciados */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-sm font-bold text-[#143028] flex items-center justify-between">
+              <span>Fotografias e Registros Documentais da Vistoria</span>
+              <span className="text-xs font-normal text-[#5B6B63]">
+                {evidenceList.length} arquivos catalogados
+              </span>
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {evidenceList.map((evd) => (
+                <EvidenceCard
+                  key={evd.id}
+                  evidence={evd}
+                  onSelect={(item) => navigate(`/evidence?source=${item.code}`)}
+                  onEdit={(item) => {
+                    setEditingEvidence(item)
+                    setModalOpen(true)
+                  }}
+                />
+              ))}
+            </div>
           </div>
 
           <EvidenceModal
@@ -667,6 +723,105 @@ export const InspectionDetail: React.FC = () => {
               }
               await loadData()
             }}
+          />
+        </div>
+      )}
+
+      {/* Tab: Extração e Fatos Comprováveis (Item 3 do Desafio 1) */}
+      {activeTab === 'extraction' && (
+        <div className="space-y-6">
+          <ExtractedFactsTable facts={DEMO_EXTRACTED_FACTS} />
+
+          {/* Destaque das Métricas de Custo e Processamento */}
+          <div className="rounded-3xl border border-[#E2E8E4] bg-[#F7F9F8] p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+            <div>
+              <span className="font-bold text-[#143028] block">
+                Métricas de Processamento de Evidências:
+              </span>
+              <span className="text-[#5B6B63]">{DEMO_COST_METRICS.processedUnits}</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-4 text-[#5B6B63]">
+              <div>
+                <span>Custo computacional: </span>
+                <strong className="text-[#143028] font-mono">
+                  {DEMO_COST_METRICS.estimatedCost}
+                </strong>
+              </div>
+              <div>
+                <span>Tempo decorrido: </span>
+                <strong className="text-[#143028] font-mono">
+                  {DEMO_COST_METRICS.processingTime}
+                </strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab: Verificação e Detecção de Divergências (Item 6 do Desafio 1) */}
+      {activeTab === 'verification' && (
+        <div className="space-y-6">
+          <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-3">
+            <h2 className="text-base sm:text-lg font-bold text-[#143028] flex items-center gap-2">
+              <SearchCheck className="w-5 h-5 text-[#1B5E3A]" />
+              <span>Verificação da Ocorrência e Auditoria Probatória</span>
+            </h2>
+            <p className="text-xs text-[#5B6B63] leading-relaxed">
+              Triagem automática em 5 categorias de integridade:{' '}
+              <strong className="text-emerald-700">Confirmado</strong> (sustentado por evidência
+              direta), <strong className="text-amber-700">Divergência</strong> (fontes em conflito),{' '}
+              <strong className="text-red-700">Ausente</strong> (não localizado),{' '}
+              <strong className="text-blue-700">Baixa confiança</strong> e{' '}
+              <strong className="text-purple-700">Requer revisão humana</strong>.
+            </p>
+          </div>
+
+          {/* Divergências em Destaque */}
+          <DivergenceBlock
+            divergences={DEMO_DIVERGENCES}
+            onResolve={(id, source, note) => {
+              toast({
+                title: 'Divergência resolvida tecnicamente',
+                description: `Opção ${source} adotada com registro fundamentado.`,
+              })
+            }}
+          />
+
+          {/* Tabela de fatos com filtros de status */}
+          <ExtractedFactsTable facts={DEMO_EXTRACTED_FACTS} />
+        </div>
+      )}
+
+      {/* Tab: O que falta para fechar o caso? (Item 5 do Desafio 1) */}
+      {activeTab === 'gaps' && (
+        <div className="space-y-6">
+          <MissingInformationChecklist
+            items={DEMO_MISSING_INFO}
+            onToggleItem={(id) => {
+              toast({ title: 'Status da pendência atualizado' })
+            }}
+          />
+        </div>
+      )}
+
+      {/* Tab: Minuta Rastreável do Relatório de Fiscalização (Item 7 e 8 do Desafio 1) */}
+      {activeTab === 'report' && (
+        <div className="space-y-6">
+          <DraftReportViewer
+            sections={DEMO_DRAFT_SECTIONS}
+            selectedMunicipality={
+              inspection.municipality.toLowerCase().includes('altamira') ? 'altamira' : 'altamira'
+            }
+          />
+        </div>
+      )}
+
+      {/* Tab: Consistência entre Instrumentos (Item 10 do Desafio 1) */}
+      {activeTab === 'instruments' && (
+        <div className="space-y-6">
+          <InstrumentConsistencyViewer
+            instruments={DEMO_DOCUMENT_INSTRUMENTS}
+            checks={DEMO_INSTRUMENT_CONSISTENCY_CHECKS}
           />
         </div>
       )}

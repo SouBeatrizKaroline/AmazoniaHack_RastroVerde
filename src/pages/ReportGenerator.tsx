@@ -26,6 +26,8 @@ import {
   type EvidenceRecord,
   type ActivityRecord,
 } from '@/services/dataService'
+import { DEMO_DRAFT_SECTIONS, MUNICIPALITY_TEMPLATES } from '@/services/draftReportFixtures'
+import { DraftReportViewer } from '@/components/DraftReportViewer'
 import { useToast } from '@/hooks/use-toast'
 
 export const ReportGenerator: React.FC = () => {
@@ -240,16 +242,6 @@ export const ReportGenerator: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsEditing(!isEditing)}
-            className="h-9 text-xs border-[#E2E8E4]"
-          >
-            <Edit3 className="w-3.5 h-3.5 mr-1.5" />
-            <span>{isEditing ? t('report.view_mode') : t('report.edit_mode')}</span>
-          </Button>
-
-          <Button
-            variant="outline"
-            size="sm"
             onClick={handleExportJSON}
             className="h-9 text-xs border-[#E2E8E4]"
           >
@@ -263,306 +255,340 @@ export const ReportGenerator: React.FC = () => {
             className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-semibold h-9 px-4 rounded-lg shadow-xs flex items-center gap-1.5"
           >
             <Printer className="w-3.5 h-3.5" />
-            <span>
-              {t('report.export_pdf')} / {t('report.print')}
-            </span>
+            <span>Visualizar versão para impressão</span>
           </Button>
         </div>
       </div>
 
-      {/* Official Report Document Paper (Printable) */}
-      <div className="rounded-3xl border border-[#E2E8E4] bg-white p-8 sm:p-12 shadow-sm space-y-8 max-w-4xl mx-auto print:shadow-none print:border-none print:p-0">
-        {/* Document Institutional Header */}
-        <div className="border-b-2 border-[#1B5E3A] pb-6 space-y-3 text-center sm:text-left">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#1B5E3A]">
-                Governo do Estado • Órgão de Fiscalização Ambiental
-              </span>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#143028] mt-0.5">
-                RELATÓRIO TÉCNICO DE VISTORIA AMBIENTAL
-              </h2>
-            </div>
-            <div className="sm:text-right font-mono text-xs font-bold text-[#143028]">
-              <div>PROCESSO: RV-2026-001</div>
-              <div className="text-[11px] text-[#5B6B63] font-normal">EMISSÃO PRELIMINAR</div>
-            </div>
-          </div>
+      {/* Nova Minuta Rastreável com 10 Seções Oficiais, Templates por Município e Chips Clicáveis de Fontes */}
+      <div className="space-y-6">
+        <DraftReportViewer
+          sections={DEMO_DRAFT_SECTIONS}
+          selectedMunicipality={
+            inspection.municipality.toLowerCase().includes('altamira') ? 'altamira' : 'altamira'
+          }
+        />
+      </div>
 
-          <div className="p-2.5 rounded-lg bg-[#E7F2EC]/60 border border-[#1B5E3A]/20 text-[11px] text-[#1B5E3A] font-medium text-center">
-            {t('report.draft_notice')}
+      {/* Documento Legado / Histórico da Vistoria Técnica */}
+      <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-[#E2E8E4]">
+          <div>
+            <h3 className="text-sm font-bold text-[#143028]">
+              Dossiê Complementar de Registros da Vistoria
+            </h3>
+            <p className="text-xs text-[#5B6B63]">
+              Exibição detalhada de campos livres anotados pelos agentes e cronologia detalhada.
+            </p>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsEditing(!isEditing)}
+            className="h-8 text-xs font-semibold"
+          >
+            <Edit3 className="w-3.5 h-3.5 mr-1.5" />
+            <span>{isEditing ? 'Concluir edição rápida' : 'Editar notas livres'}</span>
+          </Button>
         </div>
-
-        {/* 13 Structured Numbered Sections */}
-        <div className="space-y-6 text-xs sm:text-sm text-[#143028]">
-          {/* Section 1 */}
-          <div className="space-y-1.5">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">
-              1. Identificação da Fiscalização
-            </h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec1}
-                onChange={(e) => setSections({ ...sections, sec1: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec1}</p>
-            )}
-          </div>
-
-          {/* Section 2 */}
-          <div className="space-y-1.5">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">2. Data e Local</h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec2}
-                onChange={(e) => setSections({ ...sections, sec2: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec2}</p>
-            )}
-          </div>
-
-          {/* Section 3 */}
-          <div className="space-y-1.5">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">3. Equipe Responsável</h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec3}
-                onChange={(e) => setSections({ ...sections, sec3: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec3}</p>
-            )}
-          </div>
-
-          {/* Section 4 */}
-          <div className="space-y-1.5">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">4. Contextualização</h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec4}
-                onChange={(e) => setSections({ ...sections, sec4: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec4}</p>
-            )}
-          </div>
-
-          {/* Section 5 — With Direct Traceability Source Block */}
-          <div className="space-y-2">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">
-              5. Descrição da Ocorrência
-            </h3>
-            {isEditing ? (
-              <Textarea
-                rows={3}
-                value={sections.sec5}
-                onChange={(e) => setSections({ ...sections, sec5: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec5}</p>
-            )}
-
-            {/* Traceability Source Badge & Return Button */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-[11px] print:bg-transparent">
-              <div className="flex flex-wrap items-center gap-2 text-[#5B6B63]">
-                <span className="font-bold text-[#143028]">{t('report.source_block')}</span>
-                <span className="font-mono font-bold text-[#1B5E3A] bg-white px-1.5 py-0.5 rounded border border-[#E2E8E4]">
-                  📷 EVD-014
+        {/* Official Report Document Paper (Printable) */}{' '}
+        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-8 sm:p-12 shadow-sm space-y-8 max-w-4xl mx-auto print:shadow-none print:border-none print:p-0">
+          {/* Document Institutional Header */}
+          <div className="border-b-2 border-[#1B5E3A] pb-6 space-y-3 text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#1B5E3A]">
+                  Governo do Estado • Órgão de Fiscalização Ambiental
                 </span>
-                <span>📍 Lat -8.0000, Long -34.0000</span>
-                <span>🕒 14:32</span>
-                <span>👤 Agente 01 — Léo</span>
+                <h2 className="text-xl sm:text-2xl font-bold text-[#143028] mt-0.5">
+                  RELATÓRIO TÉCNICO DE VISTORIA AMBIENTAL
+                </h2>
               </div>
+              <div className="sm:text-right font-mono text-xs font-bold text-[#143028]">
+                <div>PROCESSO: RV-2026-001</div>
+                <div className="text-[11px] text-[#5B6B63] font-normal">EMISSÃO PRELIMINAR</div>
+              </div>
+            </div>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleNavigateToSource('EVD-014')}
-                className="h-7 text-[11px] font-bold text-[#1B5E3A] hover:bg-[#E7F2EC] print:hidden self-end sm:self-center"
-              >
-                <span>{t('report.view_source_evidence')}</span>
-                <ArrowRight className="w-3 h-3 ml-1" />
-              </Button>
+            <div className="p-2.5 rounded-lg bg-[#E7F2EC]/60 border border-[#1B5E3A]/20 text-[11px] text-[#1B5E3A] font-medium text-center">
+              {t('report.draft_notice')}
             </div>
           </div>
 
-          {/* Section 6 — Evidence Summary */}
-          <div className="space-y-2">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">6. Evidências Coletadas</h3>
-            {isEditing ? (
-              <Textarea
-                rows={3}
-                value={sections.sec6}
-                onChange={(e) => setSections({ ...sections, sec6: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec6}</p>
-            )}
+          {/* 13 Structured Numbered Sections */}
+          <div className="space-y-6 text-xs sm:text-sm text-[#143028]">
+            {/* Section 1 */}
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">
+                1. Identificação da Fiscalização
+              </h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec1}
+                  onChange={(e) => setSections({ ...sections, sec1: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec1}</p>
+              )}
+            </div>
 
-            {/* Dynamic Traceability Sources from real evidence */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 print:hidden">
-              {evidenceList.slice(0, 4).map((evd) => (
-                <div
-                  key={evd.id}
-                  className="flex items-center justify-between p-2.5 rounded-lg bg-[#F7F9F8] border border-[#E2E8E4] text-[11px]"
-                >
-                  <div className="font-mono text-[#1B5E3A] font-semibold truncate max-w-[200px]">
-                    {evd.type === 'Fotografia' ? '📷' : evd.type === 'Documento' ? '📄' : '📍'}{' '}
-                    {evd.code} ({evd.description})
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleNavigateToSource(evd.code)}
-                    className="font-bold text-[#0F766E] hover:underline shrink-0 ml-2"
-                  >
-                    Ver origem →
-                  </button>
+            {/* Section 2 */}
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">2. Data e Local</h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec2}
+                  onChange={(e) => setSections({ ...sections, sec2: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec2}</p>
+              )}
+            </div>
+
+            {/* Section 3 */}
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">3. Equipe Responsável</h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec3}
+                  onChange={(e) => setSections({ ...sections, sec3: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec3}</p>
+              )}
+            </div>
+
+            {/* Section 4 */}
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">4. Contextualização</h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec4}
+                  onChange={(e) => setSections({ ...sections, sec4: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec4}</p>
+              )}
+            </div>
+
+            {/* Section 5 — With Direct Traceability Source Block */}
+            <div className="space-y-2">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">
+                5. Descrição da Ocorrência
+              </h3>
+              {isEditing ? (
+                <Textarea
+                  rows={3}
+                  value={sections.sec5}
+                  onChange={(e) => setSections({ ...sections, sec5: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec5}</p>
+              )}
+
+              {/* Traceability Source Badge & Return Button */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-[11px] print:bg-transparent">
+                <div className="flex flex-wrap items-center gap-2 text-[#5B6B63]">
+                  <span className="font-bold text-[#143028]">{t('report.source_block')}</span>
+                  <span className="font-mono font-bold text-[#1B5E3A] bg-white px-1.5 py-0.5 rounded border border-[#E2E8E4]">
+                    📷 EVD-014
+                  </span>
+                  <span>📍 Lat -8.0000, Long -34.0000</span>
+                  <span>🕒 14:32</span>
+                  <span>👤 Agente 01 — Léo</span>
                 </div>
-              ))}
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleNavigateToSource('EVD-014')}
+                  className="h-7 text-[11px] font-bold text-[#1B5E3A] hover:bg-[#E7F2EC] print:hidden self-end sm:self-center"
+                >
+                  <span>{t('report.view_source_evidence')}</span>
+                  <ArrowRight className="w-3 h-3 ml-1" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Section 6 — Evidence Summary */}
+            <div className="space-y-2">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">
+                6. Evidências Coletadas
+              </h3>
+              {isEditing ? (
+                <Textarea
+                  rows={3}
+                  value={sections.sec6}
+                  onChange={(e) => setSections({ ...sections, sec6: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec6}</p>
+              )}
+
+              {/* Dynamic Traceability Sources from real evidence */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 print:hidden">
+                {evidenceList.slice(0, 4).map((evd) => (
+                  <div
+                    key={evd.id}
+                    className="flex items-center justify-between p-2.5 rounded-lg bg-[#F7F9F8] border border-[#E2E8E4] text-[11px]"
+                  >
+                    <div className="font-mono text-[#1B5E3A] font-semibold truncate max-w-[200px]">
+                      {evd.type === 'Fotografia' ? '📷' : evd.type === 'Documento' ? '📄' : '📍'}{' '}
+                      {evd.code} ({evd.description})
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleNavigateToSource(evd.code)}
+                      className="font-bold text-[#0F766E] hover:underline shrink-0 ml-2"
+                    >
+                      Ver origem →
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Section 7 */}
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">7. Linha do Tempo</h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec7}
+                  onChange={(e) => setSections({ ...sections, sec7: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec7}</p>
+              )}
+            </div>
+
+            {/* Section 8 */}
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">8. Dados Geográficos</h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec8}
+                  onChange={(e) => setSections({ ...sections, sec8: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028] font-mono text-xs">{sections.sec8}</p>
+              )}
+            </div>
+
+            {/* Section 9 */}
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">
+                9. Documentos Relacionados
+              </h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec9}
+                  onChange={(e) => setSections({ ...sections, sec9: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec9}</p>
+              )}
+            </div>
+
+            {/* Section 10 */}
+            <div className="space-y-1.5 p-3.5 rounded-xl bg-amber-50/60 border border-amber-200">
+              <h3 className="font-bold text-[#B45309] text-sm uppercase">
+                10. Pontos que Precisam de Revisão
+              </h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec10}
+                  onChange={(e) => setSections({ ...sections, sec10: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-amber-950">{sections.sec10}</p>
+              )}
+            </div>
+
+            {/* Section 11 */}
+            <div className="space-y-1.5 p-3.5 rounded-xl bg-blue-50/60 border border-blue-200">
+              <h3 className="font-bold text-[#2563EB] text-sm uppercase">
+                11. Informações Pendentes
+              </h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec11}
+                  onChange={(e) => setSections({ ...sections, sec11: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-blue-950">{sections.sec11}</p>
+              )}
+            </div>
+
+            {/* Section 12 */}
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">12. Observações</h3>
+              {isEditing ? (
+                <Textarea
+                  rows={2}
+                  value={sections.sec12}
+                  onChange={(e) => setSections({ ...sections, sec12: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec12}</p>
+              )}
+            </div>
+
+            {/* Section 13 */}
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">
+                13. Conclusão do Agente
+              </h3>
+              {isEditing ? (
+                <Textarea
+                  rows={3}
+                  value={sections.sec13}
+                  onChange={(e) => setSections({ ...sections, sec13: e.target.value })}
+                  className="text-xs"
+                />
+              ) : (
+                <p className="leading-relaxed text-[#143028]">{sections.sec13}</p>
+              )}
             </div>
           </div>
 
-          {/* Section 7 */}
-          <div className="space-y-1.5">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">7. Linha do Tempo</h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec7}
-                onChange={(e) => setSections({ ...sections, sec7: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec7}</p>
-            )}
-          </div>
-
-          {/* Section 8 */}
-          <div className="space-y-1.5">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">8. Dados Geográficos</h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec8}
-                onChange={(e) => setSections({ ...sections, sec8: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028] font-mono text-xs">{sections.sec8}</p>
-            )}
-          </div>
-
-          {/* Section 9 */}
-          <div className="space-y-1.5">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">
-              9. Documentos Relacionados
-            </h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec9}
-                onChange={(e) => setSections({ ...sections, sec9: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec9}</p>
-            )}
-          </div>
-
-          {/* Section 10 */}
-          <div className="space-y-1.5 p-3.5 rounded-xl bg-amber-50/60 border border-amber-200">
-            <h3 className="font-bold text-[#B45309] text-sm uppercase">
-              10. Pontos que Precisam de Revisão
-            </h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec10}
-                onChange={(e) => setSections({ ...sections, sec10: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-amber-950">{sections.sec10}</p>
-            )}
-          </div>
-
-          {/* Section 11 */}
-          <div className="space-y-1.5 p-3.5 rounded-xl bg-blue-50/60 border border-blue-200">
-            <h3 className="font-bold text-[#2563EB] text-sm uppercase">
-              11. Informações Pendentes
-            </h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec11}
-                onChange={(e) => setSections({ ...sections, sec11: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-blue-950">{sections.sec11}</p>
-            )}
-          </div>
-
-          {/* Section 12 */}
-          <div className="space-y-1.5">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">12. Observações</h3>
-            {isEditing ? (
-              <Textarea
-                rows={2}
-                value={sections.sec12}
-                onChange={(e) => setSections({ ...sections, sec12: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec12}</p>
-            )}
-          </div>
-
-          {/* Section 13 */}
-          <div className="space-y-1.5">
-            <h3 className="font-bold text-[#1B5E3A] text-sm uppercase">13. Conclusão do Agente</h3>
-            {isEditing ? (
-              <Textarea
-                rows={3}
-                value={sections.sec13}
-                onChange={(e) => setSections({ ...sections, sec13: e.target.value })}
-                className="text-xs"
-              />
-            ) : (
-              <p className="leading-relaxed text-[#143028]">{sections.sec13}</p>
-            )}
-          </div>
-        </div>
-
-        {/* Signatures block */}
-        <div className="pt-10 border-t border-[#E2E8E4] grid grid-cols-1 sm:grid-cols-2 gap-8 text-center text-xs">
-          <div className="space-y-1">
-            <div className="w-48 mx-auto border-b border-gray-400 pb-1 font-semibold text-[#143028]">
-              Agente 01 — Léo
+          {/* Signatures block */}
+          <div className="pt-10 border-t border-[#E2E8E4] grid grid-cols-1 sm:grid-cols-2 gap-8 text-center text-xs">
+            <div className="space-y-1">
+              <div className="w-48 mx-auto border-b border-gray-400 pb-1 font-semibold text-[#143028]">
+                Agente 01 — Léo
+              </div>
+              <div className="text-[11px] text-[#5B6B63]">
+                Equipe de Fiscalização Ambiental • Matrícula 9821-X
+              </div>
             </div>
-            <div className="text-[11px] text-[#5B6B63]">
-              Equipe de Fiscalização Ambiental • Matrícula 9821-X
-            </div>
-          </div>
 
-          <div className="space-y-1">
-            <div className="w-48 mx-auto border-b border-gray-400 pb-1 font-semibold text-[#143028]">
-              Coordenação Regional
+            <div className="space-y-1">
+              <div className="w-48 mx-auto border-b border-gray-400 pb-1 font-semibold text-[#143028]">
+                Coordenação Regional
+              </div>
+              <div className="text-[11px] text-[#5B6B63]">Visto da Autoridade Competente</div>
             </div>
-            <div className="text-[11px] text-[#5B6B63]">Visto da Autoridade Competente</div>
           </div>
         </div>
       </div>

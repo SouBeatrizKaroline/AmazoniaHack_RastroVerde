@@ -87,7 +87,9 @@ export const InspectionsList: React.FC = () => {
     { key: 'Em coleta', label: t('status.em_coleta') },
     { key: 'Em análise', label: t('status.em_analise') },
     { key: 'Com pendências', label: t('status.com_pendencias') },
+    { key: 'Requer validação', label: t('status.requer_validacao') },
     { key: 'Pronta para relatório', label: t('status.pronta_relatorio') },
+    { key: 'Minuta gerada', label: t('status.minuta_gerada') },
     { key: 'Finalizada', label: t('status.finalizada') },
   ]
 

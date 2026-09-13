@@ -223,64 +223,91 @@ export const Index: React.FC = () => {
           </div>
         </div>
 
-        {/* Visual Animated Flow Strip: Trilha no mapa entre as etapas */}
+        {/* Seção Como o RastroVerde Funciona: 6 Passos Oficiais do Desafio 1 */}
         <div className="relative z-10 mt-12 sm:mt-16 pt-8 sm:pt-10 border-t border-[#E2E8E4]">
-          <div className="text-center max-w-xl mx-auto mb-7 space-y-1">
+          <div className="text-center max-w-2xl mx-auto mb-7 space-y-1">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#1B5E3A]">
               <GitBranch className="w-3.5 h-3.5" />
               <span>{t('landing.flow_title')}</span>
             </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-[#143028]">
+              {t('landing.how_it_works_title')}
+            </h2>
             <p className="text-xs text-[#5B6B63]">{t('landing.flow_subtitle')}</p>
           </div>
 
-          {/* Connected Steps Grid with trail line */}
-          <div className="relative">
-            {/* Trail connector line (desktop) */}
-            <div className="hidden lg:block absolute top-10 left-[8%] right-[8%] h-0.5 border-t-2 border-dashed border-[#1B5E3A]/25 z-0" />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 relative z-10">
-              {flowSteps.map((step, idx) => {
-                const Icon = step.icon
-                const isHovered = hoveredStep === idx
-                return (
-                  <div
-                    key={step.step}
-                    onMouseEnter={() => setHoveredStep(idx)}
-                    onMouseLeave={() => setHoveredStep(null)}
-                    className={`relative flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-white border transition-all duration-300 ${
-                      isHovered
-                        ? 'border-[#1B5E3A] shadow-md -translate-y-1'
-                        : 'border-[#E2E8E4] shadow-2xs hover:border-[#1B5E3A]/60'
-                    }`}
-                  >
-                    {/* Node indicator */}
-                    <div className="relative mb-3">
-                      <div
-                        className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                          isHovered
-                            ? 'bg-[#1B5E3A] text-white shadow-md scale-105'
-                            : 'bg-[#E7F2EC] text-[#1B5E3A]'
-                        }`}
-                      >
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#143028] text-white font-mono text-[9px] font-bold">
-                        {step.step}
-                      </span>
+          {/* 6 Passos: 1. Recebe -> 2. Organiza -> 3. Extrai -> 4. Verifica -> 5. Gera Minuta -> 6. Humano Revisa */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 relative z-10">
+            {[
+              {
+                step: '1',
+                title: t('landing.step1_title'),
+                desc: t('landing.step1_desc'),
+                highlight: t('landing.step1_highlight'),
+                icon: Camera,
+              },
+              {
+                step: '2',
+                title: t('landing.step2_title'),
+                desc: t('landing.step2_desc'),
+                highlight: t('landing.step2_highlight'),
+                icon: Layers,
+              },
+              {
+                step: '3',
+                title: t('landing.step3_title'),
+                desc: t('landing.step3_desc'),
+                highlight: t('landing.step3_highlight'),
+                icon: Search,
+              },
+              {
+                step: '4',
+                title: t('landing.step4_title'),
+                desc: t('landing.step4_desc'),
+                highlight: t('landing.step4_highlight'),
+                icon: ShieldCheck,
+              },
+              {
+                step: '5',
+                title: t('landing.step5_title'),
+                desc: t('landing.step5_desc'),
+                highlight: t('landing.step5_highlight'),
+                icon: FileText,
+              },
+              {
+                step: '6',
+                title: t('landing.step6_title'),
+                desc: t('landing.step6_desc'),
+                highlight: t('landing.step6_highlight'),
+                icon: CheckCircle2,
+              },
+            ].map((item, idx) => {
+              const Icon = item.icon
+              return (
+                <div
+                  key={item.step}
+                  className="flex flex-col items-center text-center p-4 rounded-2xl bg-white border border-[#E2E8E4] shadow-2xs hover:border-[#1B5E3A] hover:shadow-md transition-all"
+                >
+                  <div className="relative mb-3">
+                    <div className="w-11 h-11 rounded-2xl bg-[#E7F2EC] text-[#1B5E3A] flex items-center justify-center font-bold">
+                      <Icon className="w-5 h-5" />
                     </div>
-
-                    <div className="text-sm font-bold text-[#143028] mb-0.5">{step.label}</div>
-                    <span className="text-[10px] font-semibold text-[#0F766E] uppercase tracking-wider mb-1.5">
-                      {step.highlight}
+                    <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.2 rounded-full bg-[#143028] text-white font-mono text-[9px] font-bold">
+                      {item.step}
                     </span>
-                    <p className="text-xs text-[#5B6B63] leading-relaxed">{step.desc}</p>
                   </div>
-                )
-              })}
-            </div>
+                  <div className="text-xs sm:text-sm font-bold text-[#143028] mb-1">
+                    {item.title}
+                  </div>
+                  <span className="text-[10px] font-semibold text-[#0F766E] uppercase tracking-wider mb-1.5">
+                    {item.highlight}
+                  </span>
+                  <p className="text-[11px] text-[#5B6B63] leading-relaxed">{item.desc}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
-
         {/* Scroll cue */}
         <div className="flex justify-center pt-6">
           <a
@@ -563,6 +590,28 @@ export const Index: React.FC = () => {
                 <span className="text-[10px] text-[#5B6B63] hidden md:block">{step.sub}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Destaque: A evidência não deve terminar numa pasta */}
+      <section className="rounded-3xl border-2 border-[#1B5E3A] bg-gradient-to-r from-[#E7F2EC]/90 via-white to-[#E7F2EC]/60 p-6 sm:p-10 shadow-xs">
+        <div className="max-w-3xl mx-auto text-center space-y-3">
+          <span className="font-bold text-xs uppercase tracking-wider text-[#1B5E3A] bg-white px-3 py-1 rounded-full border border-[#1B5E3A]/30 inline-block shadow-2xs">
+            {t('landing.folder_badge')}
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-black text-[#143028]">
+            {t('landing.folder_headline')}
+          </h2>
+          <p className="text-xs sm:text-sm text-[#5B6B63] leading-relaxed max-w-2xl mx-auto">
+            {t('landing.folder_desc')}
+          </p>
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <Link to="/inspections/RV-DEMO-001">
+              <Button className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-10 px-6 rounded-xl shadow-xs">
+                {t('landing.btn_demo')}
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

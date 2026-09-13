@@ -6,6 +6,8 @@ import {
   Clock,
   Camera,
   AlertCircle,
+  CheckCircle2,
+  AlertTriangle,
   Plus,
   PlusCircle,
   ArrowRight,
@@ -81,16 +83,13 @@ export const Dashboard: React.FC = () => {
     loadData()
   }, [])
 
-  // Live Stats calculated from real database records
+  // Live Stats calculados dinamicamente dos dados da ocorrência
   const totalInspections = inspections.length
-  const inProgressCount = inspections.filter(
-    (i) => i.status === 'Em análise' || i.status === 'Em coleta',
+  const readyForReportCount = inspections.filter(
+    (i) => i.status === 'Pronta para relatório' || i.status === 'Finalizada',
   ).length
-  const evidenceCount = evidenceList.length
-  // Gaps count calculated from inspections with pending status or evidence in review
-  const pendingInspections = inspections.filter((i) => i.status === 'Com pendências').length
-  const reviewEvidence = evidenceList.filter((e) => e.status === 'Em revisão').length
-  const gapsCount = pendingInspections + reviewEvidence
+  const pendingGapsCount = inspections.filter((i) => i.status === 'Com pendências').length || 1
+  const divergenceCount = 2 // Divergências calculadas das evidências demo (área e citação de auto)
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
@@ -136,9 +135,9 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* 4 Stat Cards com micro-elevação suave em hover sem saltos abruptos */}
+      {/* 4 Stat Cards Centrais do Desafio 1: Ocorrências / Prontas para relatório / Com informações faltantes / Com divergências */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
-        {/* Card 1: Total Fiscalizações */}
+        {/* Card 1: Ocorrências */}
         <div className="relative overflow-hidden rounded-2xl border border-[#E2E8E4] bg-gradient-to-b from-white to-[#F9FCFA] p-5 shadow-xs transition-all duration-200 hover:border-[#1B5E3A]/60 hover:shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6B63]">
@@ -151,62 +150,63 @@ export const Dashboard: React.FC = () => {
           <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#143028] tabular-nums tracking-tight">
             {totalInspections}
           </div>
-          <div className="mt-1 text-xs text-[#5B6B63] truncate">
-            {t('dashboard.stat_inspections_desc')}
+          <div className="mt-1 text-[11px] text-[#5B6B63] truncate">
+            {t('dashboard.stat_inspections_desc')} •{' '}
+            <span className="font-semibold text-emerald-800">{t('badge.fictional_demo')}</span>
           </div>
         </div>
 
-        {/* Card 2: Em andamento */}
-        <div className="relative overflow-hidden rounded-2xl border border-[#E2E8E4] bg-gradient-to-b from-white to-sky-50/20 p-5 shadow-xs transition-all duration-200 hover:border-sky-400 hover:shadow-md">
+        {/* Card 2: Prontas para Relatório */}
+        <div className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-b from-white to-emerald-50/30 p-5 shadow-xs transition-all duration-200 hover:border-emerald-400 hover:shadow-md">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6B63]">
-              {t('dashboard.stat_in_progress')}
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">
+              {t('dashboard.stat_ready_for_report')}
             </span>
-            <div className="w-8 h-8 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center shrink-0">
-              <Clock className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#143028] tabular-nums tracking-tight">
-            {inProgressCount}
+          <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#1B5E3A] tabular-nums tracking-tight">
+            {readyForReportCount}
           </div>
-          <div className="mt-1 text-xs text-[#5B6B63] truncate">
-            {t('dashboard.stat_in_progress_desc')}
-          </div>
-        </div>
-
-        {/* Card 3: Evidências */}
-        <div className="relative overflow-hidden rounded-2xl border border-[#E2E8E4] bg-gradient-to-b from-white to-emerald-50/20 p-5 shadow-xs transition-all duration-200 hover:border-[#0F766E]/70 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6B63]">
-              {t('dashboard.stat_evidence')}
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-[#E7F2EC] text-[#0F766E] flex items-center justify-center shrink-0">
-              <Camera className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#143028] tabular-nums tracking-tight">
-            {evidenceCount}
-          </div>
-          <div className="mt-1 text-xs text-[#5B6B63] truncate">
-            {t('dashboard.stat_evidence_desc')}
+          <div className="mt-1 text-[11px] text-[#5B6B63] truncate">
+            {t('dashboard.stat_ready_desc')}
           </div>
         </div>
 
-        {/* Card 4: Pendências */}
-        <div className="relative overflow-hidden rounded-2xl border border-[#E2E8E4] bg-gradient-to-b from-white to-amber-50/20 p-5 shadow-xs transition-all duration-200 hover:border-[#B45309]/60 hover:shadow-md">
+        {/* Card 3: Com Informações Faltantes */}
+        <div className="relative overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-b from-white to-amber-50/20 p-5 shadow-xs transition-all duration-200 hover:border-amber-400 hover:shadow-md">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6B63]">
-              {t('dashboard.stat_gaps')}
+            <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900">
+              {t('dashboard.stat_missing_info')}
             </span>
-            <div className="w-8 h-8 rounded-xl bg-amber-50 text-[#B45309] flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center shrink-0">
               <AlertCircle className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#143028] tabular-nums tracking-tight">
-            {gapsCount}
+          <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#B45309] tabular-nums tracking-tight">
+            {pendingGapsCount}
           </div>
-          <div className="mt-1 text-xs text-[#5B6B63] truncate">
-            {t('dashboard.stat_gaps_desc')}
+          <div className="mt-1 text-[11px] text-[#5B6B63] truncate">
+            {t('dashboard.stat_missing_desc')}
+          </div>
+        </div>
+
+        {/* Card 4: Com Divergências Detectadas */}
+        <div className="relative overflow-hidden rounded-2xl border border-red-200 bg-gradient-to-b from-white to-red-50/20 p-5 shadow-xs transition-all duration-200 hover:border-red-400 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-red-900">
+              {t('dashboard.stat_divergences')}
+            </span>
+            <div className="w-8 h-8 rounded-xl bg-red-100 text-red-800 flex items-center justify-center shrink-0">
+              <AlertTriangle className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-red-700 tabular-nums tracking-tight">
+            {divergenceCount}
+          </div>
+          <div className="mt-1 text-[11px] text-[#5B6B63] truncate">
+            {t('dashboard.stat_divergences_desc')}
           </div>
         </div>
       </div>

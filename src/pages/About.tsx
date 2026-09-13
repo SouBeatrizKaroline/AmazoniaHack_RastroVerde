@@ -37,6 +37,17 @@ export const About: React.FC = () => {
         <p className="text-xs sm:text-sm text-[#143028] leading-relaxed">
           {t('about.amazoniahack_desc')}
         </p>
+        <div className="p-3.5 rounded-2xl bg-white/90 border border-[#1B5E3A]/20 text-xs text-[#143028] leading-relaxed space-y-1">
+          <strong className="text-[#1B5E3A] block">
+            Princípio de Defensabilidade Técnica & Regras de Integridade:
+          </strong>
+          <span>
+            O RastroVerde não substitui o fiscal ambiental nem garante vereditos jurídicos
+            automáticos. Nossa missão é estruturar as evidências coletadas em campo, identificar
+            lacunas probatórias e gerar minutas de relatórios onde cada afirmação aponte diretamente
+            para o arquivo e trecho probatório original.
+          </span>
+        </div>
         <div className="inline-flex items-center gap-2 rounded-full border border-[#1B5E3A]/30 bg-white px-3 py-1 text-xs font-semibold text-[#1B5E3A]">
           <span className="w-2 h-2 rounded-full bg-[#1B5E3A]" />
           <span>{t('landing.amazoniahack_badge')}</span>
