@@ -234,19 +234,7 @@ Conforme os créditos apresentados na página **Sobre** da aplicação:
 - Léo Matias Araújo
 - Sonia Janara S. Barros
 
-## 📚 Referências do projeto
-
-Esta documentação foi elaborada a partir do próprio repositório:
-
-- [Apresentação e proposta](src/pages/Index.tsx)
-- [Contexto e equipe](src/pages/About.tsx)
-- [Conteúdo demonstrativo das análises e minutas](src/services/draftReportFixtures.ts)
-- [Camada de dados](src/services/dataService.ts)
-- [Integração do assistente](pocketbase/hooks/rastroverde_ask.js)
-- [Dependências e scripts](package.json)
-- [Requisitos de ambiente do Vite](https://vite.dev/guide/)
-
-**Licença:** o repositório não contém um arquivo `LICENSE` nesta revisão. As condições de reutilização precisam ser definidas pelos responsáveis.
+Projeto desenvolvido no **AmazôniaHack 2026**.
 
 ---
 
@@ -498,19 +486,7 @@ As credited on the application's **About** page:
 - Léo Matias Araújo
 - Sonia Janara S. Barros
 
-## 📚 Project references
-
-This documentation is based on the repository itself:
-
-- [Presentation and proposal](src/pages/Index.tsx)
-- [Context and team](src/pages/About.tsx)
-- [Demonstration analysis and draft content](src/services/draftReportFixtures.ts)
-- [Data access layer](src/services/dataService.ts)
-- [Assistant integration](pocketbase/hooks/rastroverde_ask.js)
-- [Dependencies and scripts](package.json)
-- [Vite environment requirements](https://vite.dev/guide/)
-
-**License:** this repository does not contain a `LICENSE` file as of this revision. Reuse terms need to be defined by the project owners.
+Project developed at **AmazôniaHack 2026**.
 
 ---
 
