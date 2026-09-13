@@ -87,19 +87,22 @@ export const ExtractedFactsTable: React.FC<ExtractedFactsTableProps> = ({
     switch (confidence) {
       case 'Alta':
         return (
-          <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-900 bg-emerald-100/90 border border-emerald-300 px-2.5 py-0.5 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
             Alta
           </span>
         )
       case 'Média':
         return (
-          <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-950 bg-amber-100/90 border border-amber-300 px-2.5 py-0.5 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
             Média
           </span>
         )
       case 'Baixa':
         return (
-          <span className="text-[11px] font-semibold text-red-700 bg-red-50 px-2 py-0.5 rounded-md">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-red-950 bg-red-100/90 border border-red-300 px-2.5 py-0.5 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-600" />
             Baixa
           </span>
         )
@@ -163,7 +166,14 @@ export const ExtractedFactsTable: React.FC<ExtractedFactsTableProps> = ({
 
                 <td className="py-3 px-3 align-top max-w-xs">
                   <div
-                    className={`font-medium ${fact.status === 'Ausente' ? 'text-red-700 italic' : 'text-[#143028]'}`}
+                    className={`font-medium ${
+                      fact.status === 'Ausente' ||
+                      String(fact.formattedValue || fact.value).includes(
+                        '[INFORMAÇÃO NÃO LOCALIZADA',
+                      )
+                        ? 'text-red-800 font-bold bg-red-50/80 border border-red-200 px-2 py-1 rounded-md'
+                        : 'text-[#143028]'
+                    }`}
                   >
                     {fact.formattedValue || fact.value}
                   </div>

@@ -235,17 +235,16 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
             </div>
           )}
         </div>
-
-        {/* Action Buttons com hover states suaves */}
-        <div className="pt-3.5 mt-3.5 border-t border-[#E2E8E4] flex items-center justify-between gap-2">
+        {/* Action Buttons com alvos de toque >=44px no mobile */}
+        <div className="pt-3.5 mt-3.5 border-t border-[#E2E8E4] flex flex-wrap items-center justify-between gap-2">
           {onSelect && (
             <Button
               variant="outline"
               size="sm"
               onClick={() => onSelect(evidence)}
-              className="h-8.5 px-3 text-xs font-semibold text-[#143028] border-[#E2E8E4] bg-white hover:bg-[#F7F9F8] rounded-xl shadow-2xs hover:shadow-xs transition-all"
+              className="min-h-[44px] px-3.5 text-xs font-bold text-[#143028] border-[#E2E8E4] bg-white hover:bg-[#F7F9F8] rounded-xl shadow-2xs hover:shadow-xs transition-all focus:ring-2 focus:ring-[#1B5E3A]/40"
             >
-              <Eye className="w-3.5 h-3.5 mr-1.5 text-[#1B5E3A]" />
+              <Eye className="w-4 h-4 mr-1.5 text-[#1B5E3A]" />
               <span>{t('evidence.view_detail')}</span>
             </Button>
           )}
@@ -255,26 +254,26 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
               variant="ghost"
               size="sm"
               asChild
-              className="h-8.5 px-2.5 text-xs font-semibold text-[#1B5E3A] hover:bg-[#E7F2EC] rounded-xl transition-all"
+              className="min-h-[44px] px-3 text-xs font-bold text-[#1B5E3A] hover:bg-[#E7F2EC] rounded-xl transition-all"
               title="Ver minuta de relatório vinculada"
             >
               <Link to={`/reports/${evidence.inspection}`}>
-                <FileText className="w-3.5 h-3.5 mr-1 text-[#1B5E3A]" />
+                <FileText className="w-4 h-4 mr-1 text-[#1B5E3A]" />
                 <span>Ver na Minuta</span>
               </Link>
             </Button>
           )}
 
-          <div className="flex items-center gap-1 ml-auto">
+          <div className="flex items-center gap-1.5 ml-auto">
             {onEdit && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => onEdit(evidence)}
-                className="h-8.5 w-8.5 p-0 text-xs text-[#5B6B63] hover:text-[#143028] hover:bg-[#F7F9F8] rounded-xl transition-colors"
+                className="min-h-[44px] min-w-[44px] p-0 text-xs text-[#5B6B63] hover:text-[#143028] hover:bg-[#F7F9F8] rounded-xl transition-colors focus:ring-2 focus:ring-[#1B5E3A]/40"
                 aria-label={t('evidence.edit')}
               >
-                <Edit2 className="w-3.5 h-3.5" />
+                <Edit2 className="w-4 h-4" />
               </Button>
             )}
 
@@ -283,14 +282,14 @@ export const EvidenceCard: React.FC<EvidenceCardProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => setDeleteConfirmOpen(true)}
-                className="h-8.5 w-8.5 p-0 text-xs text-[#5B6B63] hover:text-[#B3261E] hover:bg-rose-50 rounded-xl transition-colors"
+                className="min-h-[44px] min-w-[44px] p-0 text-xs text-[#5B6B63] hover:text-[#B3261E] hover:bg-rose-50 rounded-xl transition-colors focus:ring-2 focus:ring-red-400/40"
                 aria-label={t('evidence.remove')}
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Trash2 className="w-4 h-4" />
               </Button>
             )}
           </div>
-        </div>
+        </div>{' '}
       </div>
 
       {/* Confirmation Dialog for Removal */}

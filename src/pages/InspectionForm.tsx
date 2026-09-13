@@ -301,6 +301,7 @@ export const InspectionForm: React.FC = () => {
                 value={formData.agent}
                 onChange={(e) => setFormData({ ...formData, agent: e.target.value })}
                 placeholder="Ex: Agente 01 — Léo / Agente 02 — Ana"
+                autoComplete="name"
                 className="h-10 text-xs"
               />
               {errors.agent && <span className="text-[11px] text-red-600">{errors.agent}</span>}
@@ -328,8 +329,9 @@ export const InspectionForm: React.FC = () => {
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               placeholder="Ex: Área de Proteção Ambiental — Setor Norte"
+              autoComplete="street-address"
               className="h-10 text-xs"
-            />
+            />{' '}
             {errors.location && <span className="text-[11px] text-red-600">{errors.location}</span>}
           </div>
 
@@ -342,6 +344,7 @@ export const InspectionForm: React.FC = () => {
                 value={formData.municipality}
                 onChange={(e) => setFormData({ ...formData, municipality: e.target.value })}
                 placeholder="Ex: Rio Claro"
+                autoComplete="address-level2"
                 className="h-10 text-xs"
               />
             </div>
@@ -354,6 +357,7 @@ export const InspectionForm: React.FC = () => {
                 value={formData.state}
                 onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                 placeholder="Ex: PA"
+                autoComplete="address-level1"
                 className="h-10 text-xs uppercase"
                 maxLength={2}
               />

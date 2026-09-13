@@ -402,6 +402,8 @@ export const EvidenceCenter: React.FC = () => {
                       <img
                         src={getEvidenceFileUrl(detailModalEvidence) || ''}
                         alt={`Evidência fotográfica ${detailModalEvidence.code}: ${detailModalEvidence.description || 'Registro de campo'}`}
+                        loading="lazy"
+                        decoding="async"
                         className="max-h-72 w-auto mx-auto object-contain rounded-xl shadow-xs border border-[#E2E8E4]"
                       />
                       <a
@@ -475,14 +477,14 @@ export const EvidenceCenter: React.FC = () => {
               <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-[#F7F9F8] border border-[#E2E8E4] text-xs">
                 <div>
                   <span className="text-[#5B6B63]">Data e Hora:</span>
-                  <div className="font-semibold text-[#143028]">
+                  <div className="font-semibold text-[#143028] mt-0.5">
                     {detailModalEvidence.date} às {detailModalEvidence.time}
                   </div>
                 </div>
 
                 <div>
                   <span className="text-[#5B6B63]">Responsável pelo Registro:</span>
-                  <div className="font-semibold text-[#143028]">
+                  <div className="font-semibold text-[#143028] mt-0.5">
                     {detailModalEvidence.officer || (
                       <span className="text-[#B3261E] italic">Não informado</span>
                     )}
@@ -491,7 +493,7 @@ export const EvidenceCenter: React.FC = () => {
 
                 <div>
                   <span className="text-[#5B6B63]">Coordenadas Geográficas:</span>
-                  <div className="font-mono font-semibold text-[#0F766E]">
+                  <div className="font-mono font-semibold text-[#0F766E] mt-0.5">
                     {detailModalEvidence.latitude != null && detailModalEvidence.longitude != null
                       ? `${detailModalEvidence.latitude}, ${detailModalEvidence.longitude}`
                       : 'Não registradas'}
@@ -500,12 +502,11 @@ export const EvidenceCenter: React.FC = () => {
 
                 <div>
                   <span className="text-[#5B6B63]">Tags de Rastreabilidade:</span>
-                  <div className="font-semibold text-[#1B5E3A]">
+                  <div className="font-semibold text-[#1B5E3A] mt-0.5">
                     {detailModalEvidence.tags || 'Sem tags'}
                   </div>
                 </div>
               </div>
-
               {detailModalEvidence.notes && (
                 <div className="p-3 rounded-xl bg-white border border-[#E2E8E4] text-xs space-y-1">
                   <span className="font-bold text-[#143028]">Observações Técnicas de Campo:</span>

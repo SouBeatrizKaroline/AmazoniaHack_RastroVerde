@@ -344,22 +344,31 @@ export const PitchCard: React.FC = () => {
                         {step.label}
                       </span>
                       {step.highlight && (
-                        <span className="px-1.5 py-0.5 text-[10px] font-extrabold bg-red-600 text-white rounded uppercase tracking-wider animate-pulse">
-                          Momento mais forte
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-black bg-gradient-to-r from-red-600 to-amber-600 text-white rounded-full uppercase tracking-wider animate-pulse shadow-xs ring-2 ring-red-400/50">
+                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                          Momento mais forte (Divergência 12,3 vs 11,8 ha)
                         </span>
                       )}
                     </div>
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
                       onClick={() => copyToClipboard(`[${step.time}] "${step.text}"`, step.id)}
-                      className="h-6 w-6 p-0 text-[#5B6B63] hover:text-[#1B5E3A]"
-                      title="Copiar este bloco"
+                      className="min-h-[36px] px-2.5 text-xs text-[#5B6B63] hover:text-[#1B5E3A] border-[#E2E8E4] bg-white rounded-lg shadow-2xs hover:shadow-xs flex items-center gap-1"
+                      title="Copiar este trecho"
                     >
                       {copiedKey === step.id ? (
-                        <Check className="w-3 h-3 text-emerald-600" />
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-700 font-bold text-[11px]">
+                            {t('pitch.copied')}
+                          </span>
+                        </>
                       ) : (
-                        <Copy className="w-3 h-3" />
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span className="text-[11px] font-medium hidden sm:inline">Copiar</span>
+                        </>
                       )}
                     </Button>
                   </div>
@@ -442,8 +451,9 @@ export const PitchCard: React.FC = () => {
                         {step.label}
                       </span>
                       {step.highlight && (
-                        <span className="px-1.5 py-0.5 text-[10px] font-extrabold bg-red-600 text-white rounded uppercase tracking-wider animate-pulse">
-                          Momento crítico
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-black bg-gradient-to-r from-red-600 to-amber-600 text-white rounded-full uppercase tracking-wider animate-pulse shadow-xs ring-2 ring-red-400/50">
+                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                          Momento crítico (12,3 vs 11,8 ha)
                         </span>
                       )}
                     </div>

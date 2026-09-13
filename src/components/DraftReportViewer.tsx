@@ -194,9 +194,9 @@ export const DraftReportViewer: React.FC<DraftReportViewerProps> = ({
                           references: sec.references,
                         })
                       }
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold text-[#1B5E3A] bg-[#E7F2EC] hover:bg-[#d4e9df] border border-[#1B5E3A]/30 transition-all shadow-2xs"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#1B5E3A] bg-[#E7F2EC] hover:bg-[#d4e9df] border border-[#1B5E3A]/30 transition-all shadow-2xs hover:shadow-xs min-h-[32px] cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-[#1B5E3A]/40"
                     >
-                      <Sparkles className="w-3 h-3 text-[#1B5E3A]" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#1B5E3A]" />
                       <span>{sec.references.length} fontes comprovatórias</span>
                     </button>
                   </div>
@@ -211,9 +211,9 @@ export const DraftReportViewer: React.FC<DraftReportViewerProps> = ({
                       return (
                         <span
                           key={pIdx}
-                          className="font-bold text-red-700 bg-red-100 border border-red-300 px-1.5 py-0.5 rounded-md inline-block my-0.5"
+                          className="font-black text-red-950 bg-red-100/95 border-2 border-red-400 px-2.5 py-1 rounded-md inline-block my-1 shadow-2xs text-xs font-mono"
                         >
-                          {part}
+                          ⚠ {part}
                         </span>
                       )
                     }
@@ -224,9 +224,9 @@ export const DraftReportViewer: React.FC<DraftReportViewerProps> = ({
                       return (
                         <span
                           key={pIdx}
-                          className="font-bold text-amber-900 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded-md inline-block my-0.5"
+                          className="font-black text-amber-950 bg-amber-100/95 border-2 border-amber-400 px-2.5 py-1 rounded-md inline-block my-1 shadow-2xs text-xs"
                         >
-                          {part}
+                          ⚡ {part}
                         </span>
                       )
                     }

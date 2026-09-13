@@ -491,7 +491,7 @@ export const InspectionDetail: React.FC = () => {
         </div>
 
         {/* Tab Navigation (Ocorrência → Evidências → Extração/Análise → Verificação → Lacunas/Pendências → Minuta Rastreável → Instrumentos Relacionados) */}
-        <div className="border-t border-[#E2E8E4] pt-3 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        <div className="border-t border-[#E2E8E4] pt-3 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none min-h-[44px]">
           {[
             { key: 'overview', label: t('workspace.tabs.overview'), icon: Layers },
             {
@@ -512,7 +512,7 @@ export const InspectionDetail: React.FC = () => {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as any)}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap min-h-[40px] focus:outline-hidden focus:ring-2 focus:ring-[#1B5E3A]/40 transition-all duration-200 ${
                   isActive
                     ? 'bg-[#1B5E3A] text-white shadow-xs font-bold'
                     : 'text-[#5B6B63] hover:text-[#143028] hover:bg-white/90 border border-transparent hover:border-[#E2E8E4]'
@@ -520,6 +520,24 @@ export const InspectionDetail: React.FC = () => {
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#5B6B63]'}`} />
                 <span>{tab.label}</span>
+                {tab.key === 'verification' && (
+                  <span
+                    className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                      isActive ? 'bg-amber-300 text-amber-950' : 'bg-amber-100 text-amber-900'
+                    }`}
+                  >
+                    1 divergência
+                  </span>
+                )}
+                {tab.key === 'gaps' && (
+                  <span
+                    className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                      isActive ? 'bg-red-300 text-red-950' : 'bg-red-100 text-red-900'
+                    }`}
+                  >
+                    3
+                  </span>
+                )}
               </button>
             )
           })}
@@ -871,77 +889,6 @@ export const InspectionDetail: React.FC = () => {
               </div>
             ))}
           </div>
-        </div>
-      )}
-
-      {/* Tab 4: Verification shortcut */}
-      {activeTab === 'verification' && (
-        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-[#143028]">
-                {t('verification.title')}
-              </h2>
-              <p className="text-xs text-[#5B6B63] mt-0.5">{t('verification.subtitle')}</p>
-            </div>
-            <Link to="/verification">
-              <Button
-                size="sm"
-                className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-9 px-4 rounded-xl shadow-2xs"
-              >
-                {t('workspace.verification_card_btn')}
-              </Button>
-            </Link>
-          </div>
-          <p className="text-xs sm:text-sm text-[#5B6B63] leading-relaxed">
-            {t('workspace.verification_card_desc')}
-          </p>
-        </div>
-      )}
-
-      {/* Tab 5: Gaps shortcut */}
-      {activeTab === 'gaps' && (
-        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-[#143028]">{t('gaps.title')}</h2>
-              <p className="text-xs text-[#5B6B63] mt-0.5">{t('gaps.subtitle')}</p>
-            </div>
-            <Link to="/gaps">
-              <Button
-                size="sm"
-                className="bg-[#B45309] hover:bg-amber-800 text-white text-xs font-bold h-9 px-4 rounded-xl shadow-2xs"
-              >
-                {t('workspace.gaps_card_btn')}
-              </Button>
-            </Link>
-          </div>
-          <p className="text-xs sm:text-sm text-[#5B6B63] leading-relaxed">
-            {t('workspace.gaps_card_desc')}
-          </p>
-        </div>
-      )}
-
-      {/* Tab 6: Report shortcut */}
-      {activeTab === 'report' && (
-        <div className="rounded-3xl border border-[#E2E8E4] bg-white p-6 sm:p-8 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-[#143028]">{t('report.title')}</h2>
-              <p className="text-xs text-[#5B6B63] mt-0.5">{t('report.draft_notice')}</p>
-            </div>
-            <Link to={`/reports/${inspection.id_number || inspection.id}`}>
-              <Button
-                size="sm"
-                className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-9 px-4 rounded-xl shadow-2xs"
-              >
-                {t('workspace.report_card_btn')}
-              </Button>
-            </Link>
-          </div>
-          <p className="text-xs sm:text-sm text-[#5B6B63] leading-relaxed">
-            {t('workspace.report_card_desc')}
-          </p>
         </div>
       )}
     </div>

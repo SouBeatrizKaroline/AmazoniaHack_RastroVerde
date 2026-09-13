@@ -50,9 +50,10 @@ export const AudioEvidenceCard: React.FC<AudioEvidenceCardProps> = ({ audio, onS
           <Button
             size="sm"
             onClick={togglePlay}
-            className={`h-9 px-4 rounded-xl text-xs font-bold flex items-center gap-2 ${
+            aria-label={isPlaying ? 'Pausar áudio de campo' : 'Reproduzir gravação de campo'}
+            className={`min-h-[44px] px-4 rounded-xl text-xs font-bold flex items-center gap-2 focus:outline-hidden focus:ring-2 focus:ring-[#1B5E3A]/40 transition-all ${
               isPlaying
-                ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'
                 : 'bg-[#1B5E3A] hover:bg-[#14502F] text-white shadow-xs'
             }`}
           >
@@ -71,13 +72,13 @@ export const AudioEvidenceCard: React.FC<AudioEvidenceCardProps> = ({ audio, onS
         </div>
       </div>
 
-      {/* Simulated Audio Player Waveform */}
+      {/* Simulated Audio Player Waveform com destaque para o trecho 01:24 */}
       <div className="p-3.5 rounded-2xl bg-[#F7F9F8] border border-[#E2E8E4] space-y-2">
         <div className="flex items-center justify-between text-[11px] text-[#5B6B63] font-mono">
-          <span>{isPlaying ? '01:24' : '00:00'}</span>
-          <span className="text-[#0F766E] font-medium flex items-center gap-1">
-            {isPlaying && <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />}
-            Trecho em destaque: 01:24 (Área 12,4 ha)
+          <span className="font-bold text-[#143028]">{isPlaying ? '01:24' : '00:00'}</span>
+          <span className="text-amber-900 bg-amber-100/90 border border-amber-300 font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-amber-600 animate-ping" />
+            Trecho crítico em destaque: 01:24 (Área 12,4 ha — única menção)
           </span>
           <span>{audio.duration}</span>
         </div>
@@ -121,31 +122,56 @@ export const AudioEvidenceCard: React.FC<AudioEvidenceCardProps> = ({ audio, onS
           Trechos Relevantes Associados a Fatos da Minuta:
         </span>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-          {audio.relevantSnippets.map((snp, idx) => (
-            <div
-              key={idx}
-              onClick={() => {
-                setActiveSnippetIndex(idx)
-                onSnippetClick?.(snp)
-              }}
-              className={`p-3 rounded-2xl border transition-all cursor-pointer text-xs space-y-1.5 ${
-                activeSnippetIndex === idx
-                  ? 'border-[#0F766E] bg-teal-50/60 shadow-xs ring-1 ring-[#0F766E]'
-                  : 'border-[#E2E8E4] bg-[#F9FCFA] hover:bg-white hover:border-[#1B5E3A]'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[11px] font-bold text-[#0F766E] bg-white px-2 py-0.5 rounded-md border border-teal-200">
-                  {snp.timestamp}
-                </span>
-                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full">
-                  Confiança {snp.confidence}
-                </span>
+          {audio.relevantSnippets.map((snp, idx) => {
+            const isCriticalPoint = snp.timestamp === '01:24'
+            return (
+              <div
+                key={idx}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    setActiveSnippetIndex(idx)
+                    onSnippetClick?.(snp)
+                  }
+                }}
+                onClick={() => {
+                  setActiveSnippetIndex(idx)
+                  onSnippetClick?.(snp)
+                }}
+                className={`p-3 rounded-2xl border transition-all cursor-pointer text-xs space-y-1.5 min-h-[44px] focus:outline-hidden focus:ring-2 focus:ring-[#1B5E3A]/40 ${
+                  activeSnippetIndex === idx
+                    ? 'border-[#0F766E] bg-teal-50/60 shadow-xs ring-2 ring-[#0F766E]'
+                    : isCriticalPoint
+                      ? 'border-amber-400 bg-amber-50/60 hover:bg-amber-50 ring-1 ring-amber-300'
+                      : 'border-[#E2E8E4] bg-[#F9FCFA] hover:bg-white hover:border-[#1B5E3A]'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span
+                    className={`font-mono text-[11px] font-bold px-2 py-0.5 rounded-md border ${
+                      isCriticalPoint
+                        ? 'bg-amber-200 text-amber-950 border-amber-300'
+                        : 'text-[#0F766E] bg-white border-teal-200'
+                    }`}
+                  >
+                    {snp.timestamp}
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-900 bg-emerald-100/80 border border-emerald-300 px-2 py-0.5 rounded-full">
+                    Confiança {snp.confidence}
+                  </span>
+                </div>
+                <div className="font-bold text-[#143028] text-xs flex items-center gap-1">
+                  {isCriticalPoint && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 animate-ping" />
+                  )}
+                  <span>{snp.associatedFact}</span>
+                </div>
+                <p className="text-[11px] text-[#5B6B63] italic line-clamp-2">{snp.snippet}</p>
               </div>
-              <div className="font-bold text-[#143028] text-xs">{snp.associatedFact}</div>
-              <p className="text-[11px] text-[#5B6B63] italic line-clamp-2">{snp.snippet}</p>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 

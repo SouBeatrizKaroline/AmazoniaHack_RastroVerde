@@ -57,15 +57,20 @@ export const DivergenceBlock: React.FC<DivergenceBlockProps> = ({ divergences, o
         return (
           <div
             key={div.id}
-            className="rounded-3xl border-2 border-amber-300 bg-amber-50/40 p-5 sm:p-6 shadow-xs space-y-4"
+            className={`rounded-3xl border-2 p-5 sm:p-6 shadow-xs space-y-4 transition-all duration-200 ${
+              isResolved
+                ? 'border-emerald-300 bg-emerald-50/40 ring-1 ring-emerald-200'
+                : 'border-amber-400 bg-gradient-to-b from-amber-50/90 to-amber-100/40 ring-2 ring-amber-300/60 shadow-amber-200/30'
+            }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-amber-200">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold">
-                  <AlertTriangle className="w-5 h-5" />
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold shadow-xs">
+                  <AlertTriangle className="w-5 h-5 animate-pulse" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-amber-950 bg-amber-200/90 border border-amber-300/80 px-2.5 py-0.5 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-ping" />
                     Divergência encontrada — Requer validação humana
                   </span>
                   <h4 className="text-sm sm:text-base font-bold text-[#143028] mt-0.5">
@@ -74,8 +79,14 @@ export const DivergenceBlock: React.FC<DivergenceBlockProps> = ({ divergences, o
                 </div>
               </div>
 
-              <div className="text-xs text-amber-900/80 font-medium bg-amber-100/70 px-3 py-1 rounded-xl self-start sm:self-auto">
-                Status: {div.status}
+              <div
+                className={`text-xs font-semibold px-3 py-1 rounded-xl self-start sm:self-auto border ${
+                  isResolved
+                    ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                    : 'bg-amber-100 text-amber-950 border-amber-300'
+                }`}
+              >
+                Status: {isResolved ? 'Resolvido pelo fiscal' : div.status}
               </div>
             </div>
 

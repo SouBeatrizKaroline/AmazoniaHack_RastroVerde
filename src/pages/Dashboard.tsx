@@ -138,77 +138,105 @@ export const Dashboard: React.FC = () => {
       {/* 4 Stat Cards Centrais do Desafio 1: Ocorrências / Prontas para relatório / Com informações faltantes / Com divergências */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
         {/* Card 1: Ocorrências */}
-        <div className="relative overflow-hidden rounded-2xl border border-[#E2E8E4] bg-gradient-to-b from-white to-[#F9FCFA] p-5 shadow-xs transition-all duration-200 hover:border-[#1B5E3A]/60 hover:shadow-md">
+        <Link
+          to="/inspections"
+          className="group relative overflow-hidden rounded-2xl border border-[#E2E8E4] bg-gradient-to-b from-white to-[#F9FCFA] p-5 shadow-xs transition-all duration-200 hover:border-[#1B5E3A]/60 hover:shadow-md block focus:outline-hidden focus:ring-2 focus:ring-[#1B5E3A]/40"
+        >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#5B6B63]">
               {t('dashboard.stat_inspections')}
             </span>
-            <div className="w-8 h-8 rounded-xl bg-[#E7F2EC] text-[#1B5E3A] flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-[#E7F2EC] text-[#1B5E3A] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
               <FileCheck2 className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#143028] tabular-nums tracking-tight">
-            {totalInspections}
+            {loading ? (
+              <span className="inline-block w-8 h-8 bg-[#E2E8E4] rounded-md animate-pulse" />
+            ) : (
+              totalInspections
+            )}
           </div>
           <div className="mt-1 text-[11px] text-[#5B6B63] truncate">
             {t('dashboard.stat_inspections_desc')} •{' '}
             <span className="font-semibold text-emerald-800">{t('badge.fictional_demo')}</span>
           </div>
-        </div>
+        </Link>
 
         {/* Card 2: Prontas para Relatório */}
-        <div className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-b from-white to-emerald-50/30 p-5 shadow-xs transition-all duration-200 hover:border-emerald-400 hover:shadow-md">
+        <Link
+          to="/inspections/RV-DEMO-001"
+          className="group relative overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-b from-white to-emerald-50/30 p-5 shadow-xs transition-all duration-200 hover:border-emerald-400 hover:shadow-md block focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40"
+        >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">
               {t('dashboard.stat_ready_for_report')}
             </span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#1B5E3A] tabular-nums tracking-tight">
-            {readyForReportCount}
+            {loading ? (
+              <span className="inline-block w-8 h-8 bg-emerald-100 rounded-md animate-pulse" />
+            ) : (
+              readyForReportCount
+            )}
           </div>
           <div className="mt-1 text-[11px] text-[#5B6B63] truncate">
             {t('dashboard.stat_ready_desc')}
           </div>
-        </div>
+        </Link>
 
         {/* Card 3: Com Informações Faltantes */}
-        <div className="relative overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-b from-white to-amber-50/20 p-5 shadow-xs transition-all duration-200 hover:border-amber-400 hover:shadow-md">
+        <Link
+          to="/gaps"
+          className="group relative overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-b from-white to-amber-50/20 p-5 shadow-xs transition-all duration-200 hover:border-amber-400 hover:shadow-md block focus:outline-hidden focus:ring-2 focus:ring-amber-500/40"
+        >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-amber-900">
               {t('dashboard.stat_missing_info')}
             </span>
-            <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
               <AlertCircle className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-[#B45309] tabular-nums tracking-tight">
-            {pendingGapsCount}
+            {loading ? (
+              <span className="inline-block w-8 h-8 bg-amber-100 rounded-md animate-pulse" />
+            ) : (
+              pendingGapsCount
+            )}
           </div>
           <div className="mt-1 text-[11px] text-[#5B6B63] truncate">
             {t('dashboard.stat_missing_desc')}
           </div>
-        </div>
+        </Link>
 
         {/* Card 4: Com Divergências Detectadas */}
-        <div className="relative overflow-hidden rounded-2xl border border-red-200 bg-gradient-to-b from-white to-red-50/20 p-5 shadow-xs transition-all duration-200 hover:border-red-400 hover:shadow-md">
+        <Link
+          to="/verification"
+          className="group relative overflow-hidden rounded-2xl border border-red-200 bg-gradient-to-b from-white to-red-50/20 p-5 shadow-xs transition-all duration-200 hover:border-red-400 hover:shadow-md block focus:outline-hidden focus:ring-2 focus:ring-red-500/40"
+        >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-red-900">
               {t('dashboard.stat_divergences')}
             </span>
-            <div className="w-8 h-8 rounded-xl bg-red-100 text-red-800 flex items-center justify-center shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-red-100 text-red-800 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
               <AlertTriangle className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 text-3xl sm:text-4xl font-extrabold text-red-700 tabular-nums tracking-tight">
-            {divergenceCount}
+            {loading ? (
+              <span className="inline-block w-8 h-8 bg-red-100 rounded-md animate-pulse" />
+            ) : (
+              divergenceCount
+            )}
           </div>
           <div className="mt-1 text-[11px] text-[#5B6B63] truncate">
             {t('dashboard.stat_divergences_desc')}
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Flow Pipeline Strip */}
