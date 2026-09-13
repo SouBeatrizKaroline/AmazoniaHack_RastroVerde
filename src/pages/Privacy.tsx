@@ -54,7 +54,7 @@ export const Privacy: React.FC = () => {
       <div className="flex items-center justify-between">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-[#1B5E3A] hover:underline"
+          className="min-h-[44px] inline-flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[#1B5E3A] hover:bg-[#E7F2EC] hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{t('auth.back_to_home')}</span>
@@ -222,7 +222,7 @@ export const Privacy: React.FC = () => {
         </div>
 
         <Link to="/inspections/RV-DEMO-001">
-          <Button className="bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold h-10 px-5 rounded-xl shadow-xs">
+          <Button className="min-h-[44px] bg-[#1B5E3A] hover:bg-[#14502F] text-white text-xs font-bold px-5 rounded-xl shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#1B5E3A]">
             {t('privacy.contact_btn')}
           </Button>
         </Link>
