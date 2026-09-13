@@ -278,8 +278,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex items-center justify-center sm:justify-start gap-2.5">
               <RastroVerdeLogo size="sm" showText={false} />
               <p className="text-xs font-medium text-[#143028]">{t('footer.text')}</p>
+              <span className="text-[11px] font-mono font-medium text-[#5B6B63] bg-[#F7F9F8] border border-[#E2E8E4] px-2 py-0.5 rounded-md">
+                {t('badge.fictional_demo')}
+              </span>
             </div>
-            <div className="flex items-center gap-4 text-xs font-semibold text-[#5B6B63]">
+            <div className="flex items-center gap-3.5 text-xs font-semibold text-[#5B6B63]">
+              <LanguageToggle />
+              <span className="text-[#E2E8E4]">•</span>
               <Link to="/about" className="hover:text-[#1B5E3A] transition-colors">
                 {t('nav.about')}
               </Link>
@@ -287,7 +292,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Link to="/privacy" className="hover:text-[#1B5E3A] transition-colors">
                 {t('about.privacy_link')}
               </Link>
-            </div>
+            </div>{' '}
           </div>
         </div>
       </footer>
