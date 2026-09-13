@@ -81,22 +81,23 @@ export const translations: Record<Language, Record<string, string>> = {
     'nav.quick_new_evd': 'Nova Evidência',
 
     // Landing
-    'landing.headline': 'Da evidência de campo à minuta de fiscalização rastreável.',
+    'landing.headline':
+      'Da evidência de campo ao relatório de infração, com organização e rastreabilidade.',
     'landing.subheadline':
-      'Organize evidências, identifique lacunas e produza relatórios ambientais com cada informação ligada à sua fonte.',
-    'landing.start_inspection': 'Analisar ocorrência',
+      'Organize evidências de fiscalização, identifique lacunas e elabore relatórios de infração ambiental com cada apontamento vinculado à sua fonte probatória.',
+    'landing.start_inspection': 'Cadastrar fiscalização',
     'landing.view_demo': 'Ver demonstração',
     'landing.enter_demo': 'Explorar demonstração',
     'landing.btn_demo': 'Explorar caso de demonstração',
     'landing.how_it_works_title': 'Como o RastroVerde funciona',
-    'landing.step1_title': '1. Recebe a ocorrência',
+    'landing.step1_title': '1. Fiscalização & Ocorrência',
     'landing.step1_desc':
-      'Fotografias com metadados, áudios com minutagem, documentos, notas de campo e coordenadas.',
-    'landing.step1_highlight': 'Entrada Multi-formato',
-    'landing.step2_title': '2. Organiza a evidência',
+      'Registro de dados institucionais, localização, agente responsável e caracterização da ocorrência.',
+    'landing.step1_highlight': 'Registro Inicial',
+    'landing.step2_title': '2. Inserção de Evidências',
     'landing.step2_desc':
-      'Classifica registros, calcula indicadores de integridade e associa cada mídia à vistoria.',
-    'landing.step2_highlight': 'Organização Probatória',
+      'Fotografias georreferenciadas, áudios, depoimentos, documentos e notas de campo vinculadas.',
+    'landing.step2_highlight': 'Evidências Vinculadas',
     'landing.step3_title': '3. Extrai os fatos',
     'landing.step3_desc':
       'Identificação, área, coordenadas, infração e instrumentos extraídos com fontes rastreáveis.',
@@ -117,14 +118,14 @@ export const translations: Record<Language, Record<string, string>> = {
     'landing.folder_headline': 'A evidência não deve terminar esquecida numa pasta de arquivos.',
     'landing.folder_desc':
       'Evidências voltam do campo em múltiplos formatos: fotos no celular, áudio gravado, anotações de prancheta e coordenadas esparsas. O RastroVerde conecta cada fato à sua evidência de origem e responde: conseguimos produzir uma minuta defensável mostrando exatamente qual evidência sustenta cada afirmação?',
-    'landing.flow_field': 'Vistoria em campo',
-    'landing.flow_evidence': 'Custódia de evidências',
-    'landing.flow_verification': 'Checagem de consistência',
-    'landing.flow_gaps': 'Auditoria de lacunas',
-    'landing.flow_report': 'Relatório rastreável',
-    'landing.flow_title': 'Fluxo Operacional de Ponta a Ponta',
+    'landing.flow_field': 'Fiscalização em campo',
+    'landing.flow_evidence': 'Organização de evidências',
+    'landing.flow_verification': 'Verificação de consistência',
+    'landing.flow_gaps': 'Checklist de pendências',
+    'landing.flow_report': 'Relatório de infração rastreável',
+    'landing.flow_title': 'Jornada Lógica da Fiscalização Ambiental',
     'landing.flow_subtitle':
-      'Ocorrência → Evidências → Extração/Análise → Verificação → Lacunas → Minuta rastreável → Instrumentos relacionados',
+      'Fiscalização → Ocorrência → Evidências → Organização das informações → Relatório de infração → Revisão/Exportação',
     'landing.problem_title': 'O desafio real da fiscalização em campo',
     'landing.problem_desc':
       'Em operações ambientais, dados críticos ficam dispersos em múltiplos suportes físicos e digitais, gerando fragilidade processual e retrabalho técnico.',
@@ -158,9 +159,10 @@ export const translations: Record<Language, Record<string, string>> = {
     'landing.access_block_title': 'Acesso Institucional para Órgãos de Controle',
     'landing.access_block_desc':
       'Plataforma segura para equipes de fiscalização ambiental, peritos criminais e analistas de órgãos gestores.',
-    'landing.access_benefit_1': 'Cadeia de custódia digital inviolável para registros de campo',
+    'landing.access_benefit_1': 'Registro organizado e rastreável de evidências de campo',
     'landing.access_benefit_2': 'Cruzamento cauteloso de horários e coordenadas antes da emissão',
-    'landing.access_benefit_3': 'Relatórios técnicos estruturados com rastreabilidade bidirecional',
+    'landing.access_benefit_3':
+      'Relatórios de infração estruturados com rastreabilidade bidirecional',
     'landing.btn_access_agent': 'Entrar com credencial funcional',
     'landing.btn_create_account': 'Solicitar cadastro institucional',
 
