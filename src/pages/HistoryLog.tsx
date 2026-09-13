@@ -134,7 +134,9 @@ export const HistoryLog: React.FC = () => {
                     </span>
                   </div>
 
-                  <p className="text-xs sm:text-sm font-medium text-[#143028] pt-1">{act.description}</p>
+                  <p className="text-xs sm:text-sm font-medium text-[#143028] pt-1">
+                    {act.description}
+                  </p>
                 </div>
               </div>
             ))}

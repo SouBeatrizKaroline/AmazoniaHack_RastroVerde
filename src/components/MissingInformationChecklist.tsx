@@ -51,7 +51,8 @@ export const MissingInformationChecklist: React.FC<MissingInformationChecklistPr
                 O que falta para fechar o caso com defensabilidade técnica?
               </h3>
               <p className="text-xs sm:text-sm text-amber-950 font-medium mt-0.5">
-                Orientação operacional em campo: dados recomendados para coleta antes de desmobilizar a equipe da poligonal.
+                Orientação operacional em campo: dados recomendados para coleta antes de
+                desmobilizar a equipe da poligonal.
               </p>
             </div>
           </div>
@@ -138,13 +139,17 @@ export const MissingInformationChecklist: React.FC<MissingInformationChecklistPr
                   <span className="font-bold text-red-900 text-xs block mb-0.5">
                     Impacto no Relatório:
                   </span>
-                  <span className="text-[#374151] font-medium leading-relaxed">{item.impactOnReport}</span>
+                  <span className="text-[#374151] font-medium leading-relaxed">
+                    {item.impactOnReport}
+                  </span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 shadow-2xs">
                   <span className="font-bold text-[#1B5E3A] text-xs block mb-0.5">
                     Ação Recomendada em Campo:
                   </span>
-                  <span className="text-[#143028] font-medium leading-relaxed">{item.fieldGuidance}</span>
+                  <span className="text-[#143028] font-medium leading-relaxed">
+                    {item.fieldGuidance}
+                  </span>
                 </div>
               </div>
             </div>
@@ -207,13 +212,17 @@ export const MissingInformationChecklist: React.FC<MissingInformationChecklistPr
                   <span className="font-bold text-amber-900 text-xs block mb-0.5">
                     Impacto na Minuta:
                   </span>
-                  <span className="text-[#374151] font-medium leading-relaxed">{item.impactOnReport}</span>
+                  <span className="text-[#374151] font-medium leading-relaxed">
+                    {item.impactOnReport}
+                  </span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200/80 shadow-2xs">
                   <span className="font-bold text-[#1B5E3A] text-xs block mb-0.5">
                     Ação Operacional:
                   </span>
-                  <span className="text-[#143028] font-medium leading-relaxed">{item.fieldGuidance}</span>
+                  <span className="text-[#143028] font-medium leading-relaxed">
+                    {item.fieldGuidance}
+                  </span>
                 </div>
               </div>
             </div>
